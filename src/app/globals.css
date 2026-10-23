@@ -1,0 +1,119 @@
+@import "tailwindcss";
+@import "../styles/tokens.css";
+@import "../styles/theme.css";
+
+/* Navigation shows as a 72px icon rail on Tablet, and on Desktop when the sidebar is collapsed. */
+@custom-variant rail {
+  @media (min-width: 768px) and (max-width: 1279.98px) {
+    @slot;
+  }
+  @media (min-width: 1280px) {
+    :where([data-sidebar="collapsed"]) & {
+      @slot;
+    }
+  }
+}
+
+/* Theme toggle icon follows the stored mode (set before paint by the inline script in the root layout). */
+@custom-variant mode-light (:where([data-theme-mode="light"]) &);
+@custom-variant mode-dark (:where([data-theme-mode="dark"]) &);
+@custom-variant mode-system (:where([data-theme-mode="system"]) &);
+
+/* Chinese interface: Inter for Latin, Noto Sans SC for Han characters (Figma font/family = Noto Sans SC) */
+:root {
+  --font-sc: "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
+}
+:root:lang(zh) {
+  --type-family: var(--font-arrows), var(--font-latin), var(--font-sc), system-ui, sans-serif;
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    background: var(--color-bg-surface-primary);
+    color: var(--color-text-primary);
+    font-family: var(--type-family);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  :focus-visible {
+    outline: none;
+    box-shadow: var(--focus-ring);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      transition-duration: var(--duration-reduced) !important;
+      animation-duration: var(--duration-reduced) !important;
+    }
+  }
+}
+
+/*
+ * Values that come from the prototype's interactions and one unstyled Figma effect,
+ * not from Figma variables — named here so components never hard-code them.
+ */
+@theme {
+  /* Drawers: Smart animate · Ease out · 0.40s. Search: Dissolve · 0.20s. */
+  --animate-sheet-in: sheet-in-left 400ms var(--ease-figma-out);
+  --animate-sheet-out: sheet-out-left 400ms var(--ease-figma-out);
+  --animate-scrim-in: fade-in 400ms var(--ease-figma-out);
+  --animate-scrim-out: fade-out 400ms var(--ease-figma-out);
+  --animate-dissolve-in: fade-in 200ms var(--ease-figma-out);
+  --animate-dissolve-out: fade-out 200ms var(--ease-figma-out);
+  --animate-panel-in: panel-in-right 400ms var(--ease-figma-out);
+  --animate-panel-out: panel-out-right 400ms var(--ease-figma-out);
+  --duration-drawer: 400ms;
+
+  /* Mobile / Menu drawer sheet (Figma uses an unstyled drop shadow here) */
+  --shadow-sheet: 8px 0 32px 0 rgb(0 0 0 / 0.18);
+
+  @keyframes sheet-in-left {
+    from {
+      transform: translateX(-100%);
+    }
+  }
+  @keyframes sheet-out-left {
+    to {
+      transform: translateX(-100%);
+    }
+  }
+  @keyframes panel-in-right {
+    from {
+      transform: translateX(calc(100% + 24px));
+    }
+  }
+  @keyframes panel-out-right {
+    to {
+      transform: translateX(calc(100% + 24px));
+    }
+  }
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+    }
+  }
+  @keyframes fade-out {
+    to {
+      opacity: 0;
+    }
+  }
+}
+
+/* Games / Game board art: the 3D board edge from Figma (stacked drop shadows). */
+.game-board-art {
+  filter: drop-shadow(0 5px 0 rgb(0 0 0 / 0.42)) drop-shadow(0 9px 8px rgb(0 0 0 / 0.18)) drop-shadow(0 18px 28px rgb(0 0 0 / 0.12));
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
+}

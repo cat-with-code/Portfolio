@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="320" height="200" viewBox="858 622 320 200" fill="none"><g id="topic-fiction-wide" clip-path="url(#clip4_2_2)">
+<rect width="320" height="200" transform="translate(858 622)" fill="#F5F3F0" />
+<ellipse id="Hill back" opacity="0.35" cx="948" cy="822" rx="110" ry="80" fill="#F2AC27" />
+<ellipse id="Hill front" opacity="0.55" cx="1118" cy="834" rx="120" ry="80" fill="#F2AC27" />
+<circle id="Moon" cx="1095" cy="679" r="27" fill="white" />
+<circle id="Moon shadow" cx="1109" cy="669" r="25" fill="#F5F3F0" />
+<circle id="Star" cx="931" cy="665" r="3" fill="white" />
+<circle id="Star_2" cx="970" cy="648" r="2" fill="white" />
+<circle id="Star_3" cx="1010.5" cy="680.5" r="2.5" fill="white" />
+<circle id="Star_4" cx="1150" cy="724" r="2" fill="white" />
+<circle id="Star_5" cx="900" cy="704" r="2" fill="white" />
+<path id="Path" d="M898 812C938 802 958 782 998 778C1038 774 1048 752 1088 742" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+<g id="Paper" filter="url(#filter16_d_2_2)">
+<path d="M911.113 725.922C910.498 721.547 913.547 717.502 917.922 716.887L971.397 709.371C975.772 708.756 979.817 711.805 980.432 716.18L985.442 751.83C986.057 756.205 983.009 760.25 978.634 760.865L925.159 768.381C920.784 768.995 916.739 765.947 916.124 761.572L911.113 725.922Z" fill="white" />
+<path id="Line_25" d="M919.87 730.75C919.716 729.657 920.479 728.645 921.572 728.491L969.105 721.811C970.199 721.657 971.21 722.42 971.364 723.513C971.518 724.607 970.756 725.619 969.662 725.772L922.129 732.453C921.035 732.606 920.024 731.844 919.87 730.75Z" fill="#666666" />
+<path id="Line_26" d="M921.263 740.653C921.109 739.559 921.871 738.548 922.965 738.394L960.595 733.106C961.689 732.952 962.7 733.714 962.854 734.808C963.008 735.902 962.246 736.913 961.152 737.067L923.522 742.355C922.428 742.509 921.416 741.747 921.263 740.653Z" fill="#666666" />
+<path id="Line_27" d="M922.653 750.556C922.5 749.462 923.262 748.451 924.356 748.297L952.083 744.4C953.177 744.246 954.188 745.008 954.342 746.102C954.496 747.196 953.734 748.207 952.64 748.361L924.912 752.258C923.818 752.412 922.807 751.65 922.653 750.556Z" fill="#666666" />
+</g>
+</g>
+<defs><filter id="filter16_d_2_2" x="904" y="704.258" width="88.5566" height="73.2361" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix" />
+<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha" />
+<feOffset dy="2" />
+<feGaussianBlur stdDeviation="3" />
+<feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.02 0" />
+<feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_2_2" />
+<feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_2_2" result="shape" />
+</filter>
+<clipPath id="clip4_2_2">
+<rect width="320" height="200" fill="white" transform="translate(858 622)" />
+</clipPath>
+</defs></svg>

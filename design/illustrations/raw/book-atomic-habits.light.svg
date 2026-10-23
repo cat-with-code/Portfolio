@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="132" height="176" viewBox="0 0 132 176" fill="none"><g id="book-atomic-habits">
+<g id="3D / pages front">
+<path d="M13.2988 9.2C13.2988 8.64771 13.7465 8.2 14.2988 8.2H120.299C121.956 8.2 123.299 9.54315 123.299 11.2V170.2C123.299 171.857 121.956 173.2 120.299 173.2H14.2988C13.7465 173.2 13.2988 172.752 13.2988 172.2V9.2Z" fill="white" />
+<path d="M14.2988 8.45H120.299C121.818 8.45 123.049 9.68122 123.049 11.2V170.2C123.049 171.719 121.818 172.95 120.299 172.95H14.2988C13.8846 172.95 13.5488 172.614 13.5488 172.2V9.2C13.5488 8.78579 13.8846 8.45 14.2988 8.45Z" stroke="black" stroke-opacity="0.14" stroke-width="0.5" />
+</g>
+<g id="3D / pages back" filter="url(#filter0_d_2_2)">
+<path d="M15.5 10.3C15.5 9.74771 15.9477 9.3 16.5 9.3H122.5C124.157 9.3 125.5 10.6431 125.5 12.3V169.1C125.5 170.757 124.157 172.1 122.5 172.1H16.5C15.9477 172.1 15.5 171.652 15.5 171.1V10.3Z" fill="white" />
+<path d="M16.5 9.55H122.5C124.019 9.55 125.25 10.7812 125.25 12.3V169.1C125.25 170.619 124.019 171.85 122.5 171.85H16.5C16.0858 171.85 15.75 171.514 15.75 171.1V10.3L15.7539 10.2229C15.7925 9.84488 16.1118 9.55 16.5 9.55Z" stroke="black" stroke-opacity="0.14" stroke-width="0.5" />
+</g>
+<g id="Book" filter="url(#filter1_dd_2_2)">
+<g clip-path="url(#clip0_2_2)">
+<path d="M10 8C10 6.89543 10.8954 6 12 6H115C117.761 6 120 8.23858 120 11V170.4C120 173.161 117.761 175.4 115 175.4H12C10.8954 175.4 10 174.505 10 173.4V8Z" fill="url(#pattern0_2_2)" />
+<rect id="3D / spine shade" x="10" y="6" width="11" height="169.4" fill="url(#paint0_linear_2_2)" />
+<rect id="3D / hinge" x="22.0996" y="6" width="1.1" height="169.4" fill="url(#paint1_linear_2_2)" />
+<rect id="3D / sheen" x="10" y="6" width="110" height="169.4" fill="url(#paint2_linear_2_2)" />
+</g>
+</g>
+</g>
+<defs><linearGradient id="paint0_linear_2_2" x1="10" y1="90.7" x2="21" y2="90.7" gradientUnits="userSpaceOnUse">
+<stop stop-opacity="0.34" />
+<stop offset="0.3" stop-color="white" stop-opacity="0.3" />
+<stop offset="0.55" stop-opacity="0.14" />
+<stop offset="1" stop-opacity="0" />
+</linearGradient>
+<clipPath id="clip0_2_2">
+<path d="M10 8C10 6.89543 10.8954 6 12 6H115C117.761 6 120 8.23858 120 11V170.4C120 173.161 117.761 175.4 115 175.4H12C10.8954 175.4 10 174.505 10 173.4V8Z" fill="white" />
+</clipPath>
+<linearGradient id="paint1_linear_2_2" x1="22.0996" y1="90.7" x2="23.1996" y2="90.7" gradientUnits="userSpaceOnUse">
+<stop stop-opacity="0.16" />
+<stop offset="1" stop-color="white" stop-opacity="0.18" />
+</linearGradient>
+<linearGradient id="paint2_linear_2_2" x1="19.1667" y1="20.1167" x2="148.124" y2="103.855" gradientUnits="userSpaceOnUse">
+<stop stop-color="white" stop-opacity="0.2" />
+<stop offset="0.42" stop-color="white" stop-opacity="0" />
+<stop offset="1" stop-opacity="0.1" />
+</linearGradient>
+<filter id="filter1_dd_2_2" x="0" y="0" width="134" height="193.4" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix" />
+<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha" />
+<feOffset dx="1" dy="2" />
+<feGaussianBlur stdDeviation="1.5" />
+<feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.16 0" />
+<feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_2_2" />
+<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha" />
+<feOffset dx="2" dy="6" />
+<feGaussianBlur stdDeviation="6" />
+<feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.18 0" />
+<feBlend mode="normal" in2="effect1_dropShadow_2_2" result="effect2_dropShadow_2_2" />
+<feBlend mode="normal" in="SourceGraphic" in2="effect2_dropShadow_2_2" result="shape" />
+</filter>
+<filter id="filter0_d_2_2" x="8.5" y="4.3" width="130" height="182.8" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix" />
+<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha" />
+<feOffset dx="3" dy="5" />
+<feGaussianBlur stdDeviation="5" />
+<feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.22 0" />
+<feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_2_2" />
+<feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_2_2" result="shape" />
+</filter>
+<pattern id="pattern0_2_2" patternContentUnits="objectBoundingBox" width="1" height="1">
+<use xlink:href="#image0_2_2" transform="matrix(0.00326964 0 0 0.00212314 -0.00842886 0)" />
+</pattern>
+<image id="image0_2_2" width="311" height="471" preserveAspectRatio="none" xlink:href="/images/books/atomic-habits.jpg" />
+</defs></svg>

@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="478" height="200" viewBox="547 962 478 200" fill="none"><g id="topic-fiction-wide-478" clip-path="url(#clip6_2_2)">
+<rect width="478" height="200" transform="translate(547 962)" fill="#594103" />
+<ellipse id="Hill back_3" opacity="0.35" cx="681.438" cy="1162" rx="164.312" ry="80" fill="#F2AC27" />
+<ellipse id="Hill front_3" opacity="0.55" cx="935.375" cy="1174" rx="179.25" ry="80" fill="#F2AC27" />
+<ellipse id="Moon_3" cx="901.019" cy="1019" rx="40.3312" ry="27" fill="#262626" />
+<ellipse id="Moon shadow_3" cx="921.932" cy="1009" rx="37.3438" ry="25" fill="#594103" />
+<ellipse id="Star_11" cx="656.044" cy="1005" rx="4.48125" ry="3" fill="#262626" />
+<ellipse id="Star_12" cx="714.3" cy="988" rx="2.9875" ry="2" fill="#262626" />
+<ellipse id="Star_13" cx="774.797" cy="1020.5" rx="3.73438" ry="2.5" fill="#262626" />
+<ellipse id="Star_14" cx="983.175" cy="1064" rx="2.9875" ry="2" fill="#262626" />
+<ellipse id="Star_15" cx="609.737" cy="1044" rx="2.9875" ry="2" fill="#262626" />
+<path id="Path_3" d="M606.75 1152C666.5 1142 696.375 1122 756.125 1118C815.875 1114 830.812 1092 890.562 1082" stroke="#262626" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+<g id="Paper_3" filter="url(#filter18_d_2_2)">
+<path d="M626.319 1065.83C625.412 1061.51 628.242 1057.66 632.641 1057.25L720.256 1049.01C724.655 1048.59 728.957 1051.76 729.864 1056.09L737.387 1091.92C738.295 1096.25 735.465 1100.09 731.066 1100.5L643.451 1108.74C639.052 1109.16 634.75 1105.99 633.842 1101.66L626.319 1065.83Z" fill="#262626" />
+<path id="Line_31" d="M639.42 1070.75C639.19 1069.66 639.906 1068.68 641.019 1068.58L713.908 1061.72C715.021 1061.62 716.109 1062.42 716.339 1063.51C716.568 1064.61 715.852 1065.58 714.74 1065.68L641.85 1072.54C640.738 1072.65 639.649 1071.84 639.42 1070.75Z" fill="#BFBFBF" />
+<path id="Line_32" d="M641.5 1080.65C641.27 1079.56 641.986 1078.59 643.099 1078.48L701.196 1073.02C702.309 1072.91 703.397 1073.71 703.627 1074.81C703.856 1075.9 703.14 1076.87 702.028 1076.98L643.93 1082.44C642.818 1082.55 641.729 1081.75 641.5 1080.65Z" fill="#BFBFBF" />
+<path id="Line_33" d="M643.578 1090.56C643.348 1089.46 644.064 1088.49 645.177 1088.39L688.482 1084.31C689.595 1084.21 690.683 1085.01 690.913 1086.1C691.142 1087.2 690.426 1088.17 689.314 1088.27L646.008 1092.35C644.896 1092.45 643.808 1091.65 643.578 1090.56Z" fill="#BFBFBF" />
+</g>
+</g>
+<defs><filter id="filter18_d_2_2" x="618.676" y="1044.26" width="126.355" height="73.236" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix" />
+<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha" />
+<feOffset dy="2" />
+<feGaussianBlur stdDeviation="3" />
+<feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.02 0" />
+<feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_2_2" />
+<feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_2_2" result="shape" />
+</filter>
+<clipPath id="clip6_2_2">
+<rect width="478" height="200" fill="white" transform="translate(547 962)" />
+</clipPath>
+</defs></svg>

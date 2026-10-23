@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" fill="none"><g id="audio-lofi">
+<g clip-path="url(#clip0_2_2)">
+<path d="M0 12C0 5.37258 5.37258 0 12 0H52C58.6274 0 64 5.37258 64 12V52C64 58.6274 58.6274 64 52 64H12C5.37258 64 0 58.6274 0 52V12Z" fill="#F5F3F0" />
+<circle id="Ellipse" cx="33" cy="25" r="11" fill="#F2AC27" />
+<ellipse id="Ellipse_2" opacity="0.35" cx="14" cy="58" rx="28" ry="20" fill="#F2AC27" />
+<ellipse id="Ellipse_3" opacity="0.6" cx="54" cy="62" rx="30" ry="20" fill="#F2AC27" />
+<rect id="Rectangle" opacity="0.9" x="31" width="2" height="64" fill="white" />
+<rect id="Rectangle_2" opacity="0.9" y="31" width="64" height="2" fill="white" />
+</g>
+</g>
+<defs><clipPath id="clip0_2_2">
+<path d="M0 12C0 5.37258 5.37258 0 12 0H52C58.6274 0 64 5.37258 64 12V52C64 58.6274 58.6274 64 52 64H12C5.37258 64 0 58.6274 0 52V12Z" fill="white" />
+</clipPath>
+</defs></svg>

@@ -1,0 +1,55 @@
+{
+  "nav": {
+    "portfolio": "PERSONAL PORTFOLIO",
+    "developer": "Developer",
+    "projects": "Projects",
+    "blog": "Blog",
+    "study": "Study",
+    "games": "Games",
+    "contact": "Contact",
+    "settings": "Settings",
+    "explore": "Explore"
+  },
+  "search": {
+    "placeholder": "Search projects, posts, and more",
+    "dialog": {
+      "placeholder": "Search everything — pages, projects, posts, and more",
+      "placeholderShort": "Search everything",
+      "esc": "esc",
+      "close": "Close",
+      "clear": "Clear search",
+      "try": "TRY",
+      "all": "All",
+      "bestMatches": "BEST MATCHES",
+      "noResults": "No results for “{query}”",
+      "noResultsHint": "Try a different word, like {words}.",
+      "navigate": "↑ ↓  to navigate",
+      "open": "↵  to open",
+      "closeHint": "esc  to close",
+      "count": "{count} results across the site"
+    }
+  },
+  "theme": {
+    "light": "Light",
+    "dark": "Dark",
+    "system": "System"
+  },
+  "a11y": {
+    "home": "Hoeurn Dareach — home",
+    "toggleSidebar": "Collapse or expand the sidebar",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu",
+    "search": "Search portfolio",
+    "theme": "Switch theme (Light, Dark, System)",
+    "profile": "Developer profile",
+    "primaryNav": "Primary",
+    "close": "Close"
+  },
+  "owner": {
+    "name": "Hoeurn Dareach"
+  },
+  "settings": {
+    "appearance": "Appearance",
+    "language": "Language"
+  }
+}

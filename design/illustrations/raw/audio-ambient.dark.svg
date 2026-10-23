@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="208 0 64 64" fill="none"><g id="audio-ambient">
+<g clip-path="url(#clip1_2_2)">
+<path d="M208 12C208 5.37258 213.373 0 220 0H260C266.627 0 272 5.37258 272 12V52C272 58.6274 266.627 64 260 64H220C213.373 64 208 58.6274 208 52V12Z" fill="#031A59" />
+<circle id="Ellipse_5" cx="236" cy="18" r="8" fill="white" />
+<ellipse id="Ellipse_6" opacity="0.25" cx="239" cy="62" rx="55" ry="32" fill="#2267F2" />
+<ellipse id="Ellipse_7" opacity="0.45" cx="214" cy="65" rx="46" ry="25" fill="#2267F2" />
+<ellipse id="Ellipse_8" opacity="0.75" cx="262" cy="68" rx="46" ry="22" fill="#2267F2" />
+</g>
+</g>
+<defs><clipPath id="clip1_2_2">
+<path d="M208 12C208 5.37258 213.373 0 220 0H260C266.627 0 272 5.37258 272 12V52C272 58.6274 266.627 64 260 64H220C213.373 64 208 58.6274 208 52V12Z" fill="white" />
+</clipPath>
+</defs></svg>

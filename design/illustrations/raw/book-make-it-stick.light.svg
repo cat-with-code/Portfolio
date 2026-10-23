@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="132" height="176" viewBox="344 0 132 176" fill="none"><g id="book-make-it-stick">
+<g id="3D / pages front_3">
+<path d="M357.299 9.2C357.299 8.64771 357.747 8.2 358.299 8.2H464.299C465.956 8.2 467.299 9.54315 467.299 11.2V170.2C467.299 171.857 465.956 173.2 464.299 173.2H358.299C357.747 173.2 357.299 172.752 357.299 172.2V9.2Z" fill="white" />
+<path d="M358.299 8.45H464.299C465.818 8.45 467.049 9.68122 467.049 11.2V170.2C467.049 171.719 465.818 172.95 464.299 172.95H358.299C357.885 172.95 357.549 172.614 357.549 172.2V9.2C357.549 8.78579 357.885 8.45 358.299 8.45Z" stroke="black" stroke-opacity="0.14" stroke-width="0.5" />
+</g>
+<g id="3D / pages back_3" filter="url(#filter4_d_2_2)">
+<path d="M359.5 10.3C359.5 9.74771 359.948 9.3 360.5 9.3H466.5C468.157 9.3 469.5 10.6431 469.5 12.3V169.1C469.5 170.757 468.157 172.1 466.5 172.1H360.5C359.948 172.1 359.5 171.652 359.5 171.1V10.3Z" fill="white" />
+<path d="M360.5 9.55H466.5C468.019 9.55 469.25 10.7812 469.25 12.3V169.1C469.25 170.619 468.019 171.85 466.5 171.85H360.5C360.086 171.85 359.75 171.514 359.75 171.1V10.3L359.754 10.2229C359.793 9.84488 360.112 9.55 360.5 9.55Z" stroke="black" stroke-opacity="0.14" stroke-width="0.5" />
+</g>
+<g id="Book_3" filter="url(#filter5_dd_2_2)">
+<g clip-path="url(#clip2_2_2)">
+<path d="M354 8C354 6.89543 354.895 6 356 6H459C461.761 6 464 8.23858 464 11V170.4C464 173.161 461.761 175.4 459 175.4H356C354.895 175.4 354 174.505 354 173.4V8Z" fill="url(#pattern2_2_2)" />
+<rect id="3D / spine shade_3" x="354" y="6" width="11" height="169.4" fill="url(#paint6_linear_2_2)" />
+<rect id="3D / hinge_3" x="366.1" y="6" width="1.1" height="169.4" fill="url(#paint7_linear_2_2)" />
+<rect id="3D / sheen_3" x="354" y="6" width="110" height="169.4" fill="url(#paint8_linear_2_2)" />
+</g>
+</g>
+</g>
+<defs><linearGradient id="paint6_linear_2_2" x1="354" y1="90.7" x2="365" y2="90.7" gradientUnits="userSpaceOnUse">
+<stop stop-opacity="0.34" />
+<stop offset="0.3" stop-color="white" stop-opacity="0.3" />
+<stop offset="0.55" stop-opacity="0.14" />
+<stop offset="1" stop-opacity="0" />
+</linearGradient>
+<pattern id="pattern2_2_2" patternContentUnits="objectBoundingBox" width="1" height="1">
+<use xlink:href="#image2_2_2" transform="matrix(0.000627036 0 0 0.000407166 -0.00162865 0)" />
+</pattern>
+<clipPath id="clip2_2_2">
+<path d="M354 8C354 6.89543 354.895 6 356 6H459C461.761 6 464 8.23858 464 11V170.4C464 173.161 461.761 175.4 459 175.4H356C354.895 175.4 354 174.505 354 173.4V8Z" fill="white" />
+</clipPath>
+<linearGradient id="paint7_linear_2_2" x1="366.1" y1="90.7" x2="367.2" y2="90.7" gradientUnits="userSpaceOnUse">
+<stop stop-opacity="0.16" />
+<stop offset="1" stop-color="white" stop-opacity="0.18" />
+</linearGradient>
+<linearGradient id="paint8_linear_2_2" x1="363.167" y1="20.1167" x2="492.124" y2="103.855" gradientUnits="userSpaceOnUse">
+<stop stop-color="white" stop-opacity="0.2" />
+<stop offset="0.42" stop-color="white" stop-opacity="0" />
+<stop offset="1" stop-opacity="0.1" />
+</linearGradient>
+<filter id="filter4_d_2_2" x="352.5" y="4.3" width="130" height="182.8" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix" />
+<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha" />
+<feOffset dx="3" dy="5" />
+<feGaussianBlur stdDeviation="5" />
+<feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.22 0" />
+<feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_2_2" />
+<feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_2_2" result="shape" />
+</filter>
+<filter id="filter5_dd_2_2" x="344" y="0" width="134" height="193.4" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix" />
+<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha" />
+<feOffset dx="1" dy="2" />
+<feGaussianBlur stdDeviation="1.5" />
+<feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.16 0" />
+<feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_2_2" />
+<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha" />
+<feOffset dx="2" dy="6" />
+<feGaussianBlur stdDeviation="6" />
+<feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.18 0" />
+<feBlend mode="normal" in2="effect1_dropShadow_2_2" result="effect2_dropShadow_2_2" />
+<feBlend mode="normal" in="SourceGraphic" in2="effect2_dropShadow_2_2" result="shape" />
+</filter>
+<image id="image2_2_2" width="1600" height="2456" preserveAspectRatio="none" xlink:href="/images/books/make-it-stick.jpg" />
+</defs></svg>

@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="507" height="242" viewBox="360 1302 507 242" fill="none"><g id="topic-notes-wide-507">
+<rect width="507" height="242" transform="translate(360 1302)" fill="#DFE3EC" />
+<g id="Notebook_2" filter="url(#filter22_d_2_2)">
+<g clip-path="url(#clip8_2_2)">
+<rect x="448.725" y="1335.88" width="237.656" height="174.24" rx="12" fill="white" />
+<rect id="Margin_2" opacity="0.4" x="489.918" y="1335.88" width="3.16875" height="174.24" fill="#F22267" />
+<rect id="Rule_7" x="505.762" y="1367.34" width="152.1" height="4.84" rx="2" fill="#666666" />
+<rect id="Rule_8" x="505.762" y="1389.12" width="114.075" height="4.84" rx="2" fill="#666666" />
+<rect id="Rule_9" x="505.762" y="1410.9" width="152.1" height="4.84" rx="2" fill="#666666" />
+<rect id="Rule_10" x="505.762" y="1432.68" width="114.075" height="4.84" rx="2" fill="#666666" />
+<rect id="Rule_11" x="505.762" y="1454.46" width="152.1" height="4.84" rx="2" fill="#666666" />
+<rect id="Rule_12" x="505.762" y="1476.24" width="114.075" height="4.84" rx="2" fill="#666666" />
+<rect id="Check_3" x="462.4" y="1363.5" width="17.0125" height="12.52" rx="2" stroke="#2267F2" stroke-width="2" />
+<rect id="Check_4" x="461.4" y="1384.28" width="19.0125" height="14.52" rx="3" fill="#2267F2" />
+</g>
+</g>
+<g id="Mug_2" filter="url(#filter23_d_2_2)">
+<path d="M711.73 1432.58C711.73 1425.95 717.103 1420.58 723.73 1420.58H785.287C791.914 1420.58 797.287 1425.95 797.287 1432.58V1478.76C797.287 1485.39 791.914 1490.76 785.287 1490.76H723.73C717.103 1490.76 711.73 1485.39 711.73 1478.76V1432.58Z" fill="white" />
+<path id="Coffee_2" d="M724.406 1434.26C724.406 1432.05 726.197 1430.26 728.406 1430.26H780.612C782.822 1430.26 784.612 1432.05 784.612 1434.26V1435.94C784.612 1438.15 782.822 1439.94 780.612 1439.94H728.406C726.197 1439.94 724.406 1438.15 724.406 1435.94V1434.26Z" fill="#F2AC27" />
+</g>
+<path id="Handle_2" d="M784.613 1453.25C784.613 1444.56 791.77 1437.52 800.457 1437.52V1437.52C809.144 1437.52 816.301 1444.56 816.301 1453.25V1453.25C816.301 1461.94 809.144 1468.98 800.457 1468.98V1468.98C791.77 1468.98 784.613 1461.94 784.613 1453.25V1453.25Z" stroke="white" stroke-width="6" />
+<path id="Rain_5" d="M733.913 1338.3L724.406 1355.24" stroke="#2267F2" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+<path id="Rain_6" d="M775.106 1360.08L765.6 1377.02" stroke="#2267F2" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+<path id="Rain_7" d="M816.299 1333.46L806.793 1350.4" stroke="#2267F2" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+<path id="Rain_8" d="M756.094 1381.86L746.588 1398.8" stroke="#2267F2" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+</g>
+<defs><filter id="filter22_d_2_2" x="442.725" y="1331.88" width="249.656" height="186.24" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix" />
+<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha" />
+<feOffset dy="2" />
+<feGaussianBlur stdDeviation="3" />
+<feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.02 0" />
+<feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_2_2" />
+<feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_2_2" result="shape" />
+</filter>
+<filter id="filter23_d_2_2" x="705.73" y="1416.58" width="97.5566" height="82.1801" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix" />
+<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha" />
+<feOffset dy="2" />
+<feGaussianBlur stdDeviation="3" />
+<feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.02 0" />
+<feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_2_2" />
+<feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_2_2" result="shape" />
+</filter>
+<clipPath id="clip8_2_2">
+<rect x="448.725" y="1335.88" width="237.656" height="174.24" rx="12" fill="white" />
+</clipPath>
+</defs></svg>

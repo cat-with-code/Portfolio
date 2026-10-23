@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="132" height="176" viewBox="172 0 132 176" fill="none"><g id="book-deep-work">
+<g id="3D / pages front_2">
+<path d="M185.299 9.2C185.299 8.64771 185.747 8.2 186.299 8.2H292.299C293.956 8.2 295.299 9.54315 295.299 11.2V170.2C295.299 171.857 293.956 173.2 292.299 173.2H186.299C185.747 173.2 185.299 172.752 185.299 172.2V9.2Z" fill="white" />
+<path d="M186.299 8.45H292.299C293.818 8.45 295.049 9.68122 295.049 11.2V170.2C295.049 171.719 293.818 172.95 292.299 172.95H186.299C185.885 172.95 185.549 172.614 185.549 172.2V9.2C185.549 8.78579 185.885 8.45 186.299 8.45Z" stroke="black" stroke-opacity="0.14" stroke-width="0.5" />
+</g>
+<g id="3D / pages back_2" filter="url(#filter2_d_2_2)">
+<path d="M187.5 10.3C187.5 9.74771 187.948 9.3 188.5 9.3H294.5C296.157 9.3 297.5 10.6431 297.5 12.3V169.1C297.5 170.757 296.157 172.1 294.5 172.1H188.5C187.948 172.1 187.5 171.652 187.5 171.1V10.3Z" fill="white" />
+<path d="M188.5 9.55H294.5C296.019 9.55 297.25 10.7812 297.25 12.3V169.1C297.25 170.619 296.019 171.85 294.5 171.85H188.5C188.086 171.85 187.75 171.514 187.75 171.1V10.3L187.754 10.2229C187.793 9.84488 188.112 9.55 188.5 9.55Z" stroke="black" stroke-opacity="0.14" stroke-width="0.5" />
+</g>
+<g id="Book_2" filter="url(#filter3_dd_2_2)">
+<g clip-path="url(#clip1_2_2)">
+<path d="M182 8C182 6.89543 182.895 6 184 6H287C289.761 6 292 8.23858 292 11V170.4C292 173.161 289.761 175.4 287 175.4H184C182.895 175.4 182 174.505 182 173.4V8Z" fill="url(#pattern1_2_2)" />
+<rect id="3D / spine shade_2" x="182" y="6" width="11" height="169.4" fill="url(#paint3_linear_2_2)" />
+<rect id="3D / hinge_2" x="194.1" y="6" width="1.1" height="169.4" fill="url(#paint4_linear_2_2)" />
+<rect id="3D / sheen_2" x="182" y="6" width="110" height="169.4" fill="url(#paint5_linear_2_2)" />
+</g>
+</g>
+</g>
+<defs><linearGradient id="paint4_linear_2_2" x1="194.1" y1="90.7" x2="195.2" y2="90.7" gradientUnits="userSpaceOnUse">
+<stop stop-opacity="0.16" />
+<stop offset="1" stop-color="white" stop-opacity="0.18" />
+</linearGradient>
+<linearGradient id="paint3_linear_2_2" x1="182" y1="90.7" x2="193" y2="90.7" gradientUnits="userSpaceOnUse">
+<stop stop-opacity="0.34" />
+<stop offset="0.3" stop-color="white" stop-opacity="0.3" />
+<stop offset="0.55" stop-opacity="0.14" />
+<stop offset="1" stop-opacity="0" />
+</linearGradient>
+<clipPath id="clip1_2_2">
+<path d="M182 8C182 6.89543 182.895 6 184 6H287C289.761 6 292 8.23858 292 11V170.4C292 173.161 289.761 175.4 287 175.4H184C182.895 175.4 182 174.505 182 173.4V8Z" fill="white" />
+</clipPath>
+<pattern id="pattern1_2_2" patternContentUnits="objectBoundingBox" width="1" height="1">
+<use xlink:href="#image1_2_2" transform="matrix(0.00157233 0 0 0.00102099 0 -0.0104958)" />
+</pattern>
+<linearGradient id="paint5_linear_2_2" x1="191.167" y1="20.1167" x2="320.124" y2="103.855" gradientUnits="userSpaceOnUse">
+<stop stop-color="white" stop-opacity="0.2" />
+<stop offset="0.42" stop-color="white" stop-opacity="0" />
+<stop offset="1" stop-opacity="0.1" />
+</linearGradient>
+<filter id="filter2_d_2_2" x="180.5" y="4.3" width="130" height="182.8" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix" />
+<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha" />
+<feOffset dx="3" dy="5" />
+<feGaussianBlur stdDeviation="5" />
+<feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.22 0" />
+<feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_2_2" />
+<feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_2_2" result="shape" />
+</filter>
+<filter id="filter3_dd_2_2" x="172" y="0" width="134" height="193.4" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix" />
+<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha" />
+<feOffset dx="1" dy="2" />
+<feGaussianBlur stdDeviation="1.5" />
+<feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.16 0" />
+<feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_2_2" />
+<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha" />
+<feOffset dx="2" dy="6" />
+<feGaussianBlur stdDeviation="6" />
+<feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.18 0" />
+<feBlend mode="normal" in2="effect1_dropShadow_2_2" result="effect2_dropShadow_2_2" />
+<feBlend mode="normal" in="SourceGraphic" in2="effect2_dropShadow_2_2" result="shape" />
+</filter>
+<image id="image1_2_2" width="636" height="1000" preserveAspectRatio="none" xlink:href="/images/books/deep-work.jpg" />
+</defs></svg>

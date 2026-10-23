@@ -1,0 +1,50 @@
+<svg width="224" height="224" viewBox="0 0 224 224" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect width="224" height="224" fill="#1E1E1E"/>
+<g id="TEMP export &#226;&#128;&#148; skill-prototyping / Dark">
+<path d="M0 16.1429C0 7.2274 7.2274 0 16.1429 0H207.357C216.273 0 223.5 7.2274 223.5 16.1429V207.357C223.5 216.273 216.273 223.5 207.357 223.5H16.1429C7.2274 223.5 0 216.273 0 207.357V16.1429Z" fill="#410557"/>
+<g id="Screen A" filter="url(#filter0_d_2_2)">
+<rect x="22.0312" y="36.4297" width="74.8535" height="149.707" rx="16.1429" fill="#262626"/>
+<rect x="22.5357" y="36.9342" width="73.8446" height="148.698" rx="15.6384" stroke="#333333" stroke-width="1.00893"/>
+<rect id="Notch" x="49.3828" y="42.1875" width="20.1529" height="2.87898" rx="1.43949" fill="#BFBFBF"/>
+<rect id="Title" x="30.668" y="53.7031" width="40.3057" height="5.75796" rx="2.87898" fill="white"/>
+<rect id="List row" x="30.668" y="68.1016" width="57.5796" height="15.8344" rx="6.05357" fill="#0236B1"/>
+<rect id="List row_2" x="30.668" y="89.6875" width="57.5796" height="15.8344" rx="6.05357" fill="#0236B1"/>
+<rect id="List row_3" x="30.668" y="111.281" width="57.5796" height="15.8344" rx="6.05357" fill="#0236B1"/>
+<rect id="Primary button" x="30.668" y="160.227" width="57.5796" height="14.3949" rx="7.19745" fill="#2267F2"/>
+</g>
+<circle id="Tap ring" cx="59.4595" cy="167.424" r="17.7044" stroke="#2267F2" stroke-width="2.01786"/>
+<circle id="Tap dot" opacity="0.45" cx="59.4592" cy="167.424" r="7.19745" fill="#2267F2"/>
+<g id="Screen B" filter="url(#filter1_d_2_2)">
+<rect x="128.555" y="36.4297" width="74.8535" height="149.707" rx="16.1429" fill="#262626"/>
+<rect x="129.059" y="36.9342" width="73.8446" height="148.698" rx="15.6384" stroke="#333333" stroke-width="1.00893"/>
+<rect id="Notch_2" x="155.906" y="42.1875" width="20.1529" height="2.87898" rx="1.43949" fill="#BFBFBF"/>
+<rect id="Hero" x="137.191" y="53.7031" width="57.5796" height="51.8217" rx="10.0893" fill="#410557"/>
+<rect id="Title_2" x="137.191" y="114.164" width="46.0637" height="5.75796" rx="2.87898" fill="white"/>
+<rect id="Line" x="137.191" y="125.68" width="57.5796" height="4.31847" rx="2.15924" fill="#BFBFBF"/>
+<rect id="Line_2" x="137.191" y="134.312" width="40.3057" height="4.31847" rx="2.15924" fill="#BFBFBF"/>
+<rect id="Success" x="137.191" y="151.586" width="57.5796" height="23.0319" rx="8.07143" fill="#1A5903"/>
+</g>
+<path id="Flow connector" d="M95.4453 170.299C115.598 170.299 106.961 83.9297 127.114 83.9297" stroke="#2267F2" stroke-width="2.01786" stroke-dasharray="5.04 4.04"/>
+<path id="Arrow head" d="M125.676 83.9269L120.278 87.0434V80.8103L125.676 83.9269Z" fill="#2267F2"/>
+</g>
+<defs>
+<filter id="filter0_d_2_2" x="15.9777" y="32.394" width="86.9587" height="161.81" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+<feOffset dy="2.01786"/>
+<feGaussianBlur stdDeviation="3.02679"/>
+<feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.02 0"/>
+<feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_2_2"/>
+<feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_2_2" result="shape"/>
+</filter>
+<filter id="filter1_d_2_2" x="122.501" y="32.394" width="86.9587" height="161.81" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+<feOffset dy="2.01786"/>
+<feGaussianBlur stdDeviation="3.02679"/>
+<feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.02 0"/>
+<feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_2_2"/>
+<feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_2_2" result="shape"/>
+</filter>
+</defs>
+</svg>

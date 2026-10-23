@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="132" height="176" viewBox="860 0 132 176" fill="none"><g id="book-little-prince">
+<g id="3D / pages front_6">
+<path d="M873.299 9.2C873.299 8.64771 873.747 8.2 874.299 8.2H980.299C981.956 8.2 983.299 9.54315 983.299 11.2V170.2C983.299 171.857 981.956 173.2 980.299 173.2H874.299C873.747 173.2 873.299 172.752 873.299 172.2V9.2Z" fill="white" />
+<path d="M874.299 8.45H980.299C981.818 8.45 983.049 9.68122 983.049 11.2V170.2C983.049 171.719 981.818 172.95 980.299 172.95H874.299C873.885 172.95 873.549 172.614 873.549 172.2V9.2C873.549 8.78579 873.885 8.45 874.299 8.45Z" stroke="black" stroke-opacity="0.14" stroke-width="0.5" />
+</g>
+<g id="3D / pages back_6" filter="url(#filter10_d_2_2)">
+<path d="M875.5 10.3C875.5 9.74771 875.948 9.3 876.5 9.3H982.5C984.157 9.3 985.5 10.6431 985.5 12.3V169.1C985.5 170.757 984.157 172.1 982.5 172.1H876.5C875.948 172.1 875.5 171.652 875.5 171.1V10.3Z" fill="white" />
+<path d="M876.5 9.55H982.5C984.019 9.55 985.25 10.7812 985.25 12.3V169.1C985.25 170.619 984.019 171.85 982.5 171.85H876.5C876.086 171.85 875.75 171.514 875.75 171.1V10.3L875.754 10.2229C875.793 9.84488 876.112 9.55 876.5 9.55Z" stroke="black" stroke-opacity="0.14" stroke-width="0.5" />
+</g>
+<g id="Book_6" filter="url(#filter11_dd_2_2)">
+<g clip-path="url(#clip5_2_2)">
+<path d="M870 8C870 6.89543 870.895 6 872 6H975C977.761 6 980 8.23858 980 11V170.4C980 173.161 977.761 175.4 975 175.4H872C870.895 175.4 870 174.505 870 173.4V8Z" fill="#17339E" />
+<path d="M870 8C870 6.89543 870.895 6 872 6H975C977.761 6 980 8.23858 980 11V170.4C980 173.161 977.761 175.4 975 175.4H872C870.895 175.4 870 174.505 870 173.4V8Z" fill="url(#pattern5_2_2)" />
+<rect id="3D / spine shade_6" x="870" y="6" width="11" height="169.4" fill="url(#paint15_linear_2_2)" />
+<rect id="3D / hinge_6" x="882.1" y="6" width="1.1" height="169.4" fill="url(#paint16_linear_2_2)" />
+<rect id="3D / sheen_6" x="870" y="6" width="110" height="169.4" fill="url(#paint17_linear_2_2)" />
+</g>
+</g>
+</g>
+<defs><pattern id="pattern5_2_2" patternContentUnits="objectBoundingBox" width="1" height="1">
+<use xlink:href="#image5_2_2" transform="matrix(0.00127877 0 0 0.000830372 0 0.0848141)" />
+</pattern>
+<filter id="filter10_d_2_2" x="868.5" y="4.3" width="130" height="182.8" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix" />
+<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha" />
+<feOffset dx="3" dy="5" />
+<feGaussianBlur stdDeviation="5" />
+<feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.22 0" />
+<feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_2_2" />
+<feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_2_2" result="shape" />
+</filter>
+<linearGradient id="paint16_linear_2_2" x1="882.1" y1="90.7" x2="883.2" y2="90.7" gradientUnits="userSpaceOnUse">
+<stop stop-opacity="0.16" />
+<stop offset="1" stop-color="white" stop-opacity="0.18" />
+</linearGradient>
+<linearGradient id="paint17_linear_2_2" x1="879.167" y1="20.1167" x2="1008.12" y2="103.855" gradientUnits="userSpaceOnUse">
+<stop stop-color="white" stop-opacity="0.2" />
+<stop offset="0.42" stop-color="white" stop-opacity="0" />
+<stop offset="1" stop-opacity="0.1" />
+</linearGradient>
+<linearGradient id="paint15_linear_2_2" x1="870" y1="90.7" x2="881" y2="90.7" gradientUnits="userSpaceOnUse">
+<stop stop-opacity="0.34" />
+<stop offset="0.3" stop-color="white" stop-opacity="0.3" />
+<stop offset="0.55" stop-opacity="0.14" />
+<stop offset="1" stop-opacity="0" />
+</linearGradient>
+<clipPath id="clip5_2_2">
+<path d="M870 8C870 6.89543 870.895 6 872 6H975C977.761 6 980 8.23858 980 11V170.4C980 173.161 977.761 175.4 975 175.4H872C870.895 175.4 870 174.505 870 173.4V8Z" fill="white" />
+</clipPath>
+<image id="image5_2_2" width="782" height="1000" preserveAspectRatio="none" xlink:href="/images/books/little-prince.jpg" />
+<filter id="filter11_dd_2_2" x="860" y="0" width="134" height="193.4" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix" />
+<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha" />
+<feOffset dx="1" dy="2" />
+<feGaussianBlur stdDeviation="1.5" />
+<feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.16 0" />
+<feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_2_2" />
+<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha" />
+<feOffset dx="2" dy="6" />
+<feGaussianBlur stdDeviation="6" />
+<feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.18 0" />
+<feBlend mode="normal" in2="effect1_dropShadow_2_2" result="effect2_dropShadow_2_2" />
+<feBlend mode="normal" in="SourceGraphic" in2="effect2_dropShadow_2_2" result="shape" />
+</filter>
+</defs></svg>

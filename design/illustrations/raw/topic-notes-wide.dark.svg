@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="320" height="200" viewBox="0 1302 320 200" fill="none"><g id="topic-notes-wide">
+<rect width="320" height="200" transform="translate(0 1302)" fill="#031A59" />
+<g id="Notebook" filter="url(#filter20_d_2_2)">
+<rect x="56" y="1330" width="150" height="144" rx="12" fill="#262626" />
+<rect id="Margin" opacity="0.4" x="82" y="1330" width="2" height="144" fill="#F22267" />
+<rect id="Rule" x="92" y="1356" width="96" height="4" rx="2" fill="#BFBFBF" />
+<rect id="Rule_2" x="92" y="1374" width="72" height="4" rx="2" fill="#BFBFBF" />
+<rect id="Rule_3" x="92" y="1392" width="96" height="4" rx="2" fill="#BFBFBF" />
+<rect id="Rule_4" x="92" y="1410" width="72" height="4" rx="2" fill="#BFBFBF" />
+<rect id="Rule_5" x="92" y="1428" width="96" height="4" rx="2" fill="#BFBFBF" />
+<rect id="Rule_6" x="92" y="1446" width="72" height="4" rx="2" fill="#BFBFBF" />
+<rect id="Check" x="65" y="1353" width="10" height="10" rx="2" stroke="#2267F2" stroke-width="2" />
+<rect id="Check_2" x="64" y="1370" width="12" height="12" rx="3" fill="#2267F2" />
+</g>
+<g id="Mug" filter="url(#filter21_d_2_2)">
+<path d="M222 1412C222 1405.37 227.373 1400 234 1400H264C270.627 1400 276 1405.37 276 1412V1446C276 1452.63 270.627 1458 264 1458H234C227.373 1458 222 1452.63 222 1446V1412Z" fill="#262626" />
+<path id="Coffee" d="M230 1412C230 1409.79 231.791 1408 234 1408H264C266.209 1408 268 1409.79 268 1412C268 1414.21 266.209 1416 264 1416H234C231.791 1416 230 1414.21 230 1412Z" fill="#F2AC27" />
+</g>
+<path id="Handle" d="M268 1424C268 1418.48 272.477 1414 278 1414V1414C283.523 1414 288 1418.48 288 1424V1430C288 1435.52 283.523 1440 278 1440V1440C272.477 1440 268 1435.52 268 1430V1424Z" stroke="#262626" stroke-width="6" />
+<path id="Rain" d="M236 1332L230 1346" stroke="#2267F2" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+<path id="Rain_2" d="M262 1350L256 1364" stroke="#2267F2" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+<path id="Rain_3" d="M288 1328L282 1342" stroke="#2267F2" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+<path id="Rain_4" d="M250 1368L244 1382" stroke="#2267F2" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+</g>
+<defs><filter id="filter21_d_2_2" x="216" y="1396" width="66" height="70" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix" />
+<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha" />
+<feOffset dy="2" />
+<feGaussianBlur stdDeviation="3" />
+<feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.02 0" />
+<feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_2_2" />
+<feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_2_2" result="shape" />
+</filter>
+<filter id="filter20_d_2_2" x="50" y="1326" width="162" height="156" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix" />
+<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha" />
+<feOffset dy="2" />
+<feGaussianBlur stdDeviation="3" />
+<feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.02 0" />
+<feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_2_2" />
+<feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_2_2" result="shape" />
+</filter>
+</defs></svg>

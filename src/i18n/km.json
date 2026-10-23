@@ -1,0 +1,24 @@
+{
+  "nav": {
+    "portfolio": "ស្នាដៃផ្ទាល់ខ្លួន",
+    "developer": "អ្នកអភិវឌ្ឍន៍",
+    "projects": "គម្រោង",
+    "blog": "អត្ថបទ",
+    "study": "សិក្សា",
+    "games": "ហ្គេម",
+    "contact": "ទំនាក់ទំនង",
+    "settings": "ការកំណត់"
+  },
+  "search": {
+    "placeholder": "ស្វែងរកគម្រោង អត្ថបទ និងផ្សេងៗ"
+  },
+  "theme": {
+    "light": "ភ្លឺ",
+    "dark": "ងងឹត",
+    "system": "ប្រព័ន្ធ"
+  },
+  "settings": {
+    "appearance": "រូបរាង",
+    "language": "ភាសា"
+  }
+}

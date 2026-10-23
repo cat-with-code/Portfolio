@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="104 0 64 64" fill="none"><g id="audio-neo">
+<path d="M104 12C104 5.37258 109.373 0 116 0H156C162.627 0 168 5.37258 168 12V52C168 58.6274 162.627 64 156 64H116C109.373 64 104 58.6274 104 52V12Z" fill="#C260F2" />
+<circle id="Ellipse_4" opacity="0.9" cx="136" cy="28" r="18" fill="white" />
+<rect id="Rectangle_3" x="104" y="30" width="64" height="2" fill="#C260F2" />
+<rect id="Rectangle_4" x="104" y="35" width="64" height="3" fill="#C260F2" />
+<rect id="Rectangle_5" x="104" y="41" width="64" height="4" fill="#C260F2" />
+<rect id="Rectangle_6" opacity="0.6" x="104" y="46" width="64" height="18" fill="#2267F2" />
+<rect id="Rectangle_7" opacity="0.5" x="104" y="50" width="64" height="1" fill="white" />
+<rect id="Rectangle_8" opacity="0.5" x="104" y="56" width="64" height="1" fill="white" />
+<rect id="Rectangle_9" opacity="0.5" x="116" y="46" width="1" height="18" fill="white" />
+<rect id="Rectangle_10" opacity="0.5" x="135.5" y="46" width="1" height="18" fill="white" />
+<rect id="Rectangle_11" opacity="0.5" x="155" y="46" width="1" height="18" fill="white" />
+</g>
+<defs /></svg>

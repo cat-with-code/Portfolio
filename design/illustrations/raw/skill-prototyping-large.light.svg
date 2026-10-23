@@ -1,0 +1,50 @@
+<svg width="314" height="314" viewBox="0 0 314 314" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect width="314" height="314" fill="#1E1E1E"/>
+<g id="TEMP export &#226;&#128;&#148; skill-prototyping-large / Light">
+<path d="M0 16C0 7.16344 7.16344 0 16 0H298C306.837 0 314 7.16344 314 16V298C314 306.837 306.837 314 298 314H16C7.16344 314 0 306.837 0 298V16Z" fill="#D3B6E2"/>
+<g id="Screen A" filter="url(#filter0_d_2_2)">
+<path d="M32 68C32 59.1634 39.1634 52 48 52H120C128.837 52 136 59.1634 136 68V244C136 252.837 128.837 260 120 260H48C39.1634 260 32 252.837 32 244V68Z" fill="white"/>
+<path d="M48 52.5H120C128.56 52.5 135.5 59.4396 135.5 68V244C135.5 252.56 128.56 259.5 120 259.5H48C39.4396 259.5 32.5 252.56 32.5 244V68C32.5 59.4396 39.4396 52.5 48 52.5Z" stroke="#E6E6E6"/>
+<rect id="Notch" x="70" y="60" width="28" height="4" rx="2" fill="#666666"/>
+<path id="Title" d="M44 80C44 77.7909 45.7909 76 48 76H96C98.2091 76 100 77.7909 100 80C100 82.2091 98.2091 84 96 84H48C45.7909 84 44 82.2091 44 80Z" fill="#0D0D0D"/>
+<rect id="List row" x="44" y="96" width="80" height="22" rx="6" fill="#F0F1F5"/>
+<rect id="List row_2" x="44" y="126" width="80" height="22" rx="6" fill="#F0F1F5"/>
+<rect id="List row_3" x="44" y="156" width="80" height="22" rx="6" fill="#F0F1F5"/>
+<rect id="Primary button" x="44" y="224" width="80" height="20" rx="10" fill="#2267F2"/>
+</g>
+<circle id="Tap ring" cx="84" cy="234" r="25" stroke="#2267F2" stroke-width="2"/>
+<circle id="Tap dot" opacity="0.45" cx="84" cy="234" r="10" fill="#2267F2"/>
+<g id="Screen B" filter="url(#filter1_d_2_2)">
+<path d="M180 68C180 59.1634 187.163 52 196 52H268C276.837 52 284 59.1634 284 68V244C284 252.837 276.837 260 268 260H196C187.163 260 180 252.837 180 244V68Z" fill="white"/>
+<path d="M196 52.5H268C276.56 52.5 283.5 59.4396 283.5 68V244C283.5 252.56 276.56 259.5 268 259.5H196C187.44 259.5 180.5 252.56 180.5 244V68C180.5 59.4396 187.44 52.5 196 52.5Z" stroke="#E6E6E6"/>
+<rect id="Notch_2" x="218" y="60" width="28" height="4" rx="2" fill="#666666"/>
+<rect id="Hero" x="192" y="76" width="80" height="72" rx="10" fill="#D3B6E2"/>
+<path id="Title_2" d="M192 164C192 161.791 193.791 160 196 160H252C254.209 160 256 161.791 256 164C256 166.209 254.209 168 252 168H196C193.791 168 192 166.209 192 164Z" fill="#0D0D0D"/>
+<rect id="Line" x="192" y="176" width="80" height="6" rx="3" fill="#666666"/>
+<rect id="Line_2" x="192" y="188" width="56" height="6" rx="3" fill="#666666"/>
+<path id="Success" d="M192 220C192 215.582 195.582 212 200 212H264C268.418 212 272 215.582 272 220V236C272 240.418 268.418 244 264 244H200C195.582 244 192 240.418 192 236V220Z" fill="#E3ECDF"/>
+</g>
+<path id="Flow connector" d="M134 238C162 238 150 118 178 118" stroke="#2267F2" stroke-width="2" stroke-dasharray="5 4"/>
+<path id="Arrow head" d="M176 118L168.5 122.33V113.67L176 118Z" fill="#2267F2"/>
+</g>
+<defs>
+<filter id="filter0_d_2_2" x="26" y="48" width="116" height="220" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+<feOffset dy="2"/>
+<feGaussianBlur stdDeviation="3"/>
+<feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.02 0"/>
+<feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_2_2"/>
+<feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_2_2" result="shape"/>
+</filter>
+<filter id="filter1_d_2_2" x="174" y="48" width="116" height="220" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+<feOffset dy="2"/>
+<feGaussianBlur stdDeviation="3"/>
+<feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.02 0"/>
+<feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_2_2"/>
+<feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_2_2" result="shape"/>
+</filter>
+</defs>
+</svg>

@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="300" height="300" viewBox="1065 962 300 300" fill="none"><g id="topic-fiction-square" clip-path="url(#clip7_2_2)">
+<rect width="300" height="300" transform="translate(1065 962)" fill="#594103" />
+<ellipse id="Hill back_4" opacity="0.35" cx="1131" cy="1262" rx="132" ry="96" fill="#F2AC27" />
+<ellipse id="Hill front_4" opacity="0.55" cx="1335" cy="1276.4" rx="144" ry="96" fill="#F2AC27" />
+<circle id="Moon_4" cx="1307.4" cy="1060.4" r="32.4" fill="#262626" />
+<circle id="Moon shadow_4" cx="1324.2" cy="1048.4" r="30" fill="#594103" />
+<circle id="Star_16" cx="1110.6" cy="1043.6" r="3.6" fill="#262626" />
+<circle id="Star_17" cx="1157.4" cy="1023.2" r="2.4" fill="#262626" />
+<circle id="Star_18" cx="1206" cy="1062.2" r="3" fill="#262626" />
+<circle id="Star_19" cx="1073.4" cy="1090.4" r="2.4" fill="#262626" />
+<path id="Path_4" d="M1071 1250C1119 1238 1143 1214 1191 1209.2C1239 1204.4 1251 1178 1299 1166" stroke="#262626" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round" />
+<g id="Paper_4" filter="url(#filter19_d_2_2)">
+<rect x="1085.4" y="1107.2" width="84" height="62.4" rx="7.2" transform="rotate(-8 1085.4 1107.2)" fill="#262626" />
+<path id="Line_34" d="M1097.24 1122.5C1097.06 1121.19 1097.97 1119.97 1099.29 1119.79L1156.33 1111.77C1157.64 1111.59 1158.85 1112.5 1159.04 1113.82C1159.22 1115.13 1158.31 1116.34 1156.99 1116.53L1099.95 1124.54C1098.64 1124.73 1097.43 1123.81 1097.24 1122.5Z" fill="#BFBFBF" />
+<path id="Line_35" d="M1098.92 1134.38C1098.73 1133.07 1099.65 1131.86 1100.96 1131.67L1146.11 1125.33C1147.43 1125.14 1148.64 1126.06 1148.83 1127.37C1149.01 1128.68 1148.1 1129.9 1146.78 1130.08L1101.63 1136.43C1100.31 1136.61 1099.1 1135.7 1098.92 1134.38Z" fill="#BFBFBF" />
+<path id="Line_36" d="M1100.59 1146.27C1100.4 1144.95 1101.32 1143.74 1102.63 1143.56L1135.9 1138.88C1137.21 1138.7 1138.43 1139.61 1138.61 1140.92C1138.8 1142.24 1137.88 1143.45 1136.57 1143.63L1103.3 1148.31C1101.98 1148.49 1100.77 1147.58 1100.59 1146.27Z" fill="#BFBFBF" />
+</g>
+</g>
+<defs><clipPath id="clip7_2_2">
+<rect width="300" height="300" fill="white" transform="translate(1065 962)" />
+</clipPath>
+<filter id="filter19_d_2_2" x="1078.2" y="1090.71" width="106.267" height="87.8833" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix" />
+<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha" />
+<feOffset dy="2.4" />
+<feGaussianBlur stdDeviation="3.6" />
+<feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.02 0" />
+<feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_2_2" />
+<feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_2_2" result="shape" />
+</filter>
+</defs></svg>
