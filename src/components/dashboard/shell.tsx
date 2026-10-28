@@ -6,23 +6,23 @@ import { SearchField, SearchIconButton } from "@/components/shell/search-trigger
 import { SidebarToggle } from "@/components/shell/sidebar-toggle";
 import { ThemeToggle } from "@/components/shell/theme-toggle";
 import { Badge } from "@/components/ui/badge";
-import { posts } from "@/content/blog";
 import { dashboardShell as copy } from "@/content/dashboard";
-import { directoryProjects } from "@/content/projects";
+import { getSiteContent } from "@/lib/site-content";
 import { DashboardMenu, DashboardNav } from "./nav";
 import { DashboardSearch, ProfileMenu, type SearchDraft } from "./overlays";
 
-/** Everything searchable besides the pages: every project and story (all drafts until publishing exists). */
-const drafts: SearchDraft[] = [
-  ...directoryProjects.map((p) => ({ kind: "project" as const, title: p.name, href: `/dashboard/projects/${p.key}` })),
-  ...Object.values(posts).map((p) => ({ kind: "story" as const, title: p.title, href: `/dashboard/writing/${p.slug}` })),
-];
 
 /**
  * Dashboard shell (Figma Desktop / Overview 1346:2158 · Tablet 1435:7646 · Mobile 1437:11205): the portfolio's shell with
  * the "Portfolio manager" navigation. Desktop 248px sidebar (collapsible) · Tablet 72px rail · Mobile top bar + menu.
  */
-export function DashboardShell({ children }: { children: ReactNode }) {
+export async function DashboardShell({ children }: { children: ReactNode }) {
+  // Everything searchable besides the pages: every project and story.
+  const { projects, posts } = await getSiteContent();
+  const drafts: SearchDraft[] = [
+    ...projects.map((p) => ({ kind: "project" as const, title: p.name, href: `/dashboard/projects/${p.key}` })),
+    ...Object.values(posts).map((p) => ({ kind: "story" as const, title: p.title, href: `/dashboard/writing/${p.slug}` })),
+  ];
   return (
     <SearchProvider>
       <div className="flex min-h-dvh flex-col">

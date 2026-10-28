@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { TryItCard } from "@/components/developer/try-it-card";
 import { DesignApproach, ProcessList } from "@/components/projects/design-approach";
 import { DirectoryButton, DirectoryCaption } from "@/components/projects/directory-button";
@@ -8,6 +9,11 @@ import { developer } from "@/content/developer";
 import { projectsPage as p } from "@/content/projects";
 import { getSiteContent } from "@/lib/site-content";
 import { getLocale } from "@/i18n/dictionaries";
+import { pageMetadata, sectionDescriptions } from "@/lib/seo";
+
+export async function generateMetadata(): Promise<Metadata> {
+  return pageMetadata({ lang: await getLocale(), path: "/projects", title: "Projects", description: sectionDescriptions.projects });
+}
 
 /** Projects — Bento editorial layout (Figma Desktop 694:22512 · Tablet 696:37956 · Mobile 696:44618). */
 export default async function ProjectsPage() {

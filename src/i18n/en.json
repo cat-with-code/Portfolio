@@ -51,5 +51,14 @@
   "settings": {
     "appearance": "Appearance",
     "language": "Language"
-  }
+  },
+  "notFound": {
+    "eyebrow": "ERROR 404 · PAGE NOT FOUND",
+    "title": "This page wandered off",
+    "body": "The link may be old, or the page has moved. Here are a few good places to pick up again.",
+    "home": "Back to home",
+    "search": "Search the site",
+    "explore": "OR EXPLORE"
+  },
+  "loading": "Loading…"
 }

@@ -1,7 +1,9 @@
+import type { Metadata } from "next";
 import { CoverCard, PlayButton, RowCard, SplitCard } from "@/components/games/cards";
 import { LibraryCount, SudokuStart } from "@/components/games/hub-client";
 import { games, hub, sections, type GameKey, type SectionKey } from "@/content/games";
 import { getLocale } from "@/i18n/dictionaries";
+import { pageMetadata, sectionDescriptions } from "@/lib/seo";
 
 const count = (s: SectionKey) => Object.values(games).filter((g) => g.section === s).length;
 
@@ -21,6 +23,10 @@ function Section({ id, children }: { id: SectionKey; children: React.ReactNode }
 function Art({ game, className }: { game: GameKey; className: string }) {
   // eslint-disable-next-line @next/next/no-img-element -- small fixed artwork, already optimised WebP
   return <img src={`/images/games/${game}.webp`} alt="" className={`object-contain drop-shadow-[0_4px_6px_rgb(0_0_0/0.18)] ${className}`} />;
+}
+
+export async function generateMetadata(): Promise<Metadata> {
+  return pageMetadata({ lang: await getLocale(), path: "/games", title: "Games", description: sectionDescriptions.games });
 }
 
 /** Games — Game Hub (Figma Desktop 694:11927 · Tablet 696:32013 · Mobile 696:38675). */

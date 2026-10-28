@@ -1,30 +1,51 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { deleteProject, saveProject } from "@/app/dashboard/actions";
 import { CaseCover } from "@/components/projects/case-cover";
 import { covers, ProjectCover, type CoverKey } from "@/components/projects/project-cover";
 import { Badge } from "@/components/ui/badge";
-import { Button, ButtonLink } from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 import { Chip } from "@/components/ui/chip";
 import { SectionHeading } from "@/components/ui/section-heading";
 import type { CaseStudy } from "@/content/case-studies";
 import { projectEditorCopy as c, statusLabel } from "@/content/dashboard";
 import type { DirectoryProject } from "@/content/projects";
 import { CoverField, DeleteZone, ItemDialog } from "./dialogs";
-import { AddItemRow, BackLink, EditorSection, FieldRow, ListItemRow, SaveNote, SelectField, TextArea, TextField } from "./editor";
+import { AddItemRow, BackLink, EditorSection, FieldRow, ListItemRow, SaveNote, TextArea, TextField, useSaver } from "./editor";
 
 /**
  * Dashboard / Project editor (Figma Desktop 1346:2166): the directory card, and — for projects with a case study page —
  * every part of that page, in page order. Preview opens the live case study.
  */
-export function ProjectEditor({ card: initialCard, study: initialStudy, others }: { card: DirectoryProject; study: CaseStudy | null; others: { value: string; label: string }[] }) {
+export function ProjectEditor({ card: initialCard, study: initialStudy, status = "draft" }: { card: DirectoryProject; study: CaseStudy | null; status?: "draft" | "published" }) {
+  const router = useRouter();
+  const isNew = initialCard.key === "new";
   const [card, setCard] = useState(initialCard);
   const [study, setStudy] = useState(initialStudy);
-  const [next, setNext] = useState(others[0]?.value ?? "");
-  const [saved, setSaved] = useState(false);
+  const { pending, note, save, clear } = useSaver();
   /** Step open in Edit item; -1 = adding a new one */
   const [editing, setEditing] = useState<number | null>(null);
-  const touch = () => setSaved(false);
+  const touch = clear;
+  /** Saves everything; `then` runs with the project's key (new projects get one on first save). */
+  const submit = (then?: (key: string) => void) =>
+    save(
+      () =>
+        saveProject({
+          key: card.key,
+          name: card.name,
+          category: card.category,
+          description: card.description,
+          disciplines: card.disciplines,
+          coverImage: card.coverImage,
+          ...(study ? { caseStudy: Object.fromEntries(Object.entries(study).filter(([k]) => k !== "key")) as Omit<CaseStudy, "key"> } : {}),
+        }),
+      (r) => {
+        if (isNew && r.key) router.replace(`/dashboard/projects/${r.key}`);
+        if (r.key) then?.(r.key);
+      }
+    );
   const setC = <K extends keyof DirectoryProject>(k: K) => (v: DirectoryProject[K]) => (setCard({ ...card, [k]: v }), touch());
   const edit = (fn: (s: CaseStudy) => CaseStudy) => study && (setStudy(fn(study)), touch());
 
@@ -33,17 +54,16 @@ export function ProjectEditor({ card: initialCard, study: initialStudy, others }
       <BackLink href="/dashboard/projects">{c.back}</BackLink>
       <SectionHeading
         title={card.name}
-        description={c.status}
+        description={status === "published" ? c.statusPublished : c.status}
         action={
           <div className="flex gap-8">
-            <Button variant="secondary" size="small" onClick={() => setSaved(true)}>
-              {c.save}
+            <Button variant="secondary" size="small" disabled={pending || !card.name.trim()} onClick={() => submit()}>
+              {pending ? c.saving : c.save}
             </Button>
-            {card.key !== "new" && (
-              <ButtonLink href={`/dashboard/projects/${card.key}/publish`} size="small">
-                {c.publish}
-              </ButtonLink>
-            )}
+            {/* Publish saves first, then opens the review */}
+            <Button size="small" disabled={pending || !card.name.trim()} onClick={() => submit((key) => router.push(`/dashboard/projects/${key}/publish`))}>
+              {status === "published" ? c.review : c.publish}
+            </Button>
           </div>
         }
       />
@@ -54,11 +74,11 @@ export function ProjectEditor({ card: initialCard, study: initialStudy, others }
             {c.modes.preview} ↗
           </a>
         )}
-        <Badge tone="warning" className="ml-10">
-          {statusLabel.draft}
+        <Badge tone={status === "draft" ? "warning" : "success"} className="ml-10">
+          {statusLabel[status]}
         </Badge>
       </div>
-      {saved && <SaveNote>{c.saved}</SaveNote>}
+      {note && <SaveNote tone={note.tone}>{note.text}</SaveNote>}
 
       <div className="flex w-full flex-col gap-24">
         <EditorSection eyebrow={c.card.eyebrow} title={c.card.title} where={c.card.where}>
@@ -157,15 +177,9 @@ export function ProjectEditor({ card: initialCard, study: initialStudy, others }
               <TextField label={c.overview.sectionTitle} value={study.outcome.title} onChange={(v) => edit((s) => ({ ...s, outcome: { ...s.outcome, title: v } }))} />
               <TextArea label={c.outcome.statement} value={study.outcome.statement} onChange={(v) => edit((s) => ({ ...s, outcome: { ...s.outcome, statement: v } }))} max={240} />
             </EditorSection>
-
-            {others.length > 0 && (
-              <EditorSection eyebrow={c.next.eyebrow} title={c.next.title} where={c.next.where}>
-                <SelectField label={c.next.label} value={next} options={others} onChange={(v) => (setNext(v), touch())} hint={c.next.hint} />
-              </EditorSection>
-            )}
           </>
         )}
-        {card.key !== "new" && <DeleteZone name={card.name} />}
+        {!isNew && <DeleteZone name={card.name} onDelete={() => deleteProject(card.key)} after="/dashboard/projects" />}
       </div>
     </div>
   );

@@ -4,7 +4,8 @@ import { BlogIcon, PlusIcon } from "@/components/icons";
 import { ButtonLink } from "@/components/ui/button";
 import { SectionHeading } from "@/components/ui/section-heading";
 import { writingCopy as c } from "@/content/dashboard";
-import { getPosts } from "@/lib/content";
+import { deletePost } from "@/app/dashboard/actions";
+import { requireOwnerContent } from "@/lib/site-content";
 
 export const metadata: Metadata = { title: "Writing" };
 
@@ -12,12 +13,13 @@ const sentence = (s: string) => s.charAt(0) + s.slice(1).toLowerCase();
 
 /** Dashboard / Writing (Figma Desktop 1346:2160 · content 1363:2612). */
 export default async function WritingPage() {
-  const rows = (await getPosts()).map((p) => ({
+  const content = await requireOwnerContent();
+  const rows = Object.values(content.posts).map((p) => ({
     key: p.slug,
     title: p.title,
     meta: sentence(p.category),
     info: `${p.minutes} min read`,
-    status: "draft" as const,
+    status: content.status?.[`post:${p.slug}`] ?? "published",
     href: `/dashboard/writing/${p.slug}`,
   }));
   return (
@@ -31,7 +33,7 @@ export default async function WritingPage() {
           </ButtonLink>
         }
       />
-      <ContentList rows={rows} icon={<BlogIcon className="size-24" />} noun={c.noun} />
+      <ContentList rows={rows} icon={<BlogIcon className="size-24" />} noun={c.noun} onDelete={deletePost} />
     </div>
   );
 }

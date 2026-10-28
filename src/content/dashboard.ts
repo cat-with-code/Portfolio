@@ -40,14 +40,17 @@ export const overviewCopy = {
     eyebrow: "PORTFOLIO MANAGER",
     badge: "Design. Build. Explore.",
     title: ["Good to see you, Dareach.", "Let’s get your work ready."],
-    body: (drafts: number) => [`${drafts} starter drafts are ready to make your own.`, "Review a project, add your assets, then publish when it feels right."],
+    body: (drafts: number) =>
+      drafts
+        ? [`${drafts} ${drafts === 1 ? "draft is" : "drafts are"} waiting for you.`, "Review a project, add your assets, then publish when it feels right."]
+        : ["Everything is published.", "Add a new project or story whenever you’re ready."],
   },
-  drafts: { eyebrow: (n: number) => `CONTINUE · ${n} DRAFTS`, title: "Pick up a draft", body: "A little progress goes a long way.", all: "View all drafts", edit: "Edit" },
-  inbox: { title: "Inbox", empty: "No messages yet. New portfolio inquiries will appear here.", open: "Open inbox" },
+  drafts: { eyebrow: (n: number) => `CONTINUE · ${n} DRAFTS`, title: "Pick up a draft", body: "A little progress goes a long way.", empty: "No drafts right now — new projects and stories start here.", all: "View all drafts", edit: "Edit" },
+  inbox: { title: "Inbox", empty: "No new messages. New portfolio inquiries will appear here.", unread: (n: number) => `${n} new ${n === 1 ? "message" : "messages"} waiting for a reply.`, open: "Open inbox" },
   checklist: { title: "Before you publish", steps: ["Review your project story", "Add cover images", "Preview, then publish"] },
   media: { eyebrow: "MEDIA", title: "Recent media", open: "Open media" },
   games: { eyebrow: "GAMES", title: "Games to link", progress: (linked: number, total: number) => `${linked} of ${total} have a play link.`, add: "Add links" },
-  actions: { eyebrow: "SHORTCUTS", title: "Quick actions", newProject: "New project", newStory: "New story", upload: "Upload media" },
+  actions: { eyebrow: "SHORTCUTS", title: "Quick actions", newProject: "New project", newStory: "New story", upload: "Media library" },
 };
 
 export const projectsCopy = { title: "Projects", description: "Tell the story behind your UI/UX design and development work.", add: "New project", noun: ["project", "projects"] as [string, string] };
@@ -79,7 +82,6 @@ export const gamesCopy = {
 export const mediaCopy = {
   title: "Media",
   description: "Images used across your portfolio.",
-  upload: "Upload",
   all: "All",
   groups: {
     projects: { filter: "Projects", eyebrow: "PROJECTS", title: "Project covers", note: "shown on project cards", caption: "Cover" },
@@ -91,8 +93,18 @@ export const mediaCopy = {
 export const inboxCopy = {
   title: "Inbox",
   description: "Messages from your contact page.",
-  filters: ["All", "Unread", "Archived"],
+  filters: { all: "All", unread: "Unread", archived: "Archived" },
   empty: { title: "No messages yet", body: "When someone writes through your contact page, their message lands here.", settings: "Notification settings", back: "Back to overview" },
+  none: { all: "Inbox zero", unread: "All caught up", archived: "Nothing archived" },
+  unread: "Unread",
+  reply: "Reply by email",
+  replySubject: "Re: your message on my portfolio",
+  markRead: "Mark as read",
+  markUnread: "Mark as unread",
+  archive: "Archive",
+  unarchive: "Move to inbox",
+  delete: "Delete",
+  deleteName: (name: string) => `message from ${name}`,
 };
 
 export const settingsCopy = {
@@ -110,7 +122,7 @@ export const settingsCopy = {
     items: [
       { key: "email-messages", title: "Email me about new messages", body: "Get a short email when someone writes through your contact page.", on: true },
       { key: "reading-time", title: "Show reading time", body: "Show “5 min read” on every story.", on: true },
-      { key: "indexing", title: "Let search engines find my portfolio", body: "Turn off while you are still working on drafts.", on: false },
+      { key: "indexing", title: "Let search engines find my portfolio", body: "Turn off to hide the whole site from Google and other search engines.", on: true },
     ],
   },
 };
@@ -119,7 +131,15 @@ export const storyEditorCopy = {
   back: "Back to writing",
   newTitle: "New story",
   status: "Draft · Only you can see this story.",
+  statusPublished: "Published · Visible on your blog.",
   save: "Save draft",
+  saving: "Saving…",
+  saveChanges: "Save changes",
+  publish: "Publish",
+  unpublish: "Unpublish",
+  savedOk: "Saved.",
+  publishedOk: "Published — it’s live on your blog.",
+  unpublishedOk: "Unpublished — it’s hidden from your blog.",
   saved: "Saving will work once the dashboard is connected to its backend. Your changes stay on this page until then.",
   modes: { edit: "Edit content", preview: "Preview post" },
   headline: {
@@ -139,6 +159,9 @@ export const storyEditorCopy = {
 export const projectEditorCopy = {
   back: "Back to projects",
   status: "Draft · Only you can see this project.",
+  statusPublished: "Published · Visible in your portfolio.",
+  saving: "Saving…",
+  review: "Review & publish",
   save: "Save draft",
   publish: "Publish",
   saved: storyEditorCopy.saved,
@@ -159,6 +182,7 @@ export const trackEditorCopy = {
   newTitle: "New track",
   status: "Shown in the Study music player and library.",
   save: "Save track",
+  saving: "Saving…",
   saved: storyEditorCopy.saved,
   details: { eyebrow: "DETAILS", title: "Track details", where: "Player and library", title2: "Title", vibe: "Sound style", length: "Length", lengthHint: "m:ss — filled in from the audio file when you upload one." },
   audio: {
@@ -176,6 +200,7 @@ export const bookEditorCopy = {
   newTitle: "New book",
   status: "Shown in the book library and its brief.",
   save: "Save book",
+  saving: "Saving…",
   saved: storyEditorCopy.saved,
   cover: { eyebrow: "COVER", title: "Book cover", where: "Library and brief", tint: "Panel colour" },
   details: { eyebrow: "DETAILS", title: "Book details", where: "Library row", title2: "Title", author: "Author", topic: "Topic", teaser: "Teaser" },
@@ -197,13 +222,13 @@ export const publishCopy = {
   title: "Ready to publish?",
   description: "Check everything once more. You can unpublish any time.",
   publish: "Publish now",
+  publishing: "Publishing…",
   checklist: { title: "Checklist", items: ["Project story reviewed", "Cover image added", "Preview checked"] },
   preview: "HOW VISITORS WILL SEE IT",
   noCase: "This project only appears as a card in All projects.",
   done: {
     title: (name: string) => `${name} is live`,
     body: "Your project is now public on your portfolio. You can edit or unpublish it any time.",
-    note: "Publishing connects with the backend — until then this is a preview of the flow and the site doesn’t change.",
     overview: "Go to overview",
     projects: "Back to projects",
   },
@@ -215,25 +240,55 @@ export const signInCopy = {
   email: "Email",
   password: "Password",
   submit: "Sign in",
-  note: "Prototype only. Any details will work.",
+  pending: "Signing in…",
+};
+
+export const verifyCopy = {
+  title: "One more step",
+  body: "Enter the code from your authenticator app to open your dashboard.",
+  code: "6-digit code",
+  codeSubmit: "Verify",
+  codePending: "Checking…",
+  signOut: "Sign out",
+};
+
+export const securityCopy = {
+  title: "Sign-in security",
+  off: "Only your password protects the dashboard right now. Add an authenticator app so signing in also needs a code from your phone.",
+  on: "Signing in needs your password and a 6-digit code from your authenticator app.",
+  app: {
+    title: "Authenticator app",
+    body: "Google Authenticator, Microsoft Authenticator, 1Password, Authy…",
+    setUp: "Set up",
+    scan: "Scan this with your authenticator app, then enter the 6-digit code it shows.",
+    manual: "Can’t scan? Enter this key:",
+    code: "6-digit code",
+    confirm: "Turn on",
+    cancel: "Cancel",
+    on: "On",
+    since: (when: string) => `Added ${when}`,
+  },
+  remove: "Turn off",
+  confirmOff: { title: "Turn off the authenticator app?", body: "Signing in will only need your password. You can set it up again any time." },
 };
 
 export const dialogsCopy = {
-  noBackend: "Nothing is stored yet — this connects with the backend.",
+  uploading: "Uploading…",
   profile: { role: "Owner · Portfolio Manager", settings: "Profile & settings", signOut: "Sign out", open: "Open profile menu" },
   search: { placeholder: "Search your dashboard", pages: "PAGES", drafts: "DRAFTS", empty: "Nothing matches that.", hint: "Press Esc to close · ⌘K opens search anywhere" },
   gameLink: { title: (game: string) => `Add a play link for ${game}`, description: "Paste the link where people can play this game.", label: "Play link", hint: "You can change it later.", save: "Save link" },
-  uploadImages: { eyebrow: "MEDIA LIBRARY", title: "Upload images", description: "Add covers and screenshots to use across your portfolio.", drop: "Drop images here", hint: "PNG, JPG or WebP", upload: "Upload" },
-  uploadAudio: { eyebrow: "MUSIC", title: "Upload audio", description: "Add an MP3 or WAV file for this focus track.", drop: "Drop an audio file here", hint: "MP3 or WAV · up to 20 MB", upload: "Upload" },
+  uploadAudio: { eyebrow: "MUSIC", title: "Upload audio", description: "Add an MP3 or WAV file for this focus track. It’s used once you save.", drop: "Drop an audio file here", hint: "MP3 or WAV · up to 20 MB", upload: "Upload" },
   addStudy: { eyebrow: "STUDY LIBRARY", title: "Add to your library", description: "Add a focus track or a book you are reading.", track: "Track", book: "Book", name: "Title", vibe: "Sound style", author: "Author", add: "Continue" },
   cover: {
     upload: "Upload cover",
     replace: "Replace",
     remove: "Remove",
     none: "No cover yet — the placeholder art shows until you upload one.",
-    hint: "PNG, JPG or WebP. It’s stored for you once the backend is connected.",
+    hint: "PNG, JPG or WebP, up to 5 MB.",
+    eyebrow: "COVER",
+    drop: "Drop an image here",
     title: "Upload a cover",
-    description: "PNG, JPG or WebP. It replaces the placeholder art.",
+    description: "It replaces the current cover once you save.",
   },
   remove: {
     action: "Delete",
@@ -244,6 +299,15 @@ export const dialogsCopy = {
     zone: { title: "Delete", body: "Remove this from your portfolio for good." },
   },
   listItem: { eyebrow: "LIST ITEM", title: "Edit item", description: "Change the title and the short description.", name: "Title", detail: "Description", hint: "One line works best.", save: "Save changes" },
+};
+
+export const dashboardNotFound = {
+  eyebrow: "ERROR 404 · NOT IN YOUR DASHBOARD",
+  title: "Nothing here",
+  body: "This page doesn’t exist — it may have been deleted, or the link is wrong.",
+  home: "Back to overview",
+  search: "Search your dashboard",
+  explore: "OR GO TO",
 };
 
 export const statusLabel = { draft: "DRAFT", published: "PUBLISHED" } as const;

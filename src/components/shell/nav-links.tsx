@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import type { ComponentType, SVGProps } from "react";
+import { Suspense, type ComponentType, type SVGProps } from "react";
 import { BlogIcon, ContactIcon, DeveloperIcon, GamesIcon, ProjectsIcon, SettingsIcon, StudyIcon } from "@/components/icons";
 import { activeNav, primaryNav, secondaryNav, type NavKey, type NavLabels } from "@/lib/site";
 import { useDrawer } from "./drawer-provider";
@@ -36,20 +36,26 @@ export function itemClasses(active: boolean, allowRail: boolean) {
   };
 }
 
-export function NavLinks({
-  lang,
-  labels,
-  allowRail = true,
-  onNavigate,
-}: {
-  lang: string;
-  labels: NavLabels;
-  allowRail?: boolean;
-  onNavigate?: () => void;
-}) {
-  const pathname = usePathname();
+type NavProps = { lang: string; labels: NavLabels; allowRail?: boolean; onNavigate?: () => void };
+
+/**
+ * Site navigation. The active item comes from the address; on a page whose address isn't known at build time (the 404
+ * catch-all) the list renders without a highlight first, then fills it in.
+ */
+export function NavLinks(props: NavProps) {
+  return (
+    <Suspense fallback={<NavList {...props} />}>
+      <ActiveNavList {...props} />
+    </Suspense>
+  );
+}
+
+function ActiveNavList(props: NavProps) {
+  return <NavList {...props} current={activeNav(usePathname())} />;
+}
+
+function NavList({ lang, labels, allowRail = true, onNavigate, current }: NavProps & { current?: NavKey | null }) {
   const { setOpen } = useDrawer();
-  const current = activeNav(pathname);
 
   const link = (key: NavKey, path: string) => {
     const Icon = icons[key];

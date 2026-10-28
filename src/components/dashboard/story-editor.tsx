@@ -1,6 +1,8 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { deletePost, savePost } from "@/app/dashboard/actions";
 import { PostArt, TopicArt } from "@/components/blog/topic-art";
 import { Blocks } from "@/components/content/blocks";
 import { Badge } from "@/components/ui/badge";
@@ -10,19 +12,28 @@ import { SectionHeading } from "@/components/ui/section-heading";
 import { statusLabel, storyEditorCopy as c } from "@/content/dashboard";
 import { storyBlocks, storyLimits as max, storyMinutes, storyTopics, type StoryForm } from "@/lib/story-form";
 import { CoverField, DeleteZone, ItemDialog } from "./dialogs";
-import { AddItemRow, BackLink, EditorSection, FieldRow, ListItemRow, SaveNote, SelectField, TextArea, TextField } from "./editor";
+import { AddItemRow, BackLink, EditorSection, FieldRow, ListItemRow, SaveNote, SelectField, TextArea, TextField, useSaver } from "./editor";
 
 /** Dashboard / Story editor (Figma Desktop 1371:4104): the blog post's fields, with a live preview of the article. */
-export function StoryEditor({ initial, isNew = false }: { initial: StoryForm; isNew?: boolean }) {
+export function StoryEditor({ initial, slug, status = "draft" }: { initial: StoryForm; slug?: string; status?: "draft" | "published" }) {
+  const isNew = !slug;
+  const router = useRouter();
   const [f, setF] = useState(initial);
   const [mode, setMode] = useState<"edit" | "preview">("edit");
-  const [saved, setSaved] = useState(false);
+  const { pending, note, save, clear } = useSaver();
   /** Point open in Edit item; -1 = adding a new one */
   const [editing, setEditing] = useState<number | null>(null);
   const set = <K extends keyof StoryForm>(key: K) => (value: StoryForm[K]) => {
     setF((prev) => ({ ...prev, [key]: value }));
-    setSaved(false);
+    clear();
   };
+  /** Saves the fields with the given status; a new story then moves to its own address. */
+  const submit = (next: "draft" | "published") =>
+    save(
+      () => savePost({ slug, title: f.title, topic: f.topic, art: f.art, excerpt: f.excerpt, dek: f.dek, cover: f.cover, body: storyBlocks(f), status: next }),
+      (r) => isNew && r.key && router.replace(`/dashboard/writing/${r.key}`),
+      next === status ? c.savedOk : next === "published" ? c.publishedOk : c.unpublishedOk
+    );
   const minutes = storyMinutes(f);
   const topic = storyTopics.find((t) => t.value === f.topic)!;
   const blocks = storyBlocks(f);
@@ -32,11 +43,29 @@ export function StoryEditor({ initial, isNew = false }: { initial: StoryForm; is
       <BackLink href="/dashboard/writing">{c.back}</BackLink>
       <SectionHeading
         title={f.title || c.newTitle}
-        description={c.status}
+        description={status === "published" ? c.statusPublished : c.status}
         action={
-          <Button size="small" onClick={() => setSaved(true)} disabled={isNew && !f.title.trim()}>
-            {c.save}
-          </Button>
+          <div className="flex flex-wrap justify-end gap-8">
+            {status === "published" ? (
+              <>
+                <Button variant="ghost" size="small" disabled={pending} onClick={() => submit("draft")}>
+                  {c.unpublish}
+                </Button>
+                <Button size="small" disabled={pending || !f.title.trim()} onClick={() => submit("published")}>
+                  {pending ? c.saving : c.saveChanges}
+                </Button>
+              </>
+            ) : (
+              <>
+                <Button variant="secondary" size="small" disabled={pending || !f.title.trim()} onClick={() => submit("draft")}>
+                  {pending ? c.saving : c.save}
+                </Button>
+                <Button size="small" disabled={pending || !f.title.trim()} onClick={() => submit("published")}>
+                  {c.publish}
+                </Button>
+              </>
+            )}
+          </div>
         }
       />
       <div className="flex w-full items-center gap-8">
@@ -46,11 +75,11 @@ export function StoryEditor({ initial, isNew = false }: { initial: StoryForm; is
         <Chip selected={mode === "preview"} onClick={() => setMode("preview")}>
           {c.modes.preview}
         </Chip>
-        <Badge tone="warning" className="ml-10">
-          {statusLabel.draft}
+        <Badge tone={status === "draft" ? "warning" : "success"} className="ml-10">
+          {statusLabel[status]}
         </Badge>
       </div>
-      {saved && <SaveNote>{c.saved}</SaveNote>}
+      {note && <SaveNote tone={note.tone}>{note.text}</SaveNote>}
 
       {mode === "edit" ? (
         <div className="flex w-full flex-col gap-24">
@@ -109,7 +138,7 @@ export function StoryEditor({ initial, isNew = false }: { initial: StoryForm; is
               onSave={(title) => set("points")(editing === -1 ? [...f.points, title] : f.points.map((p, k) => (k === editing ? title : p)))}
             />
           </EditorSection>
-          {!isNew && <DeleteZone name={f.title} />}
+          {slug && <DeleteZone name={f.title} onDelete={() => deletePost(slug)} after="/dashboard/writing" />}
         </div>
       ) : (
         /* Preview: the post page's header and article, from the current fields */

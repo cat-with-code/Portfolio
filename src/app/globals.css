@@ -70,6 +70,11 @@
   --animate-dissolve-out: fade-out 200ms var(--ease-figma-out);
   --animate-panel-in: panel-in-right 400ms var(--ease-figma-out);
   --animate-panel-out: panel-out-right 400ms var(--ease-figma-out);
+  /* Skeleton loaders: a soft light sweeping across the placeholder blocks. Loops only with motion allowed. */
+  --animate-shimmer: shimmer 1600ms ease-in-out infinite;
+  /* 404: the avatar drifts gently; the page fades up. */
+  --animate-float: float 4000ms ease-in-out infinite;
+  --animate-rise-in: rise-in 600ms var(--ease-figma-out) both;
   --duration-drawer: 400ms;
 
   /* Mobile / Menu drawer sheet (Figma uses an unstyled drop shadow here) */
@@ -103,6 +108,29 @@
   @keyframes fade-out {
     to {
       opacity: 0;
+    }
+  }
+  @keyframes shimmer {
+    from {
+      transform: translateX(-100%);
+    }
+    to {
+      transform: translateX(100%);
+    }
+  }
+  @keyframes float {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-8px);
+    }
+  }
+  @keyframes rise-in {
+    from {
+      opacity: 0;
+      transform: translateY(12px);
     }
   }
 }

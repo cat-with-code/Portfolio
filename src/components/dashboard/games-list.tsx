@@ -1,6 +1,8 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { setGameLink } from "@/app/dashboard/actions";
 import { LinkIcon } from "@/components/icons";
 import { Chip } from "@/components/ui/chip";
 import { dialogsCopy as d, gamesCopy as c } from "@/content/dashboard";
@@ -19,7 +21,9 @@ const validUrl = (v: string) => {
 /** Dashboard / Games body (Figma 1363:2892): All / Mobile ready filter, one Content row per game, Add game link dialog (1371:4420). */
 export function GamesList({ games }: { games: { key: string; title: string; section: string; image: string; linked: boolean }[] }) {
   const [mobileOnly, setMobileOnly] = useState(false);
+  const router = useRouter();
   const [links, setLinks] = useState<Record<string, string>>({});
+  const [error, setError] = useState("");
   const [linking, setLinking] = useState<{ key: string; title: string } | null>(null);
   const [url, setUrl] = useState("");
   const mobile = (key: string) => c.mobileReady.includes(key);
@@ -45,7 +49,7 @@ export function GamesList({ games }: { games: { key: string; title: string; sect
         <Chip selected={!mobileOnly} onClick={() => setMobileOnly(false)}>{`${c.filters.all} · ${games.length}`}</Chip>
         <Chip selected={mobileOnly} onClick={() => setMobileOnly(true)}>{`${c.filters.mobile} · ${games.filter((g) => mobile(g.key)).length}`}</Chip>
       </div>
-      {Object.keys(links).length > 0 && <SaveNote>{d.noBackend}</SaveNote>}
+      {error && <SaveNote tone="error">{error}</SaveNote>}
       <div className="flex w-full flex-col gap-16 rounded-card border border-general-default bg-surface-primary p-16 tablet:p-24">
         <Rows
           rows={rows}
@@ -64,9 +68,16 @@ export function GamesList({ games }: { games: { key: string; title: string; sect
         description={d.gameLink.description}
         action={d.gameLink.save}
         actionDisabled={!validUrl(url)}
-        onAction={() => {
-          if (linking) setLinks({ ...links, [linking.key]: url });
+        onAction={async () => {
+          if (!linking) return;
+          const key = linking.key;
           setLinking(null);
+          setError("");
+          const result = await setGameLink(key, url);
+          if (result.ok) {
+            setLinks((l) => ({ ...l, [key]: url }));
+            router.refresh();
+          } else setError(result.error);
         }}
       >
         <TextField label={d.gameLink.label} value={url} onChange={setUrl} placeholder="https://" hint={d.gameLink.hint} type="url" />

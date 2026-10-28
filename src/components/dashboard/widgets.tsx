@@ -67,9 +67,7 @@ export function DraftsWidget({ drafts, total, className = "" }: { drafts: DraftI
     <WidgetCard className={className}>
       <CardHeader eyebrow={c.drafts.eyebrow(drafts.length)} title={c.drafts.title} body={c.drafts.body} />
       <div className="flex w-full flex-col">
-        {drafts.map((d) => (
-          <DraftRow key={d.key} item={d} />
-        ))}
+        {drafts.length ? drafts.map((d) => <DraftRow key={d.key} item={d} />) : <p className="type-body border-t border-general-default py-16 text-secondary">{c.drafts.empty}</p>}
       </div>
       <ButtonLink href="/dashboard/writing" variant="secondary" aria-label={`${c.drafts.all} (${total})`}>
         {c.drafts.all}
@@ -79,7 +77,7 @@ export function DraftsWidget({ drafts, total, className = "" }: { drafts: DraftI
 }
 
 /** Widget / Inbox (Figma 1388:4887) */
-export function InboxWidget({ className = "" }: { className?: string }) {
+export function InboxWidget({ unread, className = "" }: { unread: number; className?: string }) {
   return (
     <WidgetCard tint="bg-accent-blue-subtle" className={className}>
       <div className="flex w-full items-center gap-12">
@@ -88,7 +86,7 @@ export function InboxWidget({ className = "" }: { className?: string }) {
         </span>
         <h2 className="type-subheading min-w-0 flex-1 text-primary">{c.inbox.title}</h2>
       </div>
-      <p className="type-body w-full text-secondary">{c.inbox.empty}</p>
+      <p className="type-body w-full text-secondary">{unread ? c.inbox.unread(unread) : c.inbox.empty}</p>
       <ButtonLink href="/dashboard/inbox" variant="secondary" icon={<MailIcon className="size-20" />}>
         {c.inbox.open}
       </ButtonLink>

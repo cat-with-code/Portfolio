@@ -9,6 +9,7 @@ import { postPage as copy, SAMPLE_BLOG } from "@/content/blog";
 import { blocksToText } from "@/content/blocks";
 import { getLocale } from "@/i18n/dictionaries";
 import { getNextPost, getPost, getPosts } from "@/lib/content";
+import { absolute, jsonLd, pageMetadata, personJsonLd } from "@/lib/seo";
 
 const Rule = () => <div aria-hidden className="h-px w-full shrink-0 bg-(--color-border-line-divider)" />;
 
@@ -18,7 +19,15 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const post = await getPost((await params).slug);
-  return post ? { title: post.title, description: post.excerpt } : {};
+  if (!post) return {};
+  return pageMetadata({
+    lang: await getLocale(),
+    path: `/blog/${post.slug}`,
+    title: post.title,
+    description: post.excerpt || post.dek,
+    image: post.cover,
+    article: { published: post.published, section: post.category },
+  });
 }
 
 const date = (iso: string) => new Date(iso).toLocaleDateString("en", { day: "numeric", month: "long", year: "numeric" });
@@ -33,6 +42,23 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
 
   return (
     <article className="flex w-full flex-col items-start pb-32">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: jsonLd({
+            "@type": "BlogPosting",
+            headline: post.title,
+            description: post.excerpt || post.dek,
+            url: absolute(`/${lang}/blog/${post.slug}`),
+            mainEntityOfPage: absolute(`/${lang}/blog/${post.slug}`),
+            ...(post.published ? { datePublished: post.published } : {}),
+            ...(post.cover ? { image: absolute(post.cover) } : {}),
+            articleSection: post.category,
+            inLanguage: "en",
+            author: personJsonLd(lang),
+          }),
+        }}
+      />
       {/* Top line */}
       <div className="flex w-full items-center justify-between gap-16 pb-12">
         <Link href={`/${lang}/blog`} className="type-eyebrow py-12 whitespace-pre text-brand hover:text-brand-hover">

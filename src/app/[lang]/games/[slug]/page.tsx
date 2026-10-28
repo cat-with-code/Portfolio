@@ -6,6 +6,7 @@ import { GamePlay } from "@/components/games/game-page";
 import { ChevronLeftIcon } from "@/components/icons";
 import { gameOrder, games, panelCopy as pc, sections, type GameKey } from "@/content/games";
 import { getLocale } from "@/i18n/dictionaries";
+import { pageMetadata } from "@/lib/seo";
 
 export function generateStaticParams() {
   return gameOrder.map((slug) => ({ slug }));
@@ -16,7 +17,8 @@ const find = (slug: string) => (slug in games ? games[slug as GameKey] : null);
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
   const game = find(slug);
-  return game ? { title: game.title, description: game.description } : {};
+  if (!game) return {};
+  return pageMetadata({ lang: await getLocale(), path: `/games/${slug}`, title: `${game.title} — play online`, description: game.description, image: `/images/games/${slug}.webp` });
 }
 
 /** Games / Game page (Figma Desktop 1239:95379 … · Tablet 1246:122385 … · Mobile 1248:127103 …). */

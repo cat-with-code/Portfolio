@@ -1,7 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { useId, type ReactNode } from "react";
+import { useRouter } from "next/navigation";
+import { useId, useState, useTransition, type ReactNode } from "react";
+import type { Result } from "@/app/dashboard/actions";
 import { ChevronDownIcon, ChevronLeftIcon, PencilIcon, PlusIcon, TrashIcon } from "@/components/icons";
 import { fieldControl, fieldInput, FieldShell } from "@/components/ui/field";
 
@@ -121,11 +123,28 @@ export function AddItemRow({ label, onClick }: { label: string; onClick: () => v
   );
 }
 
-/** Note shown after Save while there's no backend. */
-export function SaveNote({ children }: { children: ReactNode }) {
+/** Status line under an editor's heading: "Saved." or what went wrong. */
+export function SaveNote({ children, tone = "info" }: { children: ReactNode; tone?: "info" | "error" }) {
   return (
-    <p role="status" className="type-caption w-full rounded-lg bg-status-information-subtle px-16 py-12 text-status-information">
+    <p role={tone === "error" ? "alert" : "status"} className={`type-caption w-full rounded-lg px-16 py-12 ${tone === "error" ? "bg-status-error-subtle text-status-error" : "bg-status-information-subtle text-status-information"}`}>
       {children}
     </p>
   );
+}
+
+/** Runs a dashboard server action: pending state, then "Saved." or the error, and fresh data from the server. */
+export function useSaver() {
+  const router = useRouter();
+  const [pending, start] = useTransition();
+  const [note, setNote] = useState<{ tone: "info" | "error"; text: string } | null>(null);
+  const save = (action: () => Promise<Result>, onOk?: (result: Extract<Result, { ok: true }>) => void, okText = "Saved.") =>
+    start(async () => {
+      const result = await action();
+      if (result.ok) {
+        setNote({ tone: "info", text: okText });
+        onOk?.(result);
+        router.refresh();
+      } else setNote({ tone: "error", text: result.error });
+    });
+  return { pending, note, save, clear: () => setNote(null) };
 }

@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { GoalCard, IntentionCard, PlanCard, ReminderCard } from "@/components/study/cards";
 import { DayRhythm, FocusWindow, LocalClock } from "@/components/study/daytime";
 import { FocusAudio } from "@/components/study/focus-audio";
@@ -6,7 +7,12 @@ import { MusicDrawer } from "@/components/study/music-drawer";
 import { RecentlyRead } from "@/components/study/recently-read";
 import { FavoriteBooksButton, LibraryLink } from "@/components/study/triggers";
 import { recentlyRead as rr, welcome } from "@/content/study";
-import { getDictionary } from "@/i18n/dictionaries";
+import { getDictionary, getLocale } from "@/i18n/dictionaries";
+import { pageMetadata, sectionDescriptions } from "@/lib/seo";
+
+export async function generateMetadata(): Promise<Metadata> {
+  return pageMetadata({ lang: await getLocale(), path: "/study", title: "Study", description: sectionDescriptions.study });
+}
 
 /** Study — Focus Studio (Figma Desktop 694:14994 · Tablet 696:33340 · Mobile 696:40002). */
 export default async function StudyPage() {

@@ -26,7 +26,7 @@ export default async function OverviewPage() {
         <StatCard href="/dashboard/study" icon={StudyIcon} count={s.study.total} title="Study items" detail={`${s.study.tracks} tracks · ${s.study.books} books`} tint="bg-surface-secondary" />
         <StatCard href="/dashboard/games" icon={GamesIcon} count={s.games.total} title="Games" detail="Add links to start sharing" tint="bg-accent-violet-subtle" />
         <DraftsWidget drafts={s.drafts} total={s.allDrafts} className="tablet:col-span-2 desktop:row-span-2" />
-        <InboxWidget className="tablet:col-span-2" />
+        <InboxWidget unread={s.unread} className="tablet:col-span-2" />
         <ChecklistWidget className="tablet:col-span-2" />
         <RecentMediaWidget images={s.media.recent} summary={s.media.summary} className="tablet:col-span-2" />
         <GamesWidget linked={s.games.linked} total={s.games.total} next={s.games.next} />

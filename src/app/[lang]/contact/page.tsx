@@ -1,8 +1,15 @@
+import type { Metadata } from "next";
 import { ContactForm } from "@/components/contact/contact-form";
 import { ContactMap } from "@/components/contact/contact-map";
 import { AvailabilityCard, Faq } from "@/components/contact/sidebar";
 import { SectionHeading } from "@/components/ui/section-heading";
 import { contact } from "@/content/contact";
+import { getLocale } from "@/i18n/dictionaries";
+import { pageMetadata, sectionDescriptions } from "@/lib/seo";
+
+export async function generateMetadata(): Promise<Metadata> {
+  return pageMetadata({ lang: await getLocale(), path: "/contact", title: "Contact", description: sectionDescriptions.contact });
+}
 
 /**
  * Contact (Figma Desktop 843:46112 · Tablet 843:61319 · Mobile 843:61934).

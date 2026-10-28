@@ -1,5 +1,5 @@
 import Link from "next/link";
-import type { ReactNode } from "react";
+import { Suspense, type ReactNode } from "react";
 import { SignatureLogo } from "@/components/icons";
 import { Badge } from "@/components/ui/badge";
 import type { Dictionary } from "@/i18n/dictionaries";
@@ -84,6 +84,8 @@ export function AppShell({ lang, dict, children }: { lang: string; dict: Diction
           <main className="min-w-0 flex-1 bg-page px-(--layout-gutter) pt-32">{children}</main>
         </div>
       </div>
+      {/* Overlays that read the address: on the 404 catch-all (address unknown at build time) they appear after load */}
+      <Suspense fallback={null}>
       <SearchDialog lang={lang} copy={dict.search.dialog} />
       <SettingsDrawer lang={lang} dict={dict} />
       <ProfileDrawer lang={lang} dict={dict} />
@@ -96,6 +98,7 @@ export function AppShell({ lang, dict, children }: { lang: string; dict: Diction
       <GameLibraryDrawer lang={lang} closeLabel={dict.a11y.close} />
       <MiniPlayer lang={lang} closeLabel={dict.a11y.close} />
       <FloatingReader lang={lang} closeLabel={dict.a11y.close} />
+      </Suspense>
     </ReaderProvider>
     </StudyProvider>
     </SearchProvider>

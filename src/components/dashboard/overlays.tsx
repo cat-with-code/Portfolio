@@ -4,6 +4,7 @@ import * as Dialog from "@radix-ui/react-dialog";
 import * as Popover from "@radix-ui/react-popover";
 import { Command } from "cmdk";
 import { useRouter } from "next/navigation";
+import { signOut } from "@/app/dashboard/auth-actions";
 import type { ComponentType, SVGProps } from "react";
 import { BlogIcon, GamesIcon, GridIcon, ImageIcon, LockIcon, MailIcon, ProjectsIcon, SearchIcon, SettingsIcon, StudyIcon } from "@/components/icons";
 import { useSearch } from "@/components/shell/search-provider";
@@ -104,12 +105,12 @@ export function ProfileMenu({ size }: { size: 32 | 40 }) {
               {c.profile.settings}
             </button>
           </Popover.Close>
-          <Popover.Close asChild>
-            <button type="button" onClick={() => router.push("/dashboard/sign-in")} className={row}>
+          <form action={signOut}>
+            <button type="submit" className={row}>
               <LockIcon className="size-20 shrink-0 text-icon-general-primary" />
               {c.profile.signOut}
             </button>
-          </Popover.Close>
+          </form>
         </Popover.Content>
       </Popover.Portal>
     </Popover.Root>

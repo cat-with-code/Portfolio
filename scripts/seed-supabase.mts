@@ -1,6 +1,6 @@
 /**
  * One-time import: copies the content in src/content into Supabase and records you as the owner.
- * Run from the project folder:  npx tsx --env-file=.env.local scripts/seed-supabase.ts
+ * Run from the project folder:  npx tsx --env-file=.env.local scripts/seed-supabase.mts
  *
  * Uses the service key (bypasses security rules), so it only ever runs on your computer — it is not part of the site.
  * Safe to re-run: posts, projects and books are updated by key; tracks and settings are only added when empty.
@@ -68,7 +68,8 @@ await step(`${directoryProjects.length} projects`, () =>
         cover_url: p.coverImage ?? null,
         href: p.href,
         card: card ? { meta: card.meta, status: card.status, name: card.name, description: card.description, tags: card.tags } : null,
-        case_study: study ? (({ key: _key, ...rest }) => rest)(study) : null,
+        // The key is the row's own key; store the rest of the case study.
+        case_study: study ? Object.fromEntries(Object.entries(study).filter(([k]) => k !== "key")) : null,
         status: "published",
         sort: i,
       };

@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, type ReactNode } from "react";
+import { useState, useTransition, type ReactNode } from "react";
+import type { Result } from "@/app/dashboard/actions";
 import { BadgeCheckIcon, CheckIcon } from "@/components/icons";
 import { Button, ButtonLink } from "@/components/ui/button";
 import { SectionHeading } from "@/components/ui/section-heading";
@@ -12,9 +13,11 @@ import { EmptyState } from "./empty-state";
  * Dashboard / Publish review (Figma Desktop 1346:2168) → Published (1346:2169).
  * Tick the checklist to enable Publish now; `children` is the page as visitors will see it.
  */
-export function PublishReview({ name, editHref, children }: { name: string; editHref: string; children: ReactNode }) {
+export function PublishReview({ name, editHref, onPublish, children }: { name: string; editHref: string; onPublish: () => Promise<Result>; children: ReactNode }) {
   const [checked, setChecked] = useState<boolean[]>(c.checklist.items.map(() => false));
   const [published, setPublished] = useState(false);
+  const [error, setError] = useState("");
+  const [pending, start] = useTransition();
 
   if (published)
     return (
@@ -34,7 +37,6 @@ export function PublishReview({ name, editHref, children }: { name: string; edit
             }
           />
         </section>
-        <SaveNote>{c.done.note}</SaveNote>
       </div>
     );
 
@@ -45,11 +47,22 @@ export function PublishReview({ name, editHref, children }: { name: string; edit
         title={c.title}
         description={c.description}
         action={
-          <Button size="small" disabled={!checked.every(Boolean)} onClick={() => setPublished(true)}>
-            {c.publish}
+          <Button
+            size="small"
+            disabled={!checked.every(Boolean) || pending}
+            onClick={() =>
+              start(async () => {
+                const result = await onPublish();
+                if (result.ok) setPublished(true);
+                else setError(result.error);
+              })
+            }
+          >
+            {pending ? c.publishing : c.publish}
           </Button>
         }
       />
+      {error && <SaveNote tone="error">{error}</SaveNote>}
       <section className="flex w-full flex-col gap-16 rounded-card bg-accent-green-subtle px-24 py-20 tablet:flex-row tablet:items-center tablet:gap-24">
         <h2 className="type-subheading shrink-0 text-primary">{c.checklist.title}</h2>
         <ul className="grid flex-1 grid-cols-1 gap-12 tablet:grid-cols-3">

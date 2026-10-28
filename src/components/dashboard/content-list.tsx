@@ -5,7 +5,9 @@ import { PencilIcon, TrashIcon } from "@/components/icons";
 import { Badge } from "@/components/ui/badge";
 import { Button, ButtonLink } from "@/components/ui/button";
 import { Chip } from "@/components/ui/chip";
-import { dialogsCopy as d, statusLabel } from "@/content/dashboard";
+import { useRouter } from "next/navigation";
+import type { Result } from "@/app/dashboard/actions";
+import { statusLabel } from "@/content/dashboard";
 import { DeleteDialog } from "./dialogs";
 import { SaveNote } from "./editor";
 import type { Status } from "@/lib/dashboard";
@@ -83,9 +85,11 @@ export function Rows({ rows, icon, tint = "bg-surface-secondary", onAction, onDe
  * Dashboard list page body (Figma Desktop / Projects 1350:2555, Writing 1363:2612): All / Drafts / Published filter chips,
  * then a card of Dashboard / Content rows (1363:2543) and a "Showing …" count.
  */
-export function ContentList({ rows: all, icon, noun }: { rows: ContentRow[]; icon: ReactNode; noun: [string, string] }) {
+export function ContentList({ rows: all, icon, noun, onDelete }: { rows: ContentRow[]; icon: ReactNode; noun: [string, string]; onDelete?: (key: string) => Promise<Result> }) {
+  const router = useRouter();
+  const [error, setError] = useState("");
   const [filter, setFilter] = useState<"all" | Status>("all");
-  // Deleted this visit (until the backend can delete for good)
+  // Hidden straight away; the server confirms, then the page refreshes.
   const [removed, setRemoved] = useState<string[]>([]);
   const [deleting, setDeleting] = useState<ContentRow | null>(null);
   const rows = all.filter((r) => !removed.includes(r.key));
@@ -107,13 +111,28 @@ export function ContentList({ rows: all, icon, noun }: { rows: ContentRow[]; ico
         ))}
       </div>
       <div className="flex w-full flex-col gap-16 rounded-card border border-general-default bg-surface-primary p-16 tablet:p-24">
-        {removed.length > 0 && <SaveNote>{d.remove.listNote}</SaveNote>}
-        <Rows rows={shown} icon={icon} onDelete={setDeleting} />
+        {error && <SaveNote>{error}</SaveNote>}
+        <Rows rows={shown} icon={icon} onDelete={onDelete ? setDeleting : undefined} />
         <p className="type-caption w-full text-secondary">
           {shown.length === rows.length ? `Showing all ${rows.length} ${noun[1]}` : `Showing ${shown.length} of ${rows.length} ${noun[1]}`}
         </p>
       </div>
-      <DeleteDialog open={!!deleting} onOpenChange={(o) => !o && setDeleting(null)} name={deleting?.title ?? ""} onConfirm={() => deleting && setRemoved([...removed, deleting.key])} />
+      <DeleteDialog
+        open={!!deleting}
+        onOpenChange={(o) => !o && setDeleting(null)}
+        name={deleting?.title ?? ""}
+        onConfirm={async () => {
+          if (!deleting || !onDelete) return;
+          const key = deleting.key;
+          setRemoved((r) => [...r, key]);
+          setError("");
+          const res = await onDelete(key);
+          if (!res.ok) {
+            setRemoved((r) => r.filter((k) => k !== key));
+            setError(res.error);
+          } else router.refresh();
+        }}
+      />
     </>
   );
 }

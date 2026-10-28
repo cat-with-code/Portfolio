@@ -1,6 +1,5 @@
 "use client";
 
-import { usePathname } from "next/navigation";
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, useSyncExternalStore, type ReactNode } from "react";
 import { useStudy } from "@/components/study/study-provider";
 import { chunks, estimate, pickVoice, SPEEDS, WPS, words, readSpeed } from "@/lib/speech";
@@ -37,7 +36,6 @@ const subscribeNothing = () => () => {};
  */
 export function ReaderProvider({ children }: { children: ReactNode }) {
   const supported = useSyncExternalStore(subscribeNothing, () => "speechSynthesis" in window, () => true);
-  const pathname = usePathname();
   const music = useStudy();
   const [session, setSession] = useState<Session | null>(null);
   const [state, setState] = useState<State>("idle");
@@ -131,11 +129,11 @@ export function ReaderProvider({ children }: { children: ReactNode }) {
       pauseMusic();
       at.current = 0;
       speak(s, 0, speed);
-      setSession({ ...s, href: pathname });
+      setSession({ ...s, href: window.location.pathname });
       setElapsed(0);
       setState("playing");
     },
-    [supported, pauseMusic, speak, speed, pathname]
+    [supported, pauseMusic, speak, speed]
   );
 
   const toggle = useCallback(() => {

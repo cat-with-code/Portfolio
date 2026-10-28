@@ -22,6 +22,10 @@ export type SiteContent = {
   books: Book[];
   /** Play link per game key */
   gameLinks: Record<string, string>;
+  /** Dashboard only (owner): status per item — "post:<slug>", "project:<key>", "book:<key>", "track:<id>" */
+  status?: Record<string, "draft" | "published">;
+  /** Dashboard only (owner): database id of each track, parallel to `tracks` */
+  trackIds?: Record<Vibe, string[]>;
 };
 
 const Ctx = createContext<SiteContent | null>(null);

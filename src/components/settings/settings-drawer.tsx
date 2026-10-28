@@ -1,6 +1,6 @@
 "use client";
 
-import { usePathname, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useSyncExternalStore, type ReactNode } from "react";
 import { CloseIcon, MonitorIcon, MoonIcon, SignatureLogo, SunIcon } from "@/components/icons";
 import { useDrawerState } from "@/components/shell/drawer-provider";
@@ -88,14 +88,13 @@ export function SettingsDrawer({ lang, dict }: { lang: string; dict: Dictionary 
   const state = useDrawerState("settings");
   const mode = useThemeMode();
   const router = useRouter();
-  const pathname = usePathname();
   const [voice, setVoice] = useStored<(typeof settingsCopy.voices)[number]>("voice", "Female");
   const [calendar, setCalendar] = useStored<Calendar>("calendar", "gregorian");
 
   const switchLanguage = (next: string) => {
     if (next === lang) return;
     rememberLocale(next);
-    router.push(pathname.replace(/^\/[a-z]{2}(?=\/|$)/, `/${next}`));
+    router.push(window.location.pathname.replace(/^\/[a-z]{2}(?=\/|$)/, `/${next}`));
   };
 
   const themes: { mode: Mode; label: string; Icon: typeof SunIcon }[] = [

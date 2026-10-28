@@ -1,6 +1,8 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { deleteBook, deleteTrack, saveBook, saveTrack } from "@/app/dashboard/actions";
 import { PlaylistIcon } from "@/components/icons";
 import { covers } from "@/components/study/focus-audio";
 import { Button } from "@/components/ui/button";
@@ -9,19 +11,21 @@ import { bookCover, type Book } from "@/content/books";
 import { bookEditorCopy as bc, trackEditorCopy as tc } from "@/content/dashboard";
 import { vibes, type Track, type Vibe } from "@/content/study";
 import { CoverField, DeleteZone, UploadAudioButton } from "./dialogs";
-import { BackLink, EditorSection, FieldRow, SaveNote, SelectField, TextArea, TextField } from "./editor";
+import { BackLink, EditorSection, FieldRow, SaveNote, SelectField, TextArea, TextField, useSaver } from "./editor";
 
 /** "3:42" from seconds. */
 const mmss = (sec: number) => `${Math.floor(sec / 60)}:${String(Math.round(sec % 60)).padStart(2, "0")}`;
 
 /** Dashboard / Track editor (Figma Desktop 1412:6698): details, the audio file and the cover (content/study `Track`). */
-export function TrackEditor({ vibe: initialVibe, track, isNew = false }: { vibe: Vibe; track: Track; isNew?: boolean }) {
+export function TrackEditor({ vibe: initialVibe, track, id }: { vibe: Vibe; track: Track; id?: string }) {
+  const isNew = !id;
+  const router = useRouter();
+  const { pending, note, save, clear } = useSaver();
   const [vibe, setVibe] = useState(initialVibe);
   const [[title, length, src, cover], setTrack] = useState<Track>(track);
-  const [saved, setSaved] = useState(false);
   const set = (i: 0 | 1 | 2 | 3) => (v: string | undefined) => {
     setTrack((t) => Object.assign([...t], { [i]: v }) as Track);
-    setSaved(false);
+    clear();
   };
   const Cover = covers[vibe];
   const vibeLabel = vibes.find((v) => v.key === vibe)!.label;
@@ -34,9 +38,9 @@ export function TrackEditor({ vibe: initialVibe, track, isNew = false }: { vibe:
     if (q.get("title")) setTrack((t) => [q.get("title")!, t[1], t[2], t[3]]);
     if (v && vibes.some((x) => x.key === v)) setVibe(v as Vibe);
   }, [isNew]);
-  /** Uploaded audio: keep its path and read its real length. */
-  const takeAudio = (file: File) => {
-    set(2)(`/audio/${vibe}/${file.name}`);
+  /** Uploaded audio: keep its URL and read its real length from the local file. */
+  const takeAudio = (file: File, stored: string) => {
+    set(2)(stored);
     const url = URL.createObjectURL(file);
     const probe = new Audio();
     probe.preload = "metadata";
@@ -53,17 +57,26 @@ export function TrackEditor({ vibe: initialVibe, track, isNew = false }: { vibe:
         title={title || tc.newTitle}
         description={tc.status}
         action={
-          <Button size="small" onClick={() => setSaved(true)} disabled={isNew && !title.trim()}>
-            {tc.save}
+          <Button
+            size="small"
+            disabled={pending || !title.trim()}
+            onClick={() =>
+              save(
+                () => saveTrack({ id, vibe, title, length: length || "0:00", audio: src, cover }),
+                (r) => isNew && r.key && router.replace(`/dashboard/study/tracks/${r.key}`)
+              )
+            }
+          >
+            {pending ? tc.saving : tc.save}
           </Button>
         }
       />
-      {saved && <SaveNote>{tc.saved}</SaveNote>}
+      {note && <SaveNote tone={note.tone}>{note.text}</SaveNote>}
       <div className="flex w-full flex-col gap-24">
         <EditorSection eyebrow={tc.details.eyebrow} title={tc.details.title} where={tc.details.where}>
           <TextField label={tc.details.title2} value={title} onChange={set(0)} placeholder="Rain on the window" />
           <FieldRow>
-            <SelectField label={tc.details.vibe} value={vibe} options={vibes.map((v) => ({ value: v.key, label: v.label }))} onChange={(v) => (setVibe(v), setSaved(false))} />
+            <SelectField label={tc.details.vibe} value={vibe} options={vibes.map((v) => ({ value: v.key, label: v.label }))} onChange={(v) => (setVibe(v), clear())} />
             <TextField label={tc.details.length} value={length} onChange={set(1)} placeholder="3:30" hint={tc.details.lengthHint} />
           </FieldRow>
         </EditorSection>
@@ -93,7 +106,7 @@ export function TrackEditor({ vibe: initialVibe, track, isNew = false }: { vibe:
         <EditorSection eyebrow={tc.cover.eyebrow} title={tc.cover.title} where={tc.cover.where}>
           <CoverField value={cover} folder="music" onChange={set(3)} shape="square" fallback={<Cover aria-hidden className="absolute inset-0 size-full" />} />
         </EditorSection>
-        {!isNew && <DeleteZone name={title} />}
+        {id && <DeleteZone name={title} onDelete={() => deleteTrack(id)} after="/dashboard/study" />}
       </div>
     </div>
   );
@@ -101,10 +114,11 @@ export function TrackEditor({ vibe: initialVibe, track, isNew = false }: { vibe:
 
 /** Dashboard / Book editor (Figma Desktop 1412:11494): details, cover on its colour panel, then the brief (content/books `Book`). */
 export function BookEditor({ book: initial, isNew = false }: { book: Book; isNew?: boolean }) {
+  const router = useRouter();
+  const { pending, note, save, clear } = useSaver();
   const [b, setB] = useState(initial);
   const [cover, setCover] = useState<string | undefined>(isNew ? undefined : bookCover(initial));
-  const [saved, setSaved] = useState(false);
-  const update = (patch: Partial<Book>) => (setB({ ...b, ...patch }), setSaved(false));
+  const update = (patch: Partial<Book>) => (setB({ ...b, ...patch }), clear());
   const brief = (patch: Partial<Book["brief"]>) => update({ brief: { ...b.brief, ...patch } });
   useEffect(() => {
     if (!isNew) return;
@@ -119,12 +133,21 @@ export function BookEditor({ book: initial, isNew = false }: { book: Book; isNew
         title={b.title || bc.newTitle}
         description={bc.status}
         action={
-          <Button size="small" onClick={() => setSaved(true)} disabled={isNew && !b.title.trim()}>
-            {bc.save}
+          <Button
+            size="small"
+            disabled={pending || !b.title.trim()}
+            onClick={() =>
+              save(
+                () => saveBook({ key: isNew ? undefined : b.key, title: b.title, author: b.author, topic: b.topic, teaser: b.teaser, tint: b.tint as never, cover, brief: b.brief }),
+                (r) => isNew && r.key && router.replace(`/dashboard/study/books/${r.key}`)
+              )
+            }
+          >
+            {pending ? bc.saving : bc.save}
           </Button>
         }
       />
-      {saved && <SaveNote>{bc.saved}</SaveNote>}
+      {note && <SaveNote tone={note.tone}>{note.text}</SaveNote>}
       <div className="flex w-full flex-col gap-24">
         <EditorSection eyebrow={bc.details.eyebrow} title={bc.details.title} where={bc.details.where}>
           <TextField label={bc.details.title2} value={b.title} onChange={(v) => update({ title: v })} placeholder="Atomic Habits" />
@@ -139,7 +162,7 @@ export function BookEditor({ book: initial, isNew = false }: { book: Book; isNew
           <CoverField
             value={cover}
             folder="books"
-            onChange={(v) => (setCover(v), setSaved(false))}
+            onChange={(v) => (setCover(v), clear())}
             shape="portrait"
             panel={b.tint}
             fallback={<span className="type-card-title absolute inset-0 flex items-center justify-center p-16 text-center text-secondary">{b.title || bc.newTitle}</span>}
@@ -182,7 +205,7 @@ export function BookEditor({ book: initial, isNew = false }: { book: Book; isNew
         <EditorSection eyebrow={bc.reflection.eyebrow} title={bc.reflection.title} where={bc.reflection.where}>
           <TextField label={bc.reflection.label} value={b.brief.question} onChange={(v) => brief({ question: v })} />
         </EditorSection>
-        {!isNew && <DeleteZone name={b.title} />}
+        {!isNew && <DeleteZone name={b.title} onDelete={() => deleteBook(b.key)} after="/dashboard/study" />}
       </div>
     </div>
   );

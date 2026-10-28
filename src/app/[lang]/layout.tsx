@@ -1,15 +1,28 @@
 import type { Metadata } from "next";
 import { SiteContentProvider } from "@/components/content/site-content";
+import { PageHold } from "@/components/feedback/page-hold";
 import { AppShell } from "@/components/shell/app-shell";
 import { getSiteContent } from "@/lib/site-content";
 import { getDictionary, getLocale, locales } from "@/i18n/dictionaries";
+import { searchable, sectionDescriptions, siteName, siteUrl } from "@/lib/seo";
 import { bootScript, fontVariables } from "../fonts";
 import "../globals.css";
 
-export const metadata: Metadata = {
-  title: { default: "Hoeurn Dareach — Personal portfolio", template: "%s · Hoeurn Dareach" },
-  description: "Design, code, writing, study and games by Hoeurn Dareach.",
-};
+/** Site-wide defaults; each page adds its own title, description, canonical and language links (lib/seo). */
+export async function generateMetadata(): Promise<Metadata> {
+  const index = await searchable();
+  return {
+    metadataBase: siteUrl,
+    title: { default: `${siteName} — UI/UX designer & developer`, template: `%s · ${siteName}` },
+    description: sectionDescriptions.home,
+    applicationName: siteName,
+    authors: [{ name: siteName, url: siteUrl.toString() }],
+    creator: siteName,
+    keywords: ["Hoeurn Dareach", "UI/UX designer", "web developer", "Phnom Penh", "Cambodia", "portfolio", "design systems", "Next.js"],
+    robots: index ? { index: true, follow: true, googleBot: { index: true, follow: true, "max-image-preview": "large", "max-snippet": -1 } } : { index: false, follow: false },
+    formatDetection: { telephone: false, email: false, address: false },
+  };
+}
 
 export async function generateStaticParams() {
   return locales.map((lang) => ({ lang }));
@@ -34,7 +47,7 @@ export default async function RootLayout({ children }: LayoutProps<"/[lang]">) {
       <body>
         <SiteContentProvider value={await getSiteContent()}>
         <AppShell lang={lang} dict={dict}>
-          {children}
+          <PageHold variant="site" label={dict.loading}>{children}</PageHold>
         </AppShell>
         </SiteContentProvider>
       </body>

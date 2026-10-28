@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { SignInForm } from "@/components/dashboard/sign-in-form";
 
 export const metadata: Metadata = { title: "Sign in" };
@@ -7,7 +8,9 @@ export const metadata: Metadata = { title: "Sign in" };
 export default function SignInPage() {
   return (
     <main className="flex min-h-dvh items-center justify-center bg-surface-secondary px-(--layout-gutter) py-48">
-      <SignInForm />
+      <Suspense>
+        <SignInForm />
+      </Suspense>
     </main>
   );
 }

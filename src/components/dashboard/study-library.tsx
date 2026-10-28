@@ -15,7 +15,7 @@ import { CardHeader, WidgetCard } from "./widgets";
 
 /** Dashboard / Study library body (Figma 1363:2755): All / Music / Books filter, Focus music card with vibe chips, Book library grid. */
 export function StudyLibrary({ books }: { books: Book[] }) {
-  const { tracks } = useSiteContent();
+  const { tracks, trackIds } = useSiteContent();
   const trackCount = vibes.reduce((n, v) => n + tracks[v.key].length, 0);
   const [filter, setFilter] = useState<"all" | "music" | "books">("all");
   const [vibe, setVibe] = useState<Vibe | "custom">("lofi");
@@ -65,7 +65,7 @@ export function StudyLibrary({ books }: { books: Book[] }) {
                 title,
                 meta: trackCaption(tracks, vibe, i),
                 info: length,
-                href: `/dashboard/study/tracks/${vibe}-${i}`,
+                href: `/dashboard/study/tracks/${trackIds?.[vibe]?.[i] ?? `${vibe}-${i}`}`,
               }))}
             />
           )}

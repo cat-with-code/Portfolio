@@ -31,28 +31,29 @@ type ProjectRow = { key: string; name: string; eyebrow: string; category: string
 type TrackRow = { vibe: Vibe; title: string; length: string; audio_url: string | null; cover_url: string | null };
 type BookRow = { key: string; title: string; author: string; topic: string; teaser: string; tint: string; cover_url: string | null; brief: Book["brief"] };
 
-export async function getSiteContent(): Promise<SiteContent> {
-  "use cache";
-  cacheTag("content");
-  cacheLife("hours");
-  if (!supabaseConfigured) return fromFiles();
+type Status = "draft" | "published";
+type Client = ReturnType<typeof createClient>;
 
-  const db = createClient(url!, anonKey!, { auth: { persistSession: false, autoRefreshToken: false } });
+/** Reads every content table with `db`; visitors' reads are limited to published rows (the database enforces it too). */
+async function load(db: Client, publishedOnly: boolean): Promise<SiteContent> {
+  const pick = <T,>(q: T & { eq: (c: string, v: string) => T }) => (publishedOnly ? q.eq("status", "published") : q);
   const [posts, projects, tracks, books, links] = await Promise.all([
-    db.from("posts").select("slug,title,display_title,topic,filter,category,minutes,excerpt,dek,cover_url,body,published_at").eq("status", "published").order("sort"),
-    db.from("projects").select("key,name,eyebrow,category,description,disciplines,thumb,cover_url,href,card,case_study").eq("status", "published").order("sort"),
-    db.from("tracks").select("vibe,title,length,audio_url,cover_url").eq("status", "published").order("sort"),
-    db.from("books").select("key,title,author,topic,teaser,tint,cover_url,brief").eq("status", "published").order("sort"),
+    pick(db.from("posts").select("slug,title,display_title,topic,filter,category,minutes,excerpt,dek,cover_url,body,published_at,status")).order("sort"),
+    pick(db.from("projects").select("key,name,eyebrow,category,description,disciplines,thumb,cover_url,href,card,case_study,status")).order("sort"),
+    pick(db.from("tracks").select("id,vibe,title,length,audio_url,cover_url,status")).order("sort"),
+    pick(db.from("books").select("key,title,author,topic,teaser,tint,cover_url,brief,status")).order("sort"),
     db.from("game_links").select("game_key,url"),
   ]);
   const failed = [posts, projects, tracks, books, links].find((r) => r.error);
   if (failed?.error) throw new Error(`Couldn't load content from Supabase: ${failed.error.message}`);
 
-  const projectRows = (projects.data ?? []) as ProjectRow[];
-  const trackRows = (tracks.data ?? []) as TrackRow[];
-  return {
+  const postRows = (posts.data ?? []) as (PostRow & { status: Status })[];
+  const projectRows = (projects.data ?? []) as (ProjectRow & { status: Status })[];
+  const trackRows = (tracks.data ?? []) as (TrackRow & { id: string; status: Status })[];
+  const bookRows = (books.data ?? []) as (BookRow & { status: Status })[];
+  const content: SiteContent = {
     posts: Object.fromEntries(
-      ((posts.data ?? []) as PostRow[]).map((p) => [
+      postRows.map((p) => [
         p.slug,
         {
           slug: p.slug,
@@ -88,7 +89,50 @@ export async function getSiteContent(): Promise<SiteContent> {
     tracks: Object.fromEntries(
       vibes.map((v) => [v.key, trackRows.filter((t) => t.vibe === v.key).map((t): Track => [t.title, t.length, t.audio_url ?? undefined, t.cover_url ?? undefined])])
     ) as Record<Vibe, Track[]>,
-    books: ((books.data ?? []) as BookRow[]).map((b) => ({ key: b.key, title: b.title, author: b.author, topic: b.topic, teaser: b.teaser, tint: b.tint, cover: b.cover_url ?? undefined, brief: b.brief })),
+    books: bookRows.map((b) => ({ key: b.key, title: b.title, author: b.author, topic: b.topic, teaser: b.teaser, tint: b.tint, cover: b.cover_url ?? undefined, brief: b.brief })),
     gameLinks: Object.fromEntries(((links.data ?? []) as { game_key: string; url: string }[]).map((l) => [l.game_key, l.url])),
   };
+  if (!publishedOnly) {
+    content.status = Object.fromEntries([
+      ...postRows.map((p) => [`post:${p.slug}`, p.status]),
+      ...projectRows.map((p) => [`project:${p.key}`, p.status]),
+      ...bookRows.map((b) => [`book:${b.key}`, b.status]),
+      ...trackRows.map((t) => [`track:${t.id}`, t.status]),
+    ]);
+    content.trackIds = Object.fromEntries(vibes.map((v) => [v.key, trackRows.filter((t) => t.vibe === v.key).map((t) => t.id)])) as Record<Vibe, string[]>;
+  }
+  return content;
+}
+
+/** What visitors see: published content, cached and tagged "content". */
+export async function getSiteContent(): Promise<SiteContent> {
+  "use cache";
+  cacheTag("content");
+  cacheLife("hours");
+  if (!supabaseConfigured) return fromFiles();
+  return load(createClient(url!, anonKey!, { auth: { persistSession: false, autoRefreshToken: false } }), true);
+}
+
+/**
+ * What the dashboard sees: everything, drafts included, read as the signed-in owner (never cached — it reads cookies,
+ * so callers sit inside <Suspense>). Returns null if the visitor isn't the owner.
+ */
+export async function getOwnerContent(): Promise<SiteContent | null> {
+  // Per-request (cookies): mark it before loading Supabase code, which reads the clock.
+  const { connection } = await import("next/server");
+  await connection();
+  const { getOwner } = await import("./supabase/server");
+  const owner = await getOwner();
+  if (!owner) return null;
+  return load(owner.supabase as unknown as Client, false);
+}
+
+/** Dashboard pages: the owner's content, or straight to Sign in. */
+export async function requireOwnerContent(): Promise<SiteContent> {
+  const content = await getOwnerContent();
+  if (!content) {
+    const { redirect } = await import("next/navigation");
+    redirect("/dashboard/sign-in");
+  }
+  return content!;
 }
