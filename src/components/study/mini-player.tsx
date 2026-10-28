@@ -1,5 +1,6 @@
 "use client";
 
+import { useSiteContent } from "@/components/content/site-content";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { CloseIcon, PauseIcon, PlayFilledIcon, SkipForwardIcon } from "@/components/icons";
@@ -22,6 +23,7 @@ export function useMiniPlayerVisible(lang: string) {
  * Drag it anywhere (the spot is remembered); a tap still works its buttons. Closing it stops the music.
  */
 export function MiniPlayer({ lang, closeLabel }: { lang: string; closeLabel: string }) {
+  const { tracks } = useSiteContent();
   const s = useStudy();
   const study = `/${lang}/study`;
   const visible = useMiniPlayerVisible(lang);
@@ -31,7 +33,7 @@ export function MiniPlayer({ lang, closeLabel }: { lang: string; closeLabel: str
   const readerInFront = readerState !== "idle" && front === "reader";
   if (!visible || readerInFront) return null;
 
-  const caption = s.vibe === "custom" ? (s.customSong?.source ?? a.custom) : trackCaption(s.vibe, s.index);
+  const caption = s.vibe === "custom" ? (s.customSong?.source ?? a.custom) : trackCaption(tracks, s.vibe, s.index);
   const playing = s.status === "playing";
   return (
     <FloatingCard storageKey="mini-player-pos" label={a.nowPlaying} className="inset-x-(--layout-gutter) bottom-16 tablet:inset-x-auto tablet:right-24 tablet:bottom-24 tablet:w-360">

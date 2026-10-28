@@ -1,12 +1,13 @@
 "use client";
 
+import { useSiteContent } from "@/components/content/site-content";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { Blocks } from "@/components/content/blocks";
 import { PanelClose, SidePanel } from "@/components/ui/side-panel";
 import { useDrawer, useDrawerPayload, useDrawerState } from "@/components/shell/drawer-provider";
-import { browse, posts, preview, type PostTopicFilter } from "@/content/blog";
+import { browse, preview, type PostTopicFilter } from "@/content/blog";
 import { PostArt } from "./topic-art";
 
 /** Blog drawers place their panel like the other drawers: 544 wide, 24 from the edges; full width (8 inset) on phones. */
@@ -41,7 +42,8 @@ export function BrowseDrawer({ closeLabel }: { closeLabel: string }) {
   const state = useDrawerState("blog-browse");
   const { setOpen } = useDrawer();
   const [filter, setFilter] = useState<"all" | PostTopicFilter>("all");
-  const list = browse.posts.map((slug) => posts[slug]).filter((post) => filter === "all" || post.filter === filter);
+  const { posts } = useSiteContent();
+  const list = browse.posts.flatMap((slug) => (posts[slug] ? [posts[slug]] : [])).filter((post) => filter === "all" || post.filter === filter);
   return (
     <SidePanel {...state} title={browse.title} className={`${panelPlacement} bg-surface-primary`}>
       <Header eyebrow={browse.eyebrow} title={browse.title} closeLabel={closeLabel} height="h-63" />
@@ -96,8 +98,10 @@ export function BrowseDrawer({ closeLabel }: { closeLabel: string }) {
 export function PostDrawer({ closeLabel }: { closeLabel: string }) {
   const state = useDrawerState("blog-post");
   const { setOpen } = useDrawer();
-  const post = posts[useDrawerPayload("blog-post") ?? ""] ?? posts[browse.posts[0]];
+  const { posts } = useSiteContent();
+  const post = posts[useDrawerPayload("blog-post") ?? ""] ?? posts[browse.posts[0]] ?? Object.values(posts)[0];
   const lang = usePathname().split("/")[1];
+  if (!post) return null;
   return (
     <SidePanel {...state} title={post.title} className={`${panelPlacement} bg-surface-primary`}>
       <Header eyebrow={preview.eyebrow} title={preview.title} closeLabel={closeLabel} height="h-62" />

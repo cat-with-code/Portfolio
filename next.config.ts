@@ -1,7 +1,13 @@
 import type { NextConfig } from "next";
 
+// Uploaded covers live in Supabase Storage; next/image may load them from that one bucket path only.
+const supabaseHost = process.env.NEXT_PUBLIC_SUPABASE_URL ? new URL(process.env.NEXT_PUBLIC_SUPABASE_URL).hostname : null;
+
 const nextConfig: NextConfig = {
   cacheComponents: true,
+  images: {
+    remotePatterns: supabaseHost ? [{ protocol: "https", hostname: supabaseHost, pathname: "/storage/v1/object/public/covers/**" }] : [],
+  },
   // Lets phones on the same Wi-Fi use the dev server (http://<this Mac's IP>:3000) with hot reload.
   allowedDevOrigins: ["192.168.*.*", "10.*.*.*", "*.local"],
   // The dev-only "N" button defaults to bottom-left, where it covers the sidebar's Settings button.

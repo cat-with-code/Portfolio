@@ -5,7 +5,7 @@ import { PlaylistIcon } from "@/components/icons";
 import { covers } from "@/components/study/focus-audio";
 import { Button } from "@/components/ui/button";
 import { SectionHeading } from "@/components/ui/section-heading";
-import type { Book } from "@/content/books";
+import { bookCover, type Book } from "@/content/books";
 import { bookEditorCopy as bc, trackEditorCopy as tc } from "@/content/dashboard";
 import { vibes, type Track, type Vibe } from "@/content/study";
 import { CoverField, DeleteZone, UploadAudioButton } from "./dialogs";
@@ -102,8 +102,7 @@ export function TrackEditor({ vibe: initialVibe, track, isNew = false }: { vibe:
 /** Dashboard / Book editor (Figma Desktop 1412:11494): details, cover on its colour panel, then the brief (content/books `Book`). */
 export function BookEditor({ book: initial, isNew = false }: { book: Book; isNew?: boolean }) {
   const [b, setB] = useState(initial);
-  // Existing books use public/images/books/<key>.jpg
-  const [cover, setCover] = useState<string | undefined>(isNew ? undefined : `/images/books/${initial.key}.jpg`);
+  const [cover, setCover] = useState<string | undefined>(isNew ? undefined : bookCover(initial));
   const [saved, setSaved] = useState(false);
   const update = (patch: Partial<Book>) => (setB({ ...b, ...patch }), setSaved(false));
   const brief = (patch: Partial<Book["brief"]>) => update({ brief: { ...b.brief, ...patch } });

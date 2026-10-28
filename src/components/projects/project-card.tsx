@@ -4,13 +4,13 @@ import { projectsPage, type ProjectCard as Card } from "@/content/projects";
 import { ProjectCover } from "./project-cover";
 
 /** Projects / Project card (Figma 856:2446): cover, category + status, name, description, tags, Explore link. */
-export function ProjectCard({ lang, project }: { lang: string; project: Card }) {
+export function ProjectCard({ lang, project, image }: { lang: string; project: Card; image?: string }) {
   return (
     <Link
       href={`/${lang}/projects/${project.key}`}
       className="group/card flex min-w-0 flex-1 flex-col items-start gap-16 rounded-card bg-surface-primary p-20"
     >
-      <ProjectCover project={project.key} />
+      <ProjectCover project={project.key} image={image} />
       <span className="flex w-full flex-wrap content-center items-center justify-between gap-8 overflow-clip">
         <span className="type-table-heading whitespace-nowrap text-brand">{project.meta}</span>
         <span className="type-caption flex shrink-0 items-start overflow-clip rounded-full bg-brand-subtle px-12 py-4 whitespace-nowrap text-brand">

@@ -12,6 +12,8 @@ export type Book = {
   teaser: string;
   /** Cover banner tint behind the book in the brief */
   tint: string;
+  /** Cover image (uploaded, or in public/); defaults to /images/books/<key>.jpg */
+  cover?: string;
   brief: {
     bigIdea: string;
     ideas: [string, string, string];
@@ -32,6 +34,9 @@ export const library = {
   question: "A QUESTION TO TAKE INTO YOUR STUDY",
   back: "Back to Book Library",
 };
+
+/** A book's cover image. */
+export const bookCover = (b: Pick<Book, "key" | "cover">) => b.cover ?? `/images/books/${b.key}.jpg`;
 
 export const books: Book[] = [
   {

@@ -1,12 +1,13 @@
 "use client";
 
+import { useSiteContent } from "@/components/content/site-content";
 import type { ReactNode } from "react";
 import { ArrowUpRightIcon } from "@/components/icons";
 import { useDrawer } from "@/components/shell/drawer-provider";
-import { magazine, posts, type Placement } from "@/content/blog";
+import { magazine, type Placement, type Post } from "@/content/blog";
 import { PostArt } from "./topic-art";
 
-export const metaLine = (slug: string) => `${posts[slug].category}  ·  ${posts[slug].minutes} MIN READ`;
+export const metaLine = (post: Pick<Post, "category" | "minutes">) => `${post.category}  ·  ${post.minutes} MIN READ`;
 const eyebrow = (p: Placement) => (p.kicker ? `${p.number}  /  ${p.kicker}` : p.number);
 
 /** Every card opens the post in the "Inside the story" preview drawer. */
@@ -30,10 +31,10 @@ function ReadCta() {
   );
 }
 
-function Footer({ slug, className = "" }: { slug: string; className?: string }) {
+function Footer({ post, className = "" }: { post: Post; className?: string }) {
   return (
     <span className={`flex w-full items-center gap-12 px-4 pt-4 ${className}`}>
-      <span className="type-table-heading min-w-0 flex-1 whitespace-pre-wrap text-muted">{metaLine(slug)}</span>
+      <span className="type-table-heading min-w-0 flex-1 whitespace-pre-wrap text-muted">{metaLine(post)}</span>
       <ReadCta />
     </span>
   );
@@ -44,7 +45,10 @@ function Footer({ slug, className = "" }: { slug: string; className?: string }) 
  * Tablet / Mobile: Featured (wide art on top).
  */
 export function CoverStoryCard({ placement }: { placement: Placement }) {
+  const { posts } = useSiteContent();
   const post = posts[placement.slug];
+  // Unpublished or deleted posts simply leave their slot empty.
+  if (!post) return null;
   return (
     <CardButton
       slug={post.slug}
@@ -61,7 +65,7 @@ export function CoverStoryCard({ placement }: { placement: Placement }) {
           <span className="type-page-title w-full text-primary">{post.title}</span>
           <span className="type-body line-clamp-2 w-full text-muted tablet:line-clamp-3 desktop:line-clamp-4">{post.excerpt}</span>
         </span>
-        <Footer slug={post.slug} />
+        <Footer post={post} />
       </span>
     </CardButton>
   );
@@ -72,7 +76,10 @@ export function CoverStoryCard({ placement }: { placement: Placement }) {
  * Mobile: Standard (wide art on top, meta + Read the story underneath).
  */
 export function FeatureCard({ placement }: { placement: Placement }) {
+  const { posts } = useSiteContent();
   const post = posts[placement.slug];
+  // Unpublished or deleted posts simply leave their slot empty.
+  if (!post) return null;
   return (
     <CardButton
       slug={post.slug}
@@ -91,14 +98,17 @@ export function FeatureCard({ placement }: { placement: Placement }) {
         <span className="type-card-title w-full text-primary">{post.title}</span>
         <span className="type-caption hidden w-full text-accent-green tablet:block">{post.minutes} min read</span>
       </span>
-      <Footer slug={post.slug} className="tablet:hidden" />
+      <Footer post={post} className="tablet:hidden" />
     </CardButton>
   );
 }
 
 /** Reading room story. Desktop / Tablet: Wide card (art beside the copy); Mobile: Standard card. */
 export function WideCard({ placement }: { placement: Placement }) {
+  const { posts } = useSiteContent();
   const post = posts[placement.slug];
+  // Unpublished or deleted posts simply leave their slot empty.
+  if (!post) return null;
   return (
     <CardButton
       slug={post.slug}
@@ -114,7 +124,7 @@ export function WideCard({ placement }: { placement: Placement }) {
           <span className="type-card-title tablet:type-page-title w-full text-primary">{post.title}</span>
           <span className="type-body w-full text-muted">{post.excerpt}</span>
         </span>
-        <Footer slug={post.slug} className="tablet:flex-1" />
+        <Footer post={post} className="tablet:flex-1" />
       </span>
     </CardButton>
   );
@@ -122,7 +132,10 @@ export function WideCard({ placement }: { placement: Placement }) {
 
 /** Archive row — Blog / Post card Size=Compact: 84 thumbnail (wide art cropped), copy, arrow. */
 export function ArchiveCard({ placement }: { placement: Placement }) {
+  const { posts } = useSiteContent();
   const post = posts[placement.slug];
+  // Unpublished or deleted posts simply leave their slot empty.
+  if (!post) return null;
   return (
     <CardButton slug={post.slug} className="flex w-full items-center gap-16 rounded-card bg-surface-primary py-12 pr-16 pl-12">
       <span className="relative block size-84 shrink-0 overflow-clip rounded-lg">
@@ -132,7 +145,7 @@ export function ArchiveCard({ placement }: { placement: Placement }) {
       </span>
       <span className="flex min-w-0 flex-1 flex-col items-start gap-4">
         <span className="type-table-heading w-full text-brand">{placement.number}</span>
-        <span className="type-table-heading w-full whitespace-pre-wrap text-muted">{metaLine(post.slug)}</span>
+        <span className="type-table-heading w-full whitespace-pre-wrap text-muted">{metaLine(post)}</span>
         <span className="type-card-title w-full text-primary">{post.title}</span>
         <span className="type-caption w-full text-muted">{placement.excerpt ?? post.excerpt}</span>
       </span>

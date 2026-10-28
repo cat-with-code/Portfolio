@@ -1,10 +1,11 @@
 "use client";
 
+import { useSiteContent } from "@/components/content/site-content";
 import { useState } from "react";
 import { ChevronLeftIcon, ChevronRightIcon, CloseIcon, PlaylistIcon, PlusIcon, TrashIcon } from "@/components/icons";
 import { useDrawer, useDrawerPayload, useDrawerState } from "@/components/shell/drawer-provider";
 import { PanelClose, SidePanel } from "@/components/ui/side-panel";
-import { audioCopy as a, tracks, vibes, type Vibe } from "@/content/study";
+import { audioCopy as a, vibes, type Vibe } from "@/content/study";
 import { youTubeId, youTubeInfo, youTubeThumb } from "@/lib/youtube";
 import { CustomCover, covers } from "./focus-audio";
 import { useStudy, type CustomSong, type Playlist } from "./study-provider";
@@ -237,6 +238,7 @@ function CustomPlaylists() {
 
 /** Music library drawer — Audio / Track library (523:11967): browse the five vibes, or your own playlists. */
 export function MusicDrawer({ closeLabel }: { closeLabel: string }) {
+  const { tracks } = useSiteContent();
   const state = useDrawerState("study-music");
   const opened = useDrawerPayload("study-music") as Vibe | "custom" | null;
   const { setOpen } = useDrawer();

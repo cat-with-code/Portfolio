@@ -5,7 +5,6 @@
  */
 import type { CSSProperties } from "react";
 import type { CaseStudy } from "@/content/case-studies";
-import { coverImageOf } from "./project-cover";
 
 const W = 1078;
 const H = 675;
@@ -93,9 +92,9 @@ const art: Record<CaseStudy["key"], { bg: string; shapes: Shape[] }> = {
 
 const pct = (v: number, of: number) => `${((v / of) * 100).toFixed(3)}%`;
 
-export function CaseCover({ project }: { project: CaseStudy["key"] }) {
-  const { bg, shapes } = art[project];
-  const image = coverImageOf(project);
+export function CaseCover({ project, image }: { project: string; image?: string }) {
+  // Projects without drawn art (new ones) get a plain tinted panel until a cover is uploaded.
+  const { bg, shapes } = art[project as CaseStudy["key"]] ?? { bg: "bg-surface-secondary", shapes: [] };
   if (image)
     return (
       <div aria-hidden className={`relative aspect-[1078/675] w-full overflow-clip rounded-xl ${bg}`}>

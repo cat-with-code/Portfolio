@@ -5,12 +5,14 @@ import { Explorations } from "@/components/projects/explorations";
 import { ProjectCard } from "@/components/projects/project-card";
 import { SectionHeading } from "@/components/ui/section-heading";
 import { developer } from "@/content/developer";
-import { projectCards, projectsPage as p } from "@/content/projects";
+import { projectsPage as p } from "@/content/projects";
+import { getSiteContent } from "@/lib/site-content";
 import { getLocale } from "@/i18n/dictionaries";
 
 /** Projects — Bento editorial layout (Figma Desktop 694:22512 · Tablet 696:37956 · Mobile 696:44618). */
 export default async function ProjectsPage() {
   const lang = await getLocale();
+  const { projectCards, projects } = await getSiteContent();
   // Game Hub first on this page (Projects / Try it yourself 860:53385).
   const tryIt = [...developer.tryIt].reverse();
   return (
@@ -26,7 +28,7 @@ export default async function ProjectsPage() {
         <div className="flex w-full flex-col items-start gap-12">
           <div className="flex w-full flex-col items-stretch gap-16 tablet:flex-row tablet:gap-20 desktop:gap-24">
             {projectCards.map((project) => (
-              <ProjectCard key={project.key} lang={lang} project={project} />
+              <ProjectCard key={project.key} lang={lang} project={project} image={projects.find((x) => x.key === project.key)?.coverImage} />
             ))}
           </div>
           <DirectoryCaption className="hidden tablet:block">{p.closing}</DirectoryCaption>

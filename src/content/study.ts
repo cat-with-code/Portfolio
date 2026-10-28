@@ -87,9 +87,9 @@ export const tracks: Record<Vibe, Track[]> = {
 };
 
 /** "Lofi · 2 of 3" when a vibe has several tracks, "Lofi · focus collection" when it has one. */
-export const trackCaption = (vibe: Vibe, index: number) => {
+export const trackCaption = (list: Record<Vibe, Track[]>, vibe: Vibe, index: number) => {
   const label = vibes.find((v) => v.key === vibe)!.label;
-  const n = tracks[vibe].length;
+  const n = list[vibe].length;
   return n > 1 ? `${label} · ${index + 1} of ${n}` : `${label} · ${audioCopy.collection}`;
 };
 

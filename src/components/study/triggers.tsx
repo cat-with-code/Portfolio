@@ -1,12 +1,13 @@
 "use client";
 
+import { useSiteContent } from "@/components/content/site-content";
 import { ArrowRightIcon, BookOpenIcon } from "@/components/icons";
 import { useDrawer } from "@/components/shell/drawer-provider";
-import { books } from "@/content/books";
 
 /** Study / Favorite books button (1286:110254): opens the Book Library; the badge counts the books. */
 export function FavoriteBooksButton({ label, className = "" }: { label: string; className?: string }) {
   const { setOpen } = useDrawer();
+  const { books } = useSiteContent();
   return (
     <button
       type="button"

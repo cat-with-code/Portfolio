@@ -1,16 +1,20 @@
 "use client";
 
+import { useSiteContent } from "@/components/content/site-content";
 import { useRef, useState } from "react";
 import { BookArt } from "@/components/blog/book-drawers";
 import { TextReader } from "@/components/reader/text-reader";
 import { caseStudyCopy } from "@/content/case-studies";
-import { books } from "@/content/books";
 import { recentlyRead as rr } from "@/content/study";
-
-const items = rr.books.map((b) => ({ ...b, book: books.find((x) => x.key === b.key)! }));
 
 /** Study / Recently read carousel (Figma 891:86899): one book at a time, dots + swipe. */
 export function RecentlyRead() {
+  const { books } = useSiteContent();
+  // Books that were unpublished or deleted drop out of the carousel.
+  const items = rr.books.flatMap((b) => {
+    const book = books.find((x) => x.key === b.key);
+    return book ? [{ ...b, book }] : [];
+  });
   const [index, setIndex] = useState(0);
   const start = useRef<number | null>(null);
   const go = (i: number) => setIndex(Math.min(items.length - 1, Math.max(0, i)));

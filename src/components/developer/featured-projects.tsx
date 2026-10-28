@@ -1,8 +1,9 @@
 "use client";
 
+import { projectImage, useSiteContent } from "@/components/content/site-content";
 import Link from "next/link";
 import { useRef, useState } from "react";
-import { covers, coverImageOf } from "@/components/projects/project-cover";
+import { covers } from "@/components/projects/project-cover";
 import { useDrawer } from "@/components/shell/drawer-provider";
 import { developer, type FeaturedProject } from "@/content/developer";
 
@@ -39,7 +40,7 @@ function Gallery({ project }: { project: FeaturedProject }) {
   const [index, setIndex] = useState(0);
   const start = useRef<number | null>(null);
   const { Art, bg } = covers[project.key];
-  const image = coverImageOf(project.key);
+  const image = projectImage(useSiteContent(), project.key);
   return (
     <div className="flex w-308 max-w-full shrink-0 flex-col items-center gap-4">
       <div

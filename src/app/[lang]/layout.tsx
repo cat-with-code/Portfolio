@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
+import { SiteContentProvider } from "@/components/content/site-content";
 import { AppShell } from "@/components/shell/app-shell";
+import { getSiteContent } from "@/lib/site-content";
 import { getDictionary, getLocale, locales } from "@/i18n/dictionaries";
 import { bootScript, fontVariables } from "../fonts";
 import "../globals.css";
@@ -30,9 +32,11 @@ export default async function RootLayout({ children }: LayoutProps<"/[lang]">) {
         )}
       </head>
       <body>
+        <SiteContentProvider value={await getSiteContent()}>
         <AppShell lang={lang} dict={dict}>
           {children}
         </AppShell>
+        </SiteContentProvider>
       </body>
     </html>
   );

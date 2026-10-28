@@ -1,7 +1,8 @@
 "use client";
 
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
-import { tracks, techniques, vibes, type Technique, type Vibe } from "@/content/study";
+import { useSiteContent } from "@/components/content/site-content";
+import { techniques, vibes, type Technique, type Track, type Vibe } from "@/content/study";
 import { FocusAudio, toSeconds } from "@/lib/focus-audio";
 import { createYouTubePlayer, youTubeId, youTubeThumb, YT_ENDED, YT_PAUSED, YT_PLAYING, type YTPlayer } from "@/lib/youtube";
 
@@ -71,26 +72,38 @@ const openLink = (url: string) => {
     if (["http:", "https:"].includes(new URL(url).protocol)) window.open(url, "_blank", "noopener");
   } catch {}
 };
+type Tracks = Record<Vibe, Track[]>;
 /** Audio file for a track, if one has been uploaded (see `Track` in content/study). */
-const fileOf = (vibe: Vibe | "custom", index: number) => (vibe === "custom" ? undefined : tracks[vibe][index]?.[2]);
-/** The track `dir` steps away: within the vibe when it has several, otherwise the next / previous vibe. */
-function step(vibe: Vibe, index: number, dir: 1 | -1): [Vibe, number] {
+const fileOf = (tracks: Tracks, vibe: Vibe | "custom", index: number) => (vibe === "custom" ? undefined : tracks[vibe][index]?.[2]);
+/** The track `dir` steps away: within the vibe when it has several, otherwise the next / previous vibe that has tracks. */
+function step(tracks: Tracks, vibe: Vibe, index: number, dir: 1 | -1): [Vibe, number] {
   const n = tracks[vibe].length;
   if (n > 1) return [vibe, (index + dir + n) % n];
   const i = vibes.findIndex((v) => v.key === vibe);
-  return [vibes[(i + dir + vibes.length) % vibes.length].key, 0];
+  for (let k = 1; k <= vibes.length; k++) {
+    const next = vibes[(((i + dir * k) % vibes.length) + vibes.length) % vibes.length].key;
+    if (tracks[next].length) return [next, 0];
+  }
+  return [vibe, 0];
 }
 
 /** Shared state for the Study page: the generated-music player and today's focus sessions. */
 export function StudyProvider({ children }: { children: ReactNode }) {
   const engine = useRef<FocusAudio | null>(null);
+  // Published tracks (Supabase); a ref so the player's callbacks always see the current list.
+  const { tracks } = useSiteContent();
+  const tracksRef = useRef(tracks);
+  useEffect(() => {
+    tracksRef.current = tracks;
+  });
+  const first = vibes.find((v) => tracks[v.key].length)?.key ?? "lofi";
   const [p, setP] = useState<Player>({
-    vibe: "lofi",
+    vibe: first,
     index: 0,
     status: "stopped",
     elapsed: 0,
-    duration: toSeconds(tracks.lofi[0][1]),
-    title: tracks.lofi[0][0],
+    duration: toSeconds(tracks[first][0]?.[1] ?? "0:00"),
+    title: tracks[first][0]?.[0] ?? "",
     muted: false,
     volume: 1,
     loop: false,
@@ -154,7 +167,9 @@ export function StudyProvider({ children }: { children: ReactNode }) {
   useEffect(() => () => file.current?.pause(), []);
 
   const load = useCallback((vibe: Vibe, index: number, autoplay: boolean) => {
-    const [title, len, src] = tracks[vibe][index];
+    const track = tracksRef.current[vibe][index];
+    if (!track) return;
+    const [title, len, src] = track;
     setP((prev) => ({ ...prev, vibe, index, title, duration: toSeconds(len), elapsed: 0, customSong: null, status: autoplay ? "playing" : prev.status === "stopped" ? "stopped" : "paused" }));
     yt.current?.stopVideo();
     file.current?.pause();
@@ -245,7 +260,7 @@ export function StudyProvider({ children }: { children: ReactNode }) {
       } else playCustom(song);
       return;
     }
-    if (fileOf(p.vibe, p.index)) {
+    if (fileOf(tracksRef.current, p.vibe, p.index)) {
       if (p.status === "playing") {
         file.current?.pause();
         setP((prev) => ({ ...prev, status: "paused" }));
@@ -284,7 +299,7 @@ export function StudyProvider({ children }: { children: ReactNode }) {
         if (next) playCustom(next);
         return;
       }
-      const [vibe, index] = step(p.vibe, p.index, dir);
+      const [vibe, index] = step(tracksRef.current, p.vibe, p.index, dir);
       load(vibe, index, p.status === "playing");
     },
     [load, playCustom, p.vibe, p.index, p.status]
@@ -292,7 +307,7 @@ export function StudyProvider({ children }: { children: ReactNode }) {
 
   const seek = useCallback((fraction: number) => {
     const { vibe, index } = latest.current;
-    const f = fileOf(vibe, index) ? file.current : null;
+    const f = fileOf(tracksRef.current, vibe, index) ? file.current : null;
     // YouTube and file lengths are only known once they load, so ask the player rather than state.
     const duration = (vibe === "custom" ? Math.floor(yt.current?.getDuration() ?? 0) : f ? Math.floor(f.duration) || 0 : 0) || latest.current.duration;
     const elapsed = Math.round(duration * Math.min(1, Math.max(0, fraction)));
@@ -337,7 +352,7 @@ export function StudyProvider({ children }: { children: ReactNode }) {
     onTrackEnd.current = () => {
       const cur = latest.current;
       if (cur.vibe === "custom") return;
-      const [vibe, index] = cur.loop ? [cur.vibe, cur.index] : step(cur.vibe, cur.index, 1);
+      const [vibe, index] = cur.loop ? [cur.vibe, cur.index] : step(tracksRef.current, cur.vibe, cur.index, 1);
       load(vibe, index, true);
     };
   });
@@ -356,7 +371,7 @@ export function StudyProvider({ children }: { children: ReactNode }) {
       }
       // YouTube songs and uploaded files keep their own clock and say when they end.
       const player = cur.vibe === "custom" ? yt.current : null;
-      const f = fileOf(cur.vibe, cur.index) ? file.current : null;
+      const f = fileOf(tracksRef.current, cur.vibe, cur.index) ? file.current : null;
       if (player) setP((prev) => ({ ...prev, elapsed: Math.floor(player.getCurrentTime()), duration: Math.floor(player.getDuration()) || prev.duration }));
       else if (f) setP((prev) => ({ ...prev, elapsed: Math.floor(f.currentTime), duration: Math.floor(f.duration) || prev.duration }));
       else if (cur.vibe === "custom") return;

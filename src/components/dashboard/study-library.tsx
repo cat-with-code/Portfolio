@@ -1,12 +1,13 @@
 "use client";
 
+import { useSiteContent } from "@/components/content/site-content";
 import Link from "next/link";
 import { useState } from "react";
 import { PlaylistIcon } from "@/components/icons";
 import { Chip } from "@/components/ui/chip";
 import { studyCopy as c } from "@/content/dashboard";
-import type { Book } from "@/content/books";
-import { trackCaption, tracks, vibes, type Vibe } from "@/content/study";
+import { bookCover, type Book } from "@/content/books";
+import { trackCaption, vibes, type Vibe } from "@/content/study";
 import { Rows } from "./content-list";
 import { AddStudyItemButton } from "./dialogs";
 import { MediaTile } from "./media-tile";
@@ -14,6 +15,7 @@ import { CardHeader, WidgetCard } from "./widgets";
 
 /** Dashboard / Study library body (Figma 1363:2755): All / Music / Books filter, Focus music card with vibe chips, Book library grid. */
 export function StudyLibrary({ books }: { books: Book[] }) {
+  const { tracks } = useSiteContent();
   const trackCount = vibes.reduce((n, v) => n + tracks[v.key].length, 0);
   const [filter, setFilter] = useState<"all" | "music" | "books">("all");
   const [vibe, setVibe] = useState<Vibe | "custom">("lofi");
@@ -61,7 +63,7 @@ export function StudyLibrary({ books }: { books: Book[] }) {
               rows={tracks[vibe].map(([title, length], i) => ({
                 key: `${vibe}-${i}`,
                 title,
-                meta: trackCaption(vibe, i),
+                meta: trackCaption(tracks, vibe, i),
                 info: length,
                 href: `/dashboard/study/tracks/${vibe}-${i}`,
               }))}
@@ -83,7 +85,7 @@ export function StudyLibrary({ books }: { books: Book[] }) {
             {books.map((b) => (
               <li key={b.key} className="min-w-0">
                 <Link href={`/dashboard/study/books/${b.key}`} className="block rounded-card transition-opacity duration-(--duration-fast) hover:opacity-80">
-                  <MediaTile src={`/images/books/${b.key}.jpg`} title={b.title} caption={`${b.author} · ${b.topic}`} tint={b.tint} />
+                  <MediaTile src={bookCover(b)} title={b.title} caption={`${b.author} · ${b.topic}`} tint={b.tint} />
                 </Link>
               </li>
             ))}

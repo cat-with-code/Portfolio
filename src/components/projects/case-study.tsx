@@ -2,7 +2,7 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 import { ArrowRightIcon } from "@/components/icons";
 import { TextReader } from "@/components/reader/text-reader";
-import { caseStudies, caseStudyCopy as copy, type CaseStudy as Study } from "@/content/case-studies";
+import { caseStudyCopy as copy, type CaseStudy as Study } from "@/content/case-studies";
 import { CaseCover } from "./case-cover";
 
 const Rule = () => <div aria-hidden className="h-px w-full shrink-0 bg-(--color-border-line-divider)" />;
@@ -22,9 +22,7 @@ function Section({ eyebrow, title, children }: { eyebrow: string; title: string;
 
 /** Projects / Case study (Figma 1108:92445): Desktop · Tablet · Mobile layouts of one project page. */
 /** `preview` (dashboard Publish review) leaves out the audio reader, which needs the site's providers. */
-export function CaseStudy({ lang, study, preview = false }: { lang: string; study: Study; preview?: boolean }) {
-  const index = caseStudies.findIndex((s) => s.key === study.key);
-  const next = caseStudies[(index + 1) % caseStudies.length];
+export function CaseStudy({ lang, study, next, image, preview = false }: { lang: string; study: Study; next?: Study; image?: string; preview?: boolean }) {
   const spoken = [
     study.title,
     study.summary,
@@ -76,7 +74,7 @@ export function CaseStudy({ lang, study, preview = false }: { lang: string; stud
       </dl>
       <Rule />
       <div className="w-full py-20 tablet:py-32">
-        <CaseCover project={study.key} />
+        <CaseCover project={study.key} image={image} />
       </div>
       <Rule />
       <Section eyebrow={copy.sections[0]} title={study.overview.title}>
@@ -114,7 +112,8 @@ export function CaseStudy({ lang, study, preview = false }: { lang: string; stud
         <p className="type-page-title tablet:type-kpi w-full text-primary">{study.outcome.statement}</p>
       </Section>
       <Rule />
-      {/* Next project */}
+      {/* Next project (none when this is the only case study) */}
+      {next && next.key !== study.key && (
       <Link href={`/${lang}/projects/${next.key}`} className="group/next flex w-full items-center gap-24 py-20 tablet:py-24">
         <span className="flex min-w-0 flex-1 flex-col items-start gap-4">
           <span className="type-eyebrow text-muted">{copy.next}</span>
@@ -125,6 +124,7 @@ export function CaseStudy({ lang, study, preview = false }: { lang: string; stud
           <ArrowRightIcon />
         </span>
       </Link>
+      )}
       <Rule />
     </article>
   );

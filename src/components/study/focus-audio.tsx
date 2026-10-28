@@ -1,5 +1,6 @@
 "use client";
 
+import { useSiteContent } from "@/components/content/site-content";
 import * as Dialog from "@radix-ui/react-dialog";
 import * as Popover from "@radix-ui/react-popover";
 import { useEffect, useRef, useState, type ComponentType, type SVGProps } from "react";
@@ -28,7 +29,7 @@ import { AudioNeoArt } from "@/components/illustrations/audio-neo";
 import { AudioPianoArt } from "@/components/illustrations/audio-piano";
 import { AudioRainArt } from "@/components/illustrations/audio-rain";
 import { useDrawer } from "@/components/shell/drawer-provider";
-import { audioCopy as a, trackCaption, tracks, vibes, type Vibe } from "@/content/study";
+import { audioCopy as a, trackCaption, vibes, type Vibe } from "@/content/study";
 import { clock } from "@/lib/focus-audio";
 import { youTubeId, youTubeThumb } from "@/lib/youtube";
 import { useStudy, type CustomSong } from "./study-provider";
@@ -45,6 +46,7 @@ export const covers: Record<Style, ComponentType<SVGProps<SVGSVGElement>>> = {
 
 /** A focus track's uploaded cover (4th item of its `Track`), or its vibe's artwork. */
 export function TrackCover({ vibe, index, className = "" }: { vibe: Vibe; index: number; className?: string }) {
+  const { tracks } = useSiteContent();
   const image = tracks[vibe][index]?.[3];
   const Art = covers[vibe];
   // eslint-disable-next-line @next/next/no-img-element -- uploaded covers may live on any host
@@ -331,6 +333,7 @@ function SeekBar() {
 
 /** Melody picker (Figma 1332:135293): press and hold a sound style to pick one of its tracks (only styles with more than one). */
 function MelodyPicker({ vibe, onClose }: { vibe: Vibe | null; onClose: () => void }) {
+  const { tracks } = useSiteContent();
   const { playTrack, vibe: current, index, status } = useStudy();
   const info = vibes.find((v) => v.key === vibe);
   return (
@@ -390,6 +393,7 @@ function MelodyPicker({ vibe, onClose }: { vibe: Vibe | null; onClose: () => voi
 
 /** Study / Focus audio (Figma 379:15202): generated focus music with play, skip, seek, loop, sleep timer and mute. */
 export function FocusAudio({ className = "" }: { className?: string }) {
+  const { tracks } = useSiteContent();
   const s = useStudy();
   const { setOpen } = useDrawer();
   const [picker, setPicker] = useState<Vibe | null>(null);
@@ -446,7 +450,7 @@ export function FocusAudio({ className = "" }: { className?: string }) {
         {s.vibe === "custom" ? <CustomCover song={s.customSong} className="size-64 rounded-lg" /> : <TrackCover vibe={s.vibe} index={s.index} className="size-64" />}
         <div className="flex min-w-0 flex-1 flex-col gap-4">
           <p className="truncate text-[20px] leading-[28px] font-semibold text-primary">{s.vibe === "custom" && !s.customSong ? a.customLists.count.split(" · ")[1] : s.title}</p>
-          <p className="type-caption truncate text-secondary">{s.vibe === "custom" ? (s.blocked ? a.customLists.blocked : (s.customSong?.source ?? a.custom)) : trackCaption(s.vibe, s.index)}</p>
+          <p className="type-caption truncate text-secondary">{s.vibe === "custom" ? (s.blocked ? a.customLists.blocked : (s.customSong?.source ?? a.custom)) : trackCaption(tracks, s.vibe, s.index)}</p>
         </div>
         <VolumeButton />
       </div>

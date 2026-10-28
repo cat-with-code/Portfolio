@@ -1,5 +1,6 @@
 "use client";
 
+import { useSiteContent } from "@/components/content/site-content";
 import type { ComponentType, SVGProps } from "react";
 import { BookAlchemistArt } from "@/components/illustrations/book-alchemist";
 import { BookAtomicHabitsArt } from "@/components/illustrations/book-atomic-habits";
@@ -13,7 +14,7 @@ import { TextReader } from "@/components/reader/text-reader";
 import { useDrawer, useDrawerPayload, useDrawerState } from "@/components/shell/drawer-provider";
 import { SidePanel } from "@/components/ui/side-panel";
 import { caseStudyCopy } from "@/content/case-studies";
-import { books, library, type Book } from "@/content/books";
+import { bookCover, library, type Book } from "@/content/books";
 import { GlyphClose, panelPlacement } from "./blog-drawers";
 
 const covers: Record<string, ComponentType<SVGProps<SVGSVGElement>>> = {
@@ -27,14 +28,21 @@ const covers: Record<string, ComponentType<SVGProps<SVGSVGElement>>> = {
   "brief-history-of-time": BookBriefHistoryOfTimeArt,
 };
 
-/** Study / Book art (Fit=Fill): a 3D book mock-up around the cover, drawn to its box. */
+/**
+ * Study / Book art (Fit=Fill): a 3D book mock-up around the cover, drawn to its box.
+ * Books without a drawn mock-up, or with an uploaded cover, show the cover image itself.
+ */
 export function BookArt({ book, className = "" }: { book: Book; className?: string }) {
   const Art = covers[book.key];
+  const uploaded = book.cover && book.cover !== `/images/books/${book.key}.jpg`;
+  // eslint-disable-next-line @next/next/no-img-element -- uploaded covers may live on any host
+  if (!Art || uploaded) return <img src={bookCover(book)} alt="" className={`block size-full object-contain ${className}`} />;
   return <Art aria-hidden width="100%" height="100%" preserveAspectRatio="none" className={`block ${className}`} />;
 }
 
 /** Study / Book Library drawer (Figma 694:20083): one row per book; Brief opens the book brief. */
 export function LibraryDrawer({ closeLabel }: { closeLabel: string }) {
+  const { books } = useSiteContent();
   const state = useDrawerState("book-library");
   const { setOpen } = useDrawer();
   return (
@@ -85,7 +93,9 @@ export function BriefDrawer({ closeLabel }: { closeLabel: string }) {
   const state = useDrawerState("book-brief");
   const { setOpen } = useDrawer();
   const key = useDrawerPayload("book-brief");
+  const { books } = useSiteContent();
   const book = books.find((b) => b.key === key) ?? books[0];
+  if (!book) return null;
   const spoken = [book.title, `by ${book.author}.`, book.brief.bigIdea, ...book.brief.ideas, book.brief.sentence, book.brief.question].join(" ");
   return (
     <SidePanel {...state} title={book.title} className={`${panelPlacement} border border-general-subtle bg-surface-elevated`}>
