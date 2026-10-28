@@ -59,6 +59,27 @@ export function StudyIcon(props: IconProps) {
   );
 }
 
+/** Lock at 20px for "Sign out" (Figma Dashboard / Menu item 1371:4390), drawn to match the 20px line icons. */
+export function LockIcon(props: IconProps) {
+  return (
+    <svg width="20" height="20" viewBox="0 0 20 20" {...base} {...props}>
+      <rect x="4.17" y="9.17" width="11.67" height="8.33" rx="1.67" stroke="currentColor" strokeWidth="1.67" />
+      <path d="M6.67 9.17V6.67C6.67 4.83 8.16 3.33 10 3.33C11.84 3.33 13.33 4.83 13.33 6.67V9.17" stroke="currentColor" strokeWidth="1.67" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+/** Icon/Image/24 (Figma 102:6694) at 20px — the 24px artwork scaled down, stroke kept at 2. */
+export function ImageIcon(props: IconProps) {
+  return (
+    <svg width="20" height="20" viewBox="0 0 24 24" {...base} {...props}>
+      <path d="M19.5 3H4.5C3.67158 3 3 3.67158 3 4.5V19.5C3 20.3285 3.67158 21 4.5 21H19.5C20.3285 21 21 20.3285 21 19.5V4.5C21 3.67158 20.3285 3 19.5 3Z" {...line} />
+      <path d="M9 11.5C10.3807 11.5 11.5 10.3807 11.5 9C11.5 7.6193 10.3807 6.5 9 6.5C7.6193 6.5 6.5 7.6193 6.5 9C6.5 10.3807 7.6193 11.5 9 11.5Z" {...line} />
+      <path d="M21 18L15.5 13L10.5 17.5L7 14.5L3 17.5" {...line} />
+    </svg>
+  );
+}
+
 /** Icon/Gamepad/24 at 20px */
 export function GamesIcon(props: IconProps) {
   return (
@@ -703,6 +724,18 @@ export function PlaylistIcon(props: IconProps) {
     <svg width="20" height="20" viewBox="0 0 20 20" {...base} {...props}>
       <path d="M16.7497 7.66683C17.1638 7.66683 17.4998 8.00228 17.5 8.41634C17.5 8.83055 17.1639 9.16667 16.7497 9.16667H15.1668V14.7502C15.1668 14.8158 15.1566 14.8791 15.1408 14.9398C14.9907 15.8225 14.1283 16.4997 13.0835 16.4998C11.9329 16.4998 11.0002 15.6789 11.0002 14.6663C11.0004 13.654 11.933 12.8337 13.0835 12.8337C13.2861 12.8337 13.4818 12.8594 13.667 12.9069V8.41634C13.6672 8.00231 14.0024 7.66687 14.4165 7.66683H16.7497Z" fill="currentColor" />
       <path d="M7.5 12.9167C7.96024 12.9167 8.33333 13.2898 8.33333 13.75C8.33333 14.2102 7.96024 14.5833 7.5 14.5833H3.33333C2.8731 14.5833 2.5 14.2102 2.5 13.75C2.5 13.2898 2.8731 12.9167 3.33333 12.9167H7.5ZM10 8.75C10.4602 8.75 10.8333 9.1231 10.8333 9.58333C10.8333 10.0436 10.4602 10.4167 10 10.4167H3.33333C2.8731 10.4167 2.5 10.0436 2.5 9.58333C2.5 9.1231 2.8731 8.75 3.33333 8.75H10ZM14.1667 4.58333C14.6269 4.58333 15 4.95643 15 5.41667C15 5.8769 14.6269 6.25 14.1667 6.25H3.33333C2.8731 6.25 2.5 5.8769 2.5 5.41667C2.5 4.95643 2.8731 4.58333 3.33333 4.58333H14.1667Z" fill="currentColor" />
+    </svg>
+  );
+}
+
+/** Trash at 20px (not in the Figma set; drawn to match its 20px line icons). */
+export function TrashIcon(props: IconProps) {
+  return (
+    <svg width="20" height="20" viewBox="0 0 20 20" {...base} {...props}>
+      <path d="M3.33333 5H16.6667" {...line} strokeWidth="1.66667" />
+      <path d="M7.5 5V3.33333C7.5 2.8731 7.8731 2.5 8.33333 2.5H11.6667C12.1269 2.5 12.5 2.8731 12.5 3.33333V5" {...line} strokeWidth="1.66667" />
+      <path d="M4.58333 5L5.41667 16.0417C5.45 16.4767 5.81333 16.8333 6.25 16.8333H13.75C14.1867 16.8333 14.55 16.4767 14.5833 16.0417L15.4167 5" {...line} strokeWidth="1.66667" />
+      <path d="M8.33333 8.75V13.3333M11.6667 8.75V13.3333" {...line} strokeWidth="1.66667" />
     </svg>
   );
 }

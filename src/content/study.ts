@@ -67,13 +67,30 @@ export const vibes: { key: Vibe; label: string; title: string }[] = [
   { key: "piano", label: "Piano", title: "Piano melodies" },
 ];
 
-/** Eight soundscapes per vibe (names + lengths from Audio / Track library 523:11967). */
-export const tracks: Record<Vibe, [string, string][]> = {
-  lofi: [["Window-seat sketches", "3:42"], ["Coffee & margins", "4:12"], ["Late library lights", "3:18"], ["Sunday notebook", "4:06"], ["Soft-focus city", "2:58"], ["Quiet little loops", "3:36"], ["Pencil on paper", "4:24"], ["Last train home", "3:54"]],
-  neo: [["Afterglow notes", "4:18"], ["Velvet afternoon", "3:52"], ["Golden-hour keys", "4:06"], ["Pocket of sunshine", "3:28"], ["Midnight postcards", "4:32"], ["Slow-motion soul", "3:44"], ["Warm vinyl", "4:10"], ["Blue-room session", "3:56"]],
-  ambient: [["Slow horizons", "6:00"], ["Floating rooms", "7:20"], ["A softer sky", "5:40"], ["Between the clouds", "8:10"], ["Still water", "6:30"], ["Weightless morning", "7:00"], ["Long exhale", "5:50"], ["Open space", "8:00"]],
-  rain: [["Rain on the window", "10:00"], ["Cabin rainfall", "12:00"], ["City after rain", "8:00"], ["Gentle roof drops", "10:30"], ["Forest shower", "15:00"], ["Distant thunder", "11:00"], ["Quiet monsoon", "14:00"], ["Rain at dawn", "9:30"]],
-  piano: [["Letters at dawn", "3:56"], ["A quiet room", "4:20"], ["Paper lanterns", "3:40"], ["First light", "4:08"], ["Small beginnings", "3:12"], ["Pages turning", "4:36"], ["Evening reflections", "3:48"], ["Home again", "4:02"]],
+/**
+ * A focus track: title, listed length, and optionally an audio file in `public/` (e.g. "/audio/lofi/window-seat.mp3")
+ * and a cover image (e.g. "/images/music/window-seat.jpg"); without a cover the player shows the vibe's artwork.
+ * Tracks without a file play the generated soundscape for their vibe; with a file, the file plays and its real length is used.
+ */
+export type Track = [title: string, length: string, src?: string, cover?: string];
+
+/**
+ * Focus tracks per vibe (names + lengths from Audio / Track library 523:11967). One each for now; add more to a vibe and
+ * the player picks them up: press-and-hold picker, "2 of 3", and skipping within the vibe.
+ */
+export const tracks: Record<Vibe, Track[]> = {
+  lofi: [["Window-seat sketches", "3:42"]],
+  neo: [["Afterglow notes", "4:18"]],
+  ambient: [["Slow horizons", "6:00"]],
+  rain: [["Rain on the window", "10:00"]],
+  piano: [["Letters at dawn", "3:56"]],
+};
+
+/** "Lofi · 2 of 3" when a vibe has several tracks, "Lofi · focus collection" when it has one. */
+export const trackCaption = (vibe: Vibe, index: number) => {
+  const label = vibes.find((v) => v.key === vibe)!.label;
+  const n = tracks[vibe].length;
+  return n > 1 ? `${label} · ${index + 1} of ${n}` : `${label} · ${audioCopy.collection}`;
 };
 
 export const audioCopy = {
@@ -81,8 +98,9 @@ export const audioCopy = {
   soundStyle: "SOUND STYLE",
   custom: "Custom",
   collection: "focus collection",
+  picker: { eyebrow: "SOUND STYLE", caption: (n: number) => `${n} tracks · pick one to start`, hint: "Press and hold a style to pick a track" },
   library: { title: "Your focus library", body: "Choose a vibe. Find your next soundtrack.", select: "Select", playing: "Playing" },
-  picker: { eyebrow: "SOUND STYLE", caption: "8 tracks · pick one to start", hint: "Press and hold a style to pick a track" },
+  volume: { label: "Volume", hint: "Tap to mute · press and hold for volume" },
   sleep: { title: "Stop music after", custom: "Custom timer", options: [0, 15, 25, 50, 90], off: "Off", minutes: "minutes", set: "Set timer" },
   customLists: {
     count: "Custom · Your playlists",
@@ -97,9 +115,16 @@ export const audioCopy = {
     noSongs: "No songs yet",
     linkPlaceholder: "Paste a YouTube or SoundCloud link",
     add: "Add",
-    linkHint: "Works with YouTube, SoundCloud and Spotify links.",
+    adding: "Adding…",
+    linkHint: "YouTube links play here as audio, with the video's thumbnail as the cover. SoundCloud and Spotify links open on their own site.",
     songsEmptyHint: "Paste a link above to add your first song.",
     open: "Open",
+    play: "Play",
+    remove: "Remove song",
+    deletePlaylist: "Delete playlist",
+    confirmDelete: (name: string, n: number) => `Delete “${name}”${n ? ` and its ${n} ${n === 1 ? "song" : "songs"}` : ""}? This can't be undone.`,
+    delete: "Delete",
+    blocked: "Can't play here · tap play to open on YouTube",
   },
 };
 

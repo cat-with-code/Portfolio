@@ -28,9 +28,10 @@ import { AudioNeoArt } from "@/components/illustrations/audio-neo";
 import { AudioPianoArt } from "@/components/illustrations/audio-piano";
 import { AudioRainArt } from "@/components/illustrations/audio-rain";
 import { useDrawer } from "@/components/shell/drawer-provider";
-import { audioCopy as a, tracks, vibes, type Vibe } from "@/content/study";
+import { audioCopy as a, trackCaption, tracks, vibes, type Vibe } from "@/content/study";
 import { clock } from "@/lib/focus-audio";
-import { useStudy } from "./study-provider";
+import { youTubeId, youTubeThumb } from "@/lib/youtube";
+import { useStudy, type CustomSong } from "./study-provider";
 
 type Style = Vibe | "custom";
 export const covers: Record<Style, ComponentType<SVGProps<SVGSVGElement>>> = {
@@ -41,6 +42,28 @@ export const covers: Record<Style, ComponentType<SVGProps<SVGSVGElement>>> = {
   piano: AudioPianoArt,
   custom: AudioCustomArt,
 };
+
+/** A focus track's uploaded cover (4th item of its `Track`), or its vibe's artwork. */
+export function TrackCover({ vibe, index, className = "" }: { vibe: Vibe; index: number; className?: string }) {
+  const image = tracks[vibe][index]?.[3];
+  const Art = covers[vibe];
+  // eslint-disable-next-line @next/next/no-img-element -- uploaded covers may live on any host
+  if (image) return <img src={image} alt="" className={`shrink-0 rounded-lg object-cover ${className}`} />;
+  return <Art aria-hidden className={`shrink-0 ${className}`} />;
+}
+
+/** A custom song's cover: the YouTube thumbnail (cropped square), or the Custom artwork for other links. */
+export function CustomCover({ song, className = "" }: { song: CustomSong | null; className?: string }) {
+  const id = song && (song.videoId ?? youTubeId(song.url));
+  if (!id) return <AudioCustomArt aria-hidden className={`shrink-0 ${className}`} />;
+  // Built from the id (not the saved `thumb`) so songs saved with the old letterboxed thumbnail fill the box too.
+  return (
+    <span className={`block shrink-0 overflow-clip ${className}`}>
+      {/* eslint-disable-next-line @next/next/no-img-element -- remote YouTube thumbnail, already sized by i.ytimg.com */}
+      <img src={youTubeThumb(id)} alt="" className="size-full object-cover" />
+    </span>
+  );
+}
 
 /** Card and equalizer gradients per sound style (Figma Study / Focus audio 379:15202, Audio / Equalizer 379:13241). */
 const cardBg: Record<Style, string> = {
@@ -116,7 +139,7 @@ function SleepMenu() {
   const [open, setOpen] = useState(false);
   const isCustom = sleep.minutes > 0 && !a.sleep.options.includes(sleep.minutes);
   return (
-    <Popover.Root open={open} onOpenChange={(o) => { setOpen(o); if (!o) setView("list"); }}>
+    <Popover.Root modal open={open} onOpenChange={(o) => { setOpen(o); if (!o) setView("list"); }}>
       <Popover.Trigger asChild>
         <button
           type="button"
@@ -126,8 +149,10 @@ function SleepMenu() {
           <TimerIcon className="size-16" />
         </button>
       </Popover.Trigger>
+      {/* Blur (no dimming) over the music card only — the card is `relative`; a click on it closes the menu. */}
+      {open && <div aria-hidden className="absolute inset-0 z-10 backdrop-blur-[2px] animate-scrim-in" />}
       <Popover.Portal>
-        <Popover.Content side="top" align="end" sideOffset={8} className="z-40 flex w-200 flex-col gap-2 rounded-lg border border-general-default bg-surface-primary p-8 shadow-sheet outline-none">
+        <Popover.Content side="top" align="end" sideOffset={8} className="z-50 flex w-200 flex-col gap-2 rounded-lg border border-general-default bg-surface-primary p-8 shadow-sheet outline-none">
           {view === "list" ? (
             <>
               <p className="type-caption px-12 py-4 text-muted">{a.sleep.title}</p>
@@ -186,7 +211,125 @@ function SleepMenu() {
   );
 }
 
-/** Melody picker (Figma 1332:135293): press and hold a sound style to pick one of its tracks. */
+/** Mute button: tap to mute, press and hold (or ↑/↓) for a volume slider. */
+function VolumeButton() {
+  const s = useStudy();
+  const [open, setOpen] = useState(false);
+  const hold = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const held = useRef(false);
+  const cancel = () => hold.current && clearTimeout(hold.current);
+  const level = Math.round((s.muted ? 0 : s.volume) * 100);
+  return (
+    <Popover.Root modal open={open} onOpenChange={setOpen}>
+      {/* Same light blur over the music card as the sleep timer menu. */}
+      {open && <div aria-hidden className="absolute inset-0 z-10 backdrop-blur-[2px] animate-scrim-in" />}
+      <Popover.Anchor asChild>
+        <button
+          type="button"
+          aria-label={s.muted ? "Unmute" : "Mute"}
+          aria-pressed={s.muted}
+          title={a.volume.hint}
+          onPointerDown={() => {
+            held.current = false;
+            hold.current = setTimeout(() => {
+              held.current = true;
+              setOpen(true);
+            }, 450);
+          }}
+          onPointerUp={cancel}
+          onPointerLeave={cancel}
+          onContextMenu={(e) => e.preventDefault()}
+          onClick={() => !held.current && s.setMuted(!s.muted)}
+          onKeyDown={(e) => {
+            if (e.key !== "ArrowUp" && e.key !== "ArrowDown") return;
+            e.preventDefault();
+            setOpen(true);
+          }}
+          className="flex size-40 shrink-0 cursor-pointer items-center justify-center rounded-full bg-surface-primary text-icon-general-primary transition-colors duration-(--duration-fast) select-none [-webkit-touch-callout:none] hover:bg-surface-hover"
+        >
+          {s.muted || !s.volume ? <VolumeOffIcon /> : <VolumeOnIcon />}
+        </button>
+      </Popover.Anchor>
+      <Popover.Portal>
+        <Popover.Content side="bottom" align="end" sideOffset={8} className="z-40 flex w-240 items-center gap-12 rounded-lg border border-general-default bg-surface-primary px-16 py-12 shadow-sheet outline-none">
+          <button type="button" aria-label={s.muted ? "Unmute" : "Mute"} onClick={() => s.setMuted(!s.muted)} className="flex shrink-0 cursor-pointer text-icon-general-primary">
+            {s.muted || !s.volume ? <VolumeOffIcon /> : <VolumeOnIcon />}
+          </button>
+          <input
+            type="range"
+            min={0}
+            max={100}
+            value={level}
+            autoFocus
+            aria-label={a.volume.label}
+            onChange={(e) => s.setVolume(Number(e.target.value) / 100)}
+            className="h-4 min-w-0 flex-1 cursor-pointer accent-(--color-bg-brand)"
+          />
+          <span className="type-caption w-32 shrink-0 text-right text-secondary tabular-nums">{level}%</span>
+        </Popover.Content>
+      </Popover.Portal>
+    </Popover.Root>
+  );
+}
+
+/** Progress bar: click or drag to seek, ←/→ steps 5 seconds. */
+function SeekBar() {
+  const s = useStudy();
+  const [drag, setDrag] = useState<number | null>(null);
+  const at = (e: React.PointerEvent<HTMLDivElement>) => {
+    const r = e.currentTarget.getBoundingClientRect();
+    return Math.min(1, Math.max(0, (e.clientX - r.left) / r.width));
+  };
+  const fraction = drag ?? (s.duration ? Math.min(1, s.elapsed / s.duration) : 0);
+  const shown = drag !== null ? Math.round(drag * s.duration) : s.elapsed;
+  return (
+    <div className="flex h-32 w-full flex-col gap-8">
+      <div
+        role="slider"
+        tabIndex={0}
+        aria-label="Seek"
+        aria-valuemin={0}
+        aria-valuemax={s.duration}
+        aria-valuenow={shown}
+        aria-valuetext={clock(shown)}
+        onPointerDown={(e) => {
+          e.currentTarget.setPointerCapture(e.pointerId);
+          setDrag(at(e));
+        }}
+        onPointerMove={(e) => drag !== null && setDrag(at(e))}
+        onPointerUp={(e) => {
+          if (drag === null) return;
+          s.seek(at(e));
+          setDrag(null);
+        }}
+        onPointerCancel={() => setDrag(null)}
+        onKeyDown={(e) => {
+          const step = e.key === "ArrowRight" ? 5 : e.key === "ArrowLeft" ? -5 : 0;
+          if (!step || !s.duration) return;
+          e.preventDefault();
+          s.seek((s.elapsed + step) / s.duration);
+        }}
+        className="group/seek relative -my-5 flex h-16 w-full shrink-0 cursor-pointer touch-none items-center rounded-full outline-none focus-visible:shadow-focus"
+      >
+        <span className="h-6 w-full overflow-clip rounded-full bg-(--color-border-general-secondary)">
+          {/* No easing while dragging, so the bar follows the pointer. */}
+          <span className={`block h-6 rounded-full bg-brand ${drag === null ? "transition-[width] duration-1000 ease-linear" : ""}`} style={{ width: `${fraction * 100}%` }} />
+        </span>
+        <span
+          aria-hidden
+          className={`absolute size-14 -translate-x-1/2 rounded-full border-2 border-(--color-bg-surface-primary) bg-brand shadow-card transition-opacity duration-(--duration-fast) ${drag !== null ? "opacity-100" : "opacity-0 group-hover/seek:opacity-100 group-focus-visible/seek:opacity-100"}`}
+          style={{ left: `${fraction * 100}%` }}
+        />
+      </div>
+      <div className="type-caption flex h-18 w-full justify-between text-secondary tabular-nums">
+        <span>{clock(shown)}</span>
+        <span>{s.duration ? clock(s.duration) : "—"}</span>
+      </div>
+    </div>
+  );
+}
+
+/** Melody picker (Figma 1332:135293): press and hold a sound style to pick one of its tracks (only styles with more than one). */
 function MelodyPicker({ vibe, onClose }: { vibe: Vibe | null; onClose: () => void }) {
   const { playTrack, vibe: current, index, status } = useStudy();
   const info = vibes.find((v) => v.key === vibe);
@@ -207,7 +350,7 @@ function MelodyPicker({ vibe, onClose }: { vibe: Vibe | null; onClose: () => voi
                 <div className="flex min-w-0 flex-1 flex-col gap-2">
                   <p className="type-eyebrow text-brand">{a.picker.eyebrow}</p>
                   <Dialog.Title className="type-subheading text-primary">{info.title}</Dialog.Title>
-                  <p className="type-caption text-secondary">{a.picker.caption}</p>
+                  <p className="type-caption text-secondary">{a.picker.caption(tracks[info.key].length)}</p>
                 </div>
                 <Dialog.Close aria-label="Close" className="flex size-36 cursor-pointer items-center justify-center rounded-full bg-surface-secondary text-icon-general-primary">
                   <CloseIcon />
@@ -252,13 +395,12 @@ export function FocusAudio({ className = "" }: { className?: string }) {
   const [picker, setPicker] = useState<Vibe | null>(null);
   const hold = useRef<ReturnType<typeof setTimeout> | null>(null);
   const held = useRef(false);
-  const Cover = covers[s.vibe];
   const style = s.vibe;
-  const vibeLabel = style === "custom" ? a.custom : vibes.find((v) => v.key === style)!.label;
   const playing = s.status === "playing";
 
   const startHold = (v: Vibe) => {
     held.current = false;
+    if (tracks[v].length < 2) return;
     hold.current = setTimeout(() => {
       held.current = true;
       setPicker(v);
@@ -286,7 +428,7 @@ export function FocusAudio({ className = "" }: { className?: string }) {
   return (
     <section
       aria-label={a.nowPlaying}
-      className={`flex flex-col items-start gap-16 overflow-clip rounded-shell p-24 ${className}`}
+      className={`relative flex flex-col items-start gap-16 overflow-clip rounded-shell p-24 ${className}`}
       style={{ backgroundImage: `linear-gradient(104.06deg, var(--color-bg-surface-primary) 6.78%, ${cardBg[style]} 91.53%)` }}
     >
       <div className="flex w-full items-center justify-between">
@@ -301,39 +443,15 @@ export function FocusAudio({ className = "" }: { className?: string }) {
         </button>
       </div>
       <div className="flex w-full items-center gap-12">
-        <Cover aria-hidden className="size-64 shrink-0" />
+        {s.vibe === "custom" ? <CustomCover song={s.customSong} className="size-64 rounded-lg" /> : <TrackCover vibe={s.vibe} index={s.index} className="size-64" />}
         <div className="flex min-w-0 flex-1 flex-col gap-4">
           <p className="truncate text-[20px] leading-[28px] font-semibold text-primary">{s.vibe === "custom" && !s.customSong ? a.customLists.count.split(" · ")[1] : s.title}</p>
-          <p className="type-caption text-secondary">{s.vibe === "custom" ? (s.customSong?.source ?? a.custom) : `${vibeLabel} · ${s.index + 1} of 8`}</p>
+          <p className="type-caption truncate text-secondary">{s.vibe === "custom" ? (s.blocked ? a.customLists.blocked : (s.customSong?.source ?? a.custom)) : trackCaption(s.vibe, s.index)}</p>
         </div>
-        <button
-          type="button"
-          aria-label={s.muted ? "Unmute" : "Mute"}
-          aria-pressed={s.muted}
-          onClick={() => s.setMuted(!s.muted)}
-          className="flex size-40 shrink-0 cursor-pointer items-center justify-center rounded-full bg-surface-primary text-icon-general-primary transition-colors duration-(--duration-fast) hover:bg-surface-hover"
-        >
-          {s.muted ? <VolumeOffIcon /> : <VolumeOnIcon />}
-        </button>
+        <VolumeButton />
       </div>
       <Equalizer style={style} playing={playing} />
-      <div className="flex h-32 w-full flex-col gap-8">
-        <button
-          type="button"
-          aria-label="Seek"
-          onClick={(e) => {
-            const r = e.currentTarget.getBoundingClientRect();
-            s.seek((e.clientX - r.left) / r.width);
-          }}
-          className="flex h-6 w-full cursor-pointer items-start overflow-clip rounded-full bg-(--color-border-general-secondary)"
-        >
-          <span className="h-6 rounded-full bg-brand transition-[width] duration-1000 ease-linear" style={{ width: s.duration ? `${(s.elapsed / s.duration) * 100}%` : 0 }} />
-        </button>
-        <div className="type-caption flex h-18 w-full justify-between text-secondary tabular-nums">
-          <span>{clock(s.elapsed)}</span>
-          <span>{s.duration ? clock(s.duration) : "—"}</span>
-        </div>
-      </div>
+      <SeekBar />
       <div className="flex w-full flex-wrap content-center items-center justify-between gap-8">
         <Toggle on={s.loop} label="Repeat track" onClick={() => s.setLoop(!s.loop)}>
           <RefreshIcon className="size-16" />
@@ -379,7 +497,7 @@ export function FocusAudio({ className = "" }: { className?: string }) {
             drag.current = null;
           }}
           className="flex w-full items-start gap-8 overflow-x-auto [scrollbar-width:none]"
-          role="radiogroup" aria-label={a.soundStyle} title={a.picker.hint}>
+          role="radiogroup" aria-label={a.soundStyle} title={vibes.some((v) => tracks[v.key].length > 1) ? a.picker.hint : undefined}>
           {vibes.map((v) => (
             <button
               key={v.key}

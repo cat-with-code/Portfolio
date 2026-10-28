@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useRef, useState } from "react";
-import { covers } from "@/components/projects/project-cover";
+import { covers, coverImageOf } from "@/components/projects/project-cover";
 import { useDrawer } from "@/components/shell/drawer-provider";
 import { developer, type FeaturedProject } from "@/content/developer";
 
@@ -39,6 +39,7 @@ function Gallery({ project }: { project: FeaturedProject }) {
   const [index, setIndex] = useState(0);
   const start = useRef<number | null>(null);
   const { Art, bg } = covers[project.key];
+  const image = coverImageOf(project.key);
   return (
     <div className="flex w-308 max-w-full shrink-0 flex-col items-center gap-4">
       <div
@@ -54,7 +55,8 @@ function Gallery({ project }: { project: FeaturedProject }) {
         <div className="flex h-full gap-16 transition-transform duration-(--duration-drawer) ease-figma-out" style={{ transform: `translateX(calc(${-index} * (100% + 16px)))` }}>
           {views.map((box, i) => (
             <div key={i} className={`relative size-full shrink-0 overflow-clip rounded-xl ${bg}`} aria-hidden={i !== index}>
-              <Art className={`absolute ${box}`} aria-hidden />
+              {/* eslint-disable-next-line @next/next/no-img-element -- uploaded covers may live on any host */}
+              {image ? <img src={image} alt="" className="absolute inset-0 size-full object-cover" /> : <Art className={`absolute ${box}`} aria-hidden />}
             </div>
           ))}
         </div>

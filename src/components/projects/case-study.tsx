@@ -21,7 +21,8 @@ function Section({ eyebrow, title, children }: { eyebrow: string; title: string;
 }
 
 /** Projects / Case study (Figma 1108:92445): Desktop · Tablet · Mobile layouts of one project page. */
-export function CaseStudy({ lang, study }: { lang: string; study: Study }) {
+/** `preview` (dashboard Publish review) leaves out the audio reader, which needs the site's providers. */
+export function CaseStudy({ lang, study, preview = false }: { lang: string; study: Study; preview?: boolean }) {
   const index = caseStudies.findIndex((s) => s.key === study.key);
   const next = caseStudies[(index + 1) % caseStudies.length];
   const spoken = [
@@ -79,7 +80,7 @@ export function CaseStudy({ lang, study }: { lang: string; study: Study }) {
       </div>
       <Rule />
       <Section eyebrow={copy.sections[0]} title={study.overview.title}>
-        <TextReader title={study.title} text={spoken} lang={lang} labels={copy.reader} />
+        {!preview && <TextReader title={study.title} text={spoken} lang={lang} labels={copy.reader} />}
         <p className="type-mobile-body w-full text-primary">{study.overview.lead}</p>
       </Section>
       <Rule />

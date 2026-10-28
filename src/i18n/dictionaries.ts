@@ -36,7 +36,8 @@ const dictionaries: Record<Locale, Dictionary> = {
 
 export async function getLocale(): Promise<Locale> {
   const value = await lang();
-  if (!hasLocale(value)) notFound();
+  // undefined outside the [lang] root layout (the dashboard has its own)
+  if (!value || !hasLocale(value)) notFound();
   return value;
 }
 

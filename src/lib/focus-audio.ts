@@ -32,6 +32,7 @@ export class FocusAudio {
   private timer: ReturnType<typeof setInterval> | null = null;
   private sustained: Voice[] = [];
   private muted = false;
+  private volume = 1;
   private noise: AudioBuffer | null = null;
 
   private ensure() {
@@ -39,7 +40,7 @@ export class FocusAudio {
     const ctx = new AudioContext();
     this.ctx = ctx;
     this.master = ctx.createGain();
-    this.master.gain.value = this.muted ? 0 : 0.5;
+    this.master.gain.value = this.level();
     const comp = ctx.createDynamicsCompressor();
     comp.threshold.value = -18;
     comp.ratio.value = 3;
@@ -52,9 +53,20 @@ export class FocusAudio {
     return ctx;
   }
 
+  /** Master gain: 0.5 at full volume leaves headroom for the compressor. */
+  private level() {
+    return this.muted ? 0 : 0.5 * this.volume;
+  }
+
   setMuted(muted: boolean) {
     this.muted = muted;
-    if (this.master && this.ctx) this.master.gain.setTargetAtTime(muted ? 0 : 0.5, this.ctx.currentTime, 0.05);
+    if (this.master && this.ctx) this.master.gain.setTargetAtTime(this.level(), this.ctx.currentTime, 0.05);
+  }
+
+  /** 0–1 */
+  setVolume(volume: number) {
+    this.volume = volume;
+    if (this.master && this.ctx) this.master.gain.setTargetAtTime(this.level(), this.ctx.currentTime, 0.05);
   }
 
   async play(vibe: Vibe, index: number) {

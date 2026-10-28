@@ -5,6 +5,7 @@ import { BookOpenIcon, CheckIcon, CloseIcon, PencilIcon, PlusIcon, SparklesIcon 
 import { Button } from "@/components/ui/button";
 import { goalCopy, intentionCopy as ic, planCopy as pc, reminderCopy as rc, techniques } from "@/content/study";
 import { useStudy } from "./study-provider";
+import { uid } from "@/lib/uid";
 
 function useStored<T>(key: string, fallback: T) {
   const [value, setValue] = useState<T>(fallback);
@@ -174,7 +175,7 @@ export function PlanCard({ className = "" }: { className?: string }) {
           className="flex w-full items-center gap-8"
           onSubmit={(e) => {
             e.preventDefault();
-            if (draft.trim()) setTasks([...tasks, { id: crypto.randomUUID(), text: draft.trim(), done: false }]);
+            if (draft.trim()) setTasks([...tasks, { id: uid(), text: draft.trim(), done: false }]);
             setDraft("");
             setAdding(false);
           }}

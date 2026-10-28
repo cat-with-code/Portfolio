@@ -5,6 +5,7 @@
  */
 import type { CSSProperties } from "react";
 import type { CaseStudy } from "@/content/case-studies";
+import { coverImageOf } from "./project-cover";
 
 const W = 1078;
 const H = 675;
@@ -94,6 +95,14 @@ const pct = (v: number, of: number) => `${((v / of) * 100).toFixed(3)}%`;
 
 export function CaseCover({ project }: { project: CaseStudy["key"] }) {
   const { bg, shapes } = art[project];
+  const image = coverImageOf(project);
+  if (image)
+    return (
+      <div aria-hidden className={`relative aspect-[1078/675] w-full overflow-clip rounded-xl ${bg}`}>
+        {/* eslint-disable-next-line @next/next/no-img-element -- uploaded covers may live on any host */}
+        <img src={image} alt="" className="absolute inset-0 size-full object-cover" />
+      </div>
+    );
   return (
     <div aria-hidden className={`relative aspect-[1078/675] w-full overflow-clip rounded-xl ${bg}`}>
       {shapes.map(([x, y, w, h, cls, text], i) => {

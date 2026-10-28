@@ -4,6 +4,7 @@
  * None of these posts exist yet. Replace them with real writing before launch.
  */
 import type { TopicKey } from "@/components/blog/topic-art";
+import type { Block } from "./blocks";
 
 export const SAMPLE_BLOG = true;
 
@@ -22,17 +23,14 @@ export type Post = {
   excerpt: string;
   /** One-line dek used in the Browse posts drawer */
   dek: string;
-  /** Full preview body — only the cover story has one in the prototype */
-  article?: {
-    /** Title as set in the preview, with its line break */
-    title: string;
-    introduction: string;
-    heading: string;
-    body: string;
-    quote: string;
-    questionsHeading: string;
-    questions: string[];
-  };
+  /** Title as set on the post page and preview, with its line breaks (defaults to `title`) */
+  displayTitle?: string;
+  /** Publish date, ISO "2026-10-28" */
+  published?: string;
+  /** Cover image (path in public/ or a URL); without one the topic illustration is used */
+  cover?: string;
+  /** The full post. Posts without one show their excerpt and a "coming soon" note. */
+  body?: Block[];
 };
 
 const p = (post: Post) => post;
@@ -49,16 +47,25 @@ export const posts: Record<string, Post> = Object.fromEntries(
       excerpt:
         "AI tools can explain concepts in seconds, but learning is more than finding the quickest answer. The interesting question is how these tools shape our curiosity, attention, and willingness to explore.",
       dek: "New tools, old habits, endless curiosity.",
-      article: {
-        title: "What AI changes\nabout the way we learn",
-        introduction:
-          "AI tools can explain concepts in seconds, but learning is more than finding the quickest answer. The interesting question is how these tools shape our curiosity, attention, and willingness to explore.",
-        heading: "Better questions, not just faster answers",
-        body: "When technology becomes an everyday companion, we have more opportunities to learn independently. Yet that convenience brings a challenge: it can be tempting to stop at the first answer.\n\nI’m curious about what happens when we treat AI as a partner for brainstorming, checking assumptions, and finding new directions rather than as a replacement for thinking.",
-        quote: "“The real value may be the questions we learn to ask next.”",
-        questionsHeading: "Three things I’m thinking about",
-        questions: ["Keep curiosity in the driver’s seat", "Test information instead of accepting it", "Leave room for human creativity"],
-      },
+      displayTitle: "What AI changes\nabout the way we learn",
+      body: [
+        {
+          type: "paragraph",
+          text: "AI tools can explain concepts in seconds, but learning is more than finding the quickest answer. The interesting question is how these tools shape our curiosity, attention, and willingness to explore.",
+        },
+        { type: "heading", text: "Better questions, not just faster answers" },
+        {
+          type: "paragraph",
+          text: "When technology becomes an everyday companion, we have more opportunities to learn independently. Yet that convenience brings a challenge: it can be tempting to stop at the first answer.",
+        },
+        {
+          type: "paragraph",
+          text: "I’m curious about what happens when we treat AI as a partner for brainstorming, checking assumptions, and finding new directions rather than as a replacement for thinking.",
+        },
+        { type: "quote", label: "FROM THE NOTEBOOK", text: "“The real value may be the questions we learn to ask next.”" },
+        { type: "heading", text: "Three things I’m thinking about" },
+        { type: "list", ordered: true, items: ["Keep curiosity in the driver’s seat", "Test information instead of accepting it", "Leave room for human creativity"] },
+      ],
     }),
     p({ slug: "a-book-that-stayed-with-me", topic: "books", filter: "books", category: "BOOKS & READING", minutes: 5, title: "A book that stayed with me", excerpt: "Ideas from the pages I keep thinking about.", dek: "Ideas from the pages I keep thinking about." }),
     p({ slug: "a-story-about-starting-over", topic: "fiction", filter: "stories", category: "SHORT STORIES", minutes: 6, title: "A story about starting over", excerpt: "A little fiction about a second chance.", dek: "A little fiction about a second chance." }),
@@ -167,4 +174,16 @@ export const preview = {
   byline: "WRITTEN BY HOEURN DAREACH   /   PERSONAL NOTES",
   quoteLabel: "FROM THE NOTEBOOK",
   back: "←   BACK TO ALL POSTS",
+  readFull: "READ THE FULL POST   →",
+};
+
+/** Blog post page (/blog/[slug]) */
+export const postPage = {
+  back: "←   ALL POSTS",
+  masthead: "THE NOTEBOOK",
+  sample: "SAMPLE POST",
+  byline: "WRITTEN BY HOEURN DAREACH",
+  comingSoon: "The full post is on its way. Here’s the idea for now.",
+  next: "NEXT POST",
+  reader: { idleMeta: "Audio version", playing: "Listening to post", play: "Listen to this post", pause: "Pause" },
 };

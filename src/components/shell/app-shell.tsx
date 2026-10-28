@@ -7,7 +7,11 @@ import { BrowseDrawer, PostDrawer } from "@/components/blog/blog-drawers";
 import { BriefDrawer, LibraryDrawer } from "@/components/blog/book-drawers";
 import { ApproachDrawer } from "@/components/developer/approach-drawer";
 import { GameLibraryDrawer } from "@/components/games/library-drawer";
+import { FloatingReader } from "@/components/reader/floating-reader";
+import { ReaderProvider } from "@/components/reader/reader-provider";
 import { SettingsDrawer } from "@/components/settings/settings-drawer";
+import { MiniPlayer } from "@/components/study/mini-player";
+import { StudyProvider } from "@/components/study/study-provider";
 import { AvatarButton } from "./avatar-button";
 import { DrawerProvider } from "./drawer-provider";
 import { MobileMenu } from "./mobile-menu";
@@ -29,6 +33,9 @@ export function AppShell({ lang, dict, children }: { lang: string; dict: Diction
   return (
     <DrawerProvider>
     <SearchProvider>
+    {/* Study music and the text reader live here so they keep playing across pages. */}
+    <StudyProvider>
+    <ReaderProvider>
       <div className="flex min-h-dvh flex-col">
         {/* Fixed portfolio header */}
         <header className="sticky top-0 z-40 flex h-72 shrink-0 items-start bg-surface-primary">
@@ -87,6 +94,10 @@ export function AppShell({ lang, dict, children }: { lang: string; dict: Diction
       <LibraryDrawer closeLabel={dict.a11y.close} />
       <BriefDrawer closeLabel={dict.a11y.close} />
       <GameLibraryDrawer lang={lang} closeLabel={dict.a11y.close} />
+      <MiniPlayer lang={lang} closeLabel={dict.a11y.close} />
+      <FloatingReader lang={lang} closeLabel={dict.a11y.close} />
+    </ReaderProvider>
+    </StudyProvider>
     </SearchProvider>
     </DrawerProvider>
   );

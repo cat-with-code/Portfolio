@@ -14,6 +14,8 @@ export type DirectoryProject = {
   description: string;
   disciplines: string;
   cover: string;
+  /** Your uploaded cover (path in public/ or a URL). When set it replaces the drawn cover art on cards, the case study and the Developer page. */
+  coverImage?: string;
   /** Path after the locale; null = not linked (no page for it yet) */
   href: string | null;
 };

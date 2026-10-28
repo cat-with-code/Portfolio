@@ -4,7 +4,7 @@ import type { ReactNode } from "react";
 import { ArrowUpRightIcon } from "@/components/icons";
 import { useDrawer } from "@/components/shell/drawer-provider";
 import { magazine, posts, type Placement } from "@/content/blog";
-import { TopicArt } from "./topic-art";
+import { PostArt } from "./topic-art";
 
 export const metaLine = (slug: string) => `${posts[slug].category}  ·  ${posts[slug].minutes} MIN READ`;
 const eyebrow = (p: Placement) => (p.kicker ? `${p.number}  /  ${p.kicker}` : p.number);
@@ -51,9 +51,9 @@ export function CoverStoryCard({ placement }: { placement: Placement }) {
       className="flex w-full flex-col items-start gap-16 rounded-card bg-surface-primary pt-16 pr-16 pb-20 pl-16 tablet:min-w-0 tablet:flex-1 desktop:flex-row desktop:gap-20"
     >
       <span className="relative block h-200 w-full shrink-0 overflow-clip rounded-xl desktop:size-280">
-        <TopicArt topic={post.topic} shape="wide" className="tablet:hidden" />
-        <TopicArt topic={post.topic} shape="wide-478" className="hidden tablet:block desktop:hidden" />
-        <TopicArt topic={post.topic} shape="square" className="hidden desktop:block" />
+        <PostArt post={post} shape="wide" className="tablet:hidden" />
+        <PostArt post={post} shape="wide-478" className="hidden tablet:block desktop:hidden" />
+        <PostArt post={post} shape="square" className="hidden desktop:block" />
       </span>
       <span className="flex w-full flex-col items-start gap-16 desktop:h-280 desktop:min-w-0 desktop:flex-1 desktop:justify-between">
         <span className="flex w-full flex-col items-start gap-8 px-4">
@@ -79,11 +79,11 @@ export function FeatureCard({ placement }: { placement: Placement }) {
       className="flex w-full flex-col items-start gap-16 rounded-card bg-surface-primary pt-16 pr-16 pb-20 pl-16 tablet:flex-row tablet:items-center tablet:p-16"
     >
       <span className="relative block h-200 w-full shrink-0 overflow-clip rounded-xl tablet:hidden">
-        <TopicArt topic={post.topic} shape="wide" />
+        <PostArt post={post} shape="wide" />
       </span>
       <span className="relative hidden size-96 shrink-0 overflow-clip rounded-lg tablet:block">
         <span className="absolute top-0 left-0 size-120">
-          <TopicArt topic={post.topic} shape="square" />
+          <PostArt post={post} shape="square" />
         </span>
       </span>
       <span className="flex w-full min-w-0 flex-col items-start gap-8 px-4 tablet:flex-1 tablet:gap-4 tablet:px-0">
@@ -105,8 +105,8 @@ export function WideCard({ placement }: { placement: Placement }) {
       className="flex size-full flex-col items-start gap-16 rounded-card bg-surface-primary pt-16 pr-16 pb-20 pl-16 tablet:flex-row tablet:gap-24 tablet:pr-24"
     >
       <span className="relative block h-200 w-full shrink-0 overflow-clip rounded-xl tablet:h-full tablet:min-w-0 tablet:flex-1 tablet:rounded-none">
-        <TopicArt topic={post.topic} shape="wide" className="desktop:hidden" />
-        <TopicArt topic={post.topic} shape="wide-507" className="hidden desktop:block" />
+        <PostArt post={post} shape="wide" className="desktop:hidden" />
+        <PostArt post={post} shape="wide-507" className="hidden desktop:block" />
       </span>
       <span className="flex w-full min-w-0 flex-col items-start gap-16 tablet:flex-1 tablet:self-stretch">
         <span className="flex w-full flex-col items-start gap-8 px-4">
@@ -127,7 +127,7 @@ export function ArchiveCard({ placement }: { placement: Placement }) {
     <CardButton slug={post.slug} className="flex w-full items-center gap-16 rounded-card bg-surface-primary py-12 pr-16 pl-12">
       <span className="relative block size-84 shrink-0 overflow-clip rounded-lg">
         <span className="absolute top-0 -left-25 h-84 w-134">
-          <TopicArt topic={post.topic} shape="wide" />
+          <PostArt post={post} shape="wide" />
         </span>
       </span>
       <span className="flex min-w-0 flex-1 flex-col items-start gap-4">

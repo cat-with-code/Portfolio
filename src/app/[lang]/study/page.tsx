@@ -4,7 +4,6 @@ import { FocusAudio } from "@/components/study/focus-audio";
 import { FocusClock } from "@/components/study/focus-clock";
 import { MusicDrawer } from "@/components/study/music-drawer";
 import { RecentlyRead } from "@/components/study/recently-read";
-import { StudyProvider } from "@/components/study/study-provider";
 import { FavoriteBooksButton, LibraryLink } from "@/components/study/triggers";
 import { recentlyRead as rr, welcome } from "@/content/study";
 import { getDictionary } from "@/i18n/dictionaries";
@@ -13,7 +12,7 @@ import { getDictionary } from "@/i18n/dictionaries";
 export default async function StudyPage() {
   const dict = await getDictionary();
   return (
-    <StudyProvider>
+    <>
       <div className="-mt-8 flex w-full flex-col items-stretch gap-16 pb-16 tablet:gap-20">
         {/* Welcome */}
         <section className="flex w-full flex-col items-stretch gap-16 overflow-clip rounded-shell bg-brand-subtle p-24 tablet:h-138 tablet:flex-row tablet:items-center">
@@ -70,6 +69,6 @@ export default async function StudyPage() {
         <div aria-hidden className="h-16 w-full shrink-0" />
       </div>
       <MusicDrawer closeLabel={dict.a11y.close} />
-    </StudyProvider>
+    </>
   );
 }

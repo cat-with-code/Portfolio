@@ -37,6 +37,13 @@ const arts: Record<TopicKey, Record<TopicShape, Art>> = {
   culture: { square: TopicCultureSquareArt, wide: TopicCultureWideArt, "wide-507": TopicCultureWide507Art, "wide-478": TopicCultureWide478Art },
 };
 
+/** A post's uploaded cover (`post.cover`) when it has one, otherwise its topic illustration. */
+export function PostArt({ post, shape, fit = "stretch", className = "" }: { post: { topic: TopicKey; cover?: string }; shape: TopicShape; fit?: "stretch" | "cover"; className?: string }) {
+  // eslint-disable-next-line @next/next/no-img-element -- uploaded covers may live on any host
+  if (post.cover) return <img src={post.cover} alt="" className={`block size-full object-cover ${className}`} />;
+  return <TopicArt topic={post.topic} shape={shape} fit={fit} className={className} />;
+}
+
 /**
  * Fills its box: "stretch" draws the art to the box like a resized Figma instance;
  * "cover" keeps the art's proportions and crops it (the article preview banner).

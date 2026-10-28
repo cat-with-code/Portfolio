@@ -1,7 +1,8 @@
 "use client";
 
-import { useId, useState, useTransition, type ReactNode } from "react";
+import { useId, useState, useTransition } from "react";
 import { Button } from "@/components/ui/button";
+import { fieldControl as control, fieldInput as input, FieldShell } from "@/components/ui/field";
 import { ArrowUpIcon, CheckIcon, MailIcon } from "@/components/icons";
 import { availability, form } from "@/content/contact";
 import { sendContactMessage } from "@/lib/contact-action";
@@ -13,28 +14,6 @@ type Sent = { via: "server" | "mail-app"; email: string };
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 /** Field (Figma 45:24) — Default / Hover / Focus (2px focus stroke + focus ring) / Error (stroke + message). */
-const control = (error: boolean) =>
-  `flex w-full items-center gap-8 border bg-surface-primary transition-colors duration-(--duration-fast) focus-within:border-interaction-focus focus-within:shadow-[inset_0_0_0_1px_var(--color-border-interaction-focus),var(--focus-ring)] ${
-    error ? "border-status-error" : "border-general-primary hover:border-interaction-hover"
-  }`;
-const input = "type-input min-w-0 flex-1 bg-transparent text-primary outline-none placeholder:text-general-placeholder focus-visible:shadow-none";
-
-function FieldShell({ id, label, error, className = "", children }: { id: string; label: string; error?: string; className?: string; children: ReactNode }) {
-  return (
-    <div className={`flex flex-col items-start gap-8 ${className}`}>
-      <label htmlFor={id} className="type-label whitespace-nowrap text-general-label">
-        {label}
-      </label>
-      {children}
-      {error && (
-        <p id={`${id}-error`} className="type-caption text-status-error">
-          {error}
-        </p>
-      )}
-    </div>
-  );
-}
-
 /** Contact / Choice chip (Figma 841:2039) — tap toggles On/Off (multi-select). */
 function Chip({ label, on, onToggle }: { label: string; on: boolean; onToggle: () => void }) {
   return (

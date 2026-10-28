@@ -21,7 +21,7 @@ const icons: Record<NavKey | "settings", ComponentType<SVGProps<SVGSVGElement>>>
  * Navigation item (Figma 51:11). Expanded: 2px indicator + 198px row. Rail (Tablet / collapsed Desktop): 44px circle.
  * `allowRail` is false inside the Mobile menu drawer, which always shows labels.
  */
-function itemClasses(active: boolean, allowRail: boolean) {
+export function itemClasses(active: boolean, allowRail: boolean) {
   const rail = allowRail;
   return {
     root: `group/nav flex h-44 w-208 shrink-0 cursor-pointer items-center gap-8 ${rail ? "rail:w-44 rail:gap-0" : ""}`,
