@@ -20,8 +20,8 @@ export const uploadRules = {
 /** Folders per kind; file names are always random. */
 export const uploadFolders = { cover: ["blog", "projects", "music", "books"], audio: ["tracks"] } as const;
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL?.replace(/\/$/, "");
-const r2Public = process.env.NEXT_PUBLIC_R2_PUBLIC_URL?.replace(/\/$/, "");
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL?.trim().replace(/\/$/, "");
+const r2Public = process.env.NEXT_PUBLIC_R2_PUBLIC_URL?.trim().replace(/\/$/, "");
 export const COVERS = "covers";
 export const coversBase = supabaseUrl ? `${supabaseUrl}/storage/v1/object/public/${COVERS}/` : null;
 export const r2Base = r2Public ? `${r2Public}/` : null;

@@ -11,8 +11,8 @@ import { freshFetch } from "./fresh-fetch";
 import { needsCode } from "./mfa";
 import { ACTIVE_COOKIE, browserSessionCookie, sessionExpiry, signedInAt } from "./session-policy";
 
-const url = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+const url = process.env.NEXT_PUBLIC_SUPABASE_URL?.trim()!;
+const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY?.trim()!;
 
 export async function supabaseServer() {
   // Per-request work: mark it before any Supabase code runs (it reads the clock), or prerendering stalls.

@@ -20,8 +20,8 @@ function preferredLocale(request: NextRequest) {
  * checks — every server action re-checks, and the database's security rules are the last line.
  */
 async function dashboardGate(request: NextRequest) {
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL?.trim();
+  const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY?.trim();
   if (!url || !anonKey) return new NextResponse("Dashboard needs Supabase settings", { status: 503 });
 
   let response = NextResponse.next({ request });

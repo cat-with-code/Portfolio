@@ -12,7 +12,7 @@ import { locales, type Locale } from "@/i18n/dictionaries";
 
 /** The live address: NEXT_PUBLIC_SITE_URL (your domain), else Vercel's production address, else local. */
 export const siteUrl = new URL(
-  process.env.NEXT_PUBLIC_SITE_URL ?? (process.env.VERCEL_PROJECT_PRODUCTION_URL ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}` : "http://localhost:3000")
+  process.env.NEXT_PUBLIC_SITE_URL?.trim() || (process.env.VERCEL_PROJECT_PRODUCTION_URL ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}` : "http://localhost:3000")
 );
 export const siteName = profile.name;
 export const absolute = (path: string) => new URL(path, siteUrl).toString();

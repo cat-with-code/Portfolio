@@ -13,7 +13,7 @@ import { rowKey, sourceHash, translatedFields, type Table } from "../src/lib/con
 
 const FILE = new URL("../src/content/translations.json", import.meta.url);
 const tables: Table[] = ["posts", "projects", "books"];
-const db = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!, { auth: { persistSession: false } });
+const db = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL?.trim()!, process.env.SUPABASE_SERVICE_ROLE_KEY!, { auth: { persistSession: false } });
 type Row = Record<string, unknown>;
 const saved = JSON.parse(readFileSync(FILE, "utf8")) as Record<Table, Record<string, Row & { source?: string }>>;
 

@@ -20,8 +20,8 @@ import { caseStudies as fileCaseStudies, type CaseStudy } from "@/content/case-s
 import { directoryProjects as fileProjects, projectCards as fileCards, type DirectoryProject, type ProjectCard } from "@/content/projects";
 import { tracks as fileTracks, vibes, type Track, type Vibe } from "@/content/study";
 
-const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+const url = process.env.NEXT_PUBLIC_SUPABASE_URL?.trim();
+const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY?.trim();
 export const supabaseConfigured = Boolean(url && anonKey);
 
 function fromFiles(): SiteContent {

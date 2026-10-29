@@ -1,7 +1,7 @@
 import type { NextConfig } from "next";
 
 // Uploaded covers live in Supabase Storage; next/image may load them from that one bucket path only.
-const supabaseHost = process.env.NEXT_PUBLIC_SUPABASE_URL ? new URL(process.env.NEXT_PUBLIC_SUPABASE_URL).hostname : null;
+const supabaseHost = process.env.NEXT_PUBLIC_SUPABASE_URL?.trim() ? new URL(process.env.NEXT_PUBLIC_SUPABASE_URL?.trim()).hostname : null;
 
 const nextConfig: NextConfig = {
   cacheComponents: true,
