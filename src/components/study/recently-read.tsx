@@ -4,13 +4,22 @@ import { useSiteContent } from "@/components/content/site-content";
 import { useRef, useState } from "react";
 import { BookArt } from "@/components/blog/book-drawers";
 import { TextReader } from "@/components/reader/text-reader";
+import { useDrawer } from "@/components/shell/drawer-provider";
 import { useLang, useT } from "@/i18n/lang-context";
 
-/** Study / Recently read carousel (Figma 891:86899): one book at a time, dots + swipe. */
+/** Study / Recently read carousel (Figma 891:86899): one book at a time, dots + swipe. Tap a book to read its brief. */
 export function RecentlyRead() {
   const rr = useT("recentlyRead");
   const lang = useLang();
   const caseStudyCopy = useT("caseStudyCopy");
+  const library = useT("library");
+  const { setOpen } = useDrawer();
+  /** A swipe between books must not also open the book under the finger. */
+  const swiped = useRef(false);
+  const read = (key: string) => {
+    if (swiped.current) return;
+    setOpen("book-brief", key);
+  };
   const { books } = useSiteContent();
   // Books that were unpublished or deleted drop out of the carousel.
   const items = rr.books.flatMap((b) => {
@@ -29,6 +38,7 @@ export function RecentlyRead() {
           if (start.current === null) return;
           const dx = e.clientX - start.current;
           start.current = null;
+          swiped.current = Math.abs(dx) > 8;
           if (Math.abs(dx) > 40) go(index + (dx < 0 ? 1 : -1));
         }}
       >
@@ -40,14 +50,23 @@ export function RecentlyRead() {
               inert={i !== index}
               className="flex w-full shrink-0 flex-col overflow-clip rounded-shell border border-general-default bg-page tablet:min-h-297 tablet:flex-row"
             >
-              <div className={`flex h-280 w-full shrink-0 items-center justify-center p-16 tablet:h-auto tablet:w-240 tablet:p-24 tablet:bg-transparent ${book.tint}`}>
-                <span className="relative block h-244 w-183">
+              <button
+                type="button"
+                onClick={() => read(book.key)}
+                aria-label={`${book.title} — ${library.brief}`}
+                className={`group flex h-280 w-full shrink-0 cursor-pointer items-center justify-center p-16 tablet:h-auto tablet:w-240 tablet:p-24 tablet:bg-transparent ${book.tint}`}
+              >
+                <span className="relative block h-244 w-183 transition-transform duration-(--duration-fast) ease-standard group-hover:-translate-y-4 motion-reduce:transition-none">
                   <BookArt book={book} />
                 </span>
-              </div>
+              </button>
               <div className="flex min-w-0 flex-1 flex-col items-start justify-center gap-8 px-20 pt-16 pb-20">
                 <span className="type-eyebrow flex h-32 items-center rounded-full bg-accent-blue-subtle px-12 whitespace-pre text-brand">{rr.inProgress}</span>
-                <h3 className="type-page-title w-full text-primary">{book.title}</h3>
+                <h3 className="type-page-title w-full text-primary">
+                  <button type="button" onClick={() => read(book.key)} className="cursor-pointer text-left hover:text-brand">
+                    {book.title}
+                  </button>
+                </h3>
                 <p className="type-caption w-full whitespace-pre-wrap text-secondary">{`${book.author}  ·  ${topic}`}</p>
                 <p className="type-body w-full text-secondary tablet:line-clamp-2">{book.brief.bigIdea}</p>
                 <TextReader title={book.title} text={`${book.title}${lang === "en" ? ", by" : " —"} ${book.author}. ${book.brief.bigIdea}`} lang={lang} labels={caseStudyCopy.reader} />
