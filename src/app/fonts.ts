@@ -12,3 +12,6 @@ export const fontVariables = `${interArrows.variable} ${inter.variable} ${notoKh
 // Runs before paint so the saved theme and sidebar state never flash.
 // Default is Light, matching the prototype; System follows the device.
 export const bootScript = `(function(){var r=document.documentElement;try{var m=localStorage.getItem("theme")||"light";r.dataset.themeMode=m;if(m==="system"){delete r.dataset.theme}else{r.dataset.theme=m}if(localStorage.getItem("sidebar")==="collapsed")r.dataset.sidebar="collapsed"}catch(e){}})()`;
+
+/** Page background for the very first paint, before the stylesheet arrives (same values as --color-bg-surface-primary in styles/tokens.css), so opening the site never flashes white in dark mode. */
+export const firstPaintStyle = `html{background:#ffffff}html[data-theme="dark"]{background:#262626;color-scheme:dark}@media (prefers-color-scheme:dark){html:not([data-theme="light"]):not([data-theme="dark"]){background:#262626;color-scheme:dark}}`;

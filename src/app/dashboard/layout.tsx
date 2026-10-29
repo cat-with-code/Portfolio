@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
-import { bootScript, fontVariables } from "../fonts";
+import { bootScript, firstPaintStyle, fontVariables } from "../fonts";
 import "../globals.css";
 
 export const metadata: Metadata = {
@@ -14,6 +14,7 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
     <html lang="en" data-theme="light" data-theme-mode="light" className={fontVariables} suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: bootScript }} />
+        <style dangerouslySetInnerHTML={{ __html: firstPaintStyle }} />
       </head>
       <body>
         {children}

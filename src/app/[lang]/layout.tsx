@@ -8,7 +8,7 @@ import { getSiteContent } from "@/lib/site-content";
 import { sitePrefs } from "@/lib/site-prefs";
 import { getDictionary, getLocale, locales } from "@/i18n/dictionaries";
 import { searchable, sectionMeta, siteName, siteTitle, siteUrl } from "@/lib/seo";
-import { bootScript, fontVariables } from "../fonts";
+import { bootScript, firstPaintStyle, fontVariables } from "../fonts";
 import "../globals.css";
 
 /** Site-wide defaults; each page adds its own title, description, canonical and language links (lib/seo). */
@@ -40,6 +40,8 @@ export default async function RootLayout({ children }: LayoutProps<"/[lang]">) {
     <html lang={lang} className={fontVariables} suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: bootScript }} />
+        {/* Paint the theme's background before the stylesheet arrives, so opening the site never flashes white in dark mode */}
+        <style dangerouslySetInnerHTML={{ __html: firstPaintStyle }} />
         {/* Noto Sans SC is split into ~300 files, too many to self-host via next/font — load it from Google Fonts on Chinese pages only */}
         {lang === "zh" && (
           <>
