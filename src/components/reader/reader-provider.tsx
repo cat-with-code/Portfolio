@@ -25,6 +25,8 @@ type ReaderContext = {
   mount: (id: string) => () => void;
   /** Which floating box wins when both the reader and the music could show: whichever was played last. */
   front: "reader" | "music";
+  /** Why the last start didn't speak: the device has no voice for that language, or it refused to speak. */
+  problem: { id: string; kind: "no-voice" | "failed" } | null;
 };
 
 const Ctx = createContext<ReaderContext | null>(null);
@@ -43,6 +45,7 @@ export function ReaderProvider({ children }: { children: ReactNode }) {
   const [speed, setSpeed] = useState(1);
   const [mounted, setMounted] = useState<ReadonlySet<string>>(new Set());
   const [front, setFront] = useState<"reader" | "music">("music");
+  const [problem, setProblem] = useState<ReaderContext["problem"]>(null);
   /** Bumped on every (re)start, so events from cancelled utterances are ignored. */
   const run = useRef(0);
   /** Chunk being spoken, so a speed change can pick up from there. */
@@ -72,10 +75,17 @@ export function ReaderProvider({ children }: { children: ReactNode }) {
 
   /** Queues `s.text` from chunk `from` at `rate`. */
   const speak = useCallback((s: Omit<Session, "href">, from: number, rate: number) => {
-    speechSynthesis.cancel();
+    const busy = speechSynthesis.speaking || speechSynthesis.pending;
+    if (busy) speechSynthesis.cancel();
     // Safari stays paused after cancel(), which would hold the new queue too.
     if (speechSynthesis.paused) speechSynthesis.resume();
     const id = ++run.current;
+    // Chrome on Android drops speech queued in the same moment as cancel(), so a restart waits a beat. A first start
+    // (nothing to cancel) queues straight away, inside the tap — iPhones only speak when it starts from a tap.
+    if (busy) setTimeout(() => queue(), 80);
+    else queue();
+    function queue() {
+    if (run.current !== id) return;
     const voice = pickVoice(s.lang);
     const list = chunks(s.text);
     let before = list.slice(0, from).reduce((n, c) => n + words(c), 0);
@@ -98,8 +108,18 @@ export function ReaderProvider({ children }: { children: ReactNode }) {
           setState("idle");
           setElapsed(0);
         };
+      // A refusal (not our own stop or restart) ends the session instead of leaving the button stuck on "playing".
+      u.onerror = (e) => {
+        if (run.current !== id || e.error === "interrupted" || e.error === "canceled") return;
+        run.current++;
+        speechSynthesis.cancel();
+        setState("idle");
+        setElapsed(0);
+        setProblem({ id: s.id, kind: "failed" });
+      };
       speechSynthesis.speak(u);
     });
+    }
   }, []);
 
   // Only one plays at a time. Reading aloud pauses the music (it can be resumed from the player)…
@@ -126,6 +146,14 @@ export function ReaderProvider({ children }: { children: ReactNode }) {
   const start = useCallback(
     (s: Omit<Session, "href">) => {
       if (!supported) return;
+      // Most phones have no Khmer voice: say so instead of staying silent. (An empty list means the voices haven't
+      // loaded yet — try anyway.)
+      const voices = speechSynthesis.getVoices();
+      if (voices.length && !voices.some((v) => v.lang.toLowerCase().startsWith(s.lang))) {
+        setProblem({ id: s.id, kind: "no-voice" });
+        return;
+      }
+      setProblem(null);
       pauseMusic();
       at.current = 0;
       speak(s, 0, speed);
@@ -180,8 +208,8 @@ export function ReaderProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const value = useMemo<ReaderContext>(
-    () => ({ supported, session, state, elapsed, total, speed, start, toggle, stop, cycleSpeed, mounted, mount, front }),
-    [supported, session, state, elapsed, total, speed, start, toggle, stop, cycleSpeed, mounted, mount, front]
+    () => ({ supported, session, state, elapsed, total, speed, start, toggle, stop, cycleSpeed, mounted, mount, front, problem }),
+    [supported, session, state, elapsed, total, speed, start, toggle, stop, cycleSpeed, mounted, mount, front, problem]
   );
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
 }

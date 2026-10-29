@@ -631,6 +631,8 @@ export const zh = {
     minReadShort: (n: number) => `约 ${n} 分钟阅读`,
     minutes: (n: number) => `${n} 分钟`,
     flexible: "灵活",
+    noVoice: "这台设备没有这种语言的朗读声音。可以试试英文版，或在手机设置里添加语音。",
+    speechFailed: "这台设备无法朗读。请检查声音后重试。",
     posts: (n: number) => `共 ${n} 篇文章`,
     projects: (n: number) => `共 ${n} 个项目`,
   },

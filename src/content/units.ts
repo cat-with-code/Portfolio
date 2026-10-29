@@ -6,6 +6,9 @@ export const units = {
   minReadShort: (n: number) => `${n} min read`,
   minutes: (n: number) => `${n} min`,
   flexible: "Flexible",
+  /** Read-aloud problems (shown under the Listen button) */
+  noVoice: "This device has no voice for this language. Try the English version, or add a voice in your phone’s settings.",
+  speechFailed: "This device couldn’t read aloud. Check the sound and try again.",
   /** Counters in drawers: "03 POSTS", "06 PROJECTS" */
   posts: (n: number) => `${String(n).padStart(2, "0")} POSTS`,
   projects: (n: number) => `${String(n).padStart(2, "0")} PROJECTS`,

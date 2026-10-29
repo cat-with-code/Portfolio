@@ -48,7 +48,9 @@ export function TextReader({ title, text, lang, labels, bordered = false }: {
   }, [state]);
 
   const active = state !== "idle";
+  const problem = r.problem?.id === id ? (r.problem.kind === "no-voice" ? units.noVoice : units.speechFailed) : null;
   return (
+    <div className="flex w-full flex-col gap-6">
     <div className={`flex w-full items-center gap-8 overflow-clip rounded-full bg-surface-primary py-8 pr-8 pl-8 ${bordered ? "border border-general-default" : ""}`}>
       <button
         type="button"
@@ -81,6 +83,8 @@ export function TextReader({ title, text, lang, labels, bordered = false }: {
         </span>
       </button>
       <SpeedChip />
+    </div>
+    {problem && <p role="status" className="type-caption px-16 text-secondary">{problem}</p>}
     </div>
   );
 }

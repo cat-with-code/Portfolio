@@ -43,8 +43,11 @@ export function pickVoice(lang: string): SpeechSynthesisVoice | undefined {
 
 /** Sentences, with long ones split at commas: Chrome stops long utterances partway. */
 export function chunks(text: string) {
-  const sentences = text.match(/[^.!?。]+[.!?。”"]*\s*/g) ?? [text];
-  return sentences.flatMap((s) => (s.length <= 220 ? [s.trim()] : (s.match(/[^,;:]+[,;:]?\s*/g) ?? [s]).map((p) => p.trim()))).filter(Boolean);
+  // Sentence ends in English, Chinese (。！？) and Khmer (។); long sentences split at commas (also ， and 、).
+  const sentences = text.match(/[^.!?。！？។]+[.!?。！？។”"]*\s*/g) ?? [text];
+  const pieces = sentences.flatMap((s) => (s.length <= 220 ? [s] : (s.match(/[^,;:，、；]+[,;:，、；]?\s*/g) ?? [s])));
+  // Phones cut off or refuse very long utterances: anything still over 220 characters is split at spaces, or hard.
+  return pieces.flatMap((p) => (p.length <= 220 ? [p.trim()] : (p.match(/.{1,200}(\s|$)|.{1,200}/g) ?? [p]).map((x) => x.trim()))).filter(Boolean);
 }
 export const words = (s: string) => s.split(/\s+/).filter(Boolean).length;
 
