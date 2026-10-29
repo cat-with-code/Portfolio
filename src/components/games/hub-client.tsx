@@ -4,10 +4,11 @@ import Link from "next/link";
 import { useState } from "react";
 import { ArrowRightIcon } from "@/components/icons";
 import { useDrawer } from "@/components/shell/drawer-provider";
-import { hub } from "@/content/games";
+import { useT } from "@/i18n/lang-context";
 
 /** "16 GAMES / Browse all games ↗" — opens the Game Library drawer. */
 export function LibraryCount() {
+  const hub = useT("hub");
   const { setOpen } = useDrawer();
   return (
     <button
@@ -26,11 +27,12 @@ export function LibraryCount() {
 
 /** Sudoku bento footer: pick a difficulty, then play (the game page starts with it selected). */
 export function SudokuStart({ lang }: { lang: string }) {
+  const sudoku = useT("games").sudoku;
   const [level, setLevel] = useState(0);
   return (
     <div className="flex flex-col items-center gap-12">
-      <div className="flex gap-4" role="radiogroup" aria-label="Difficulty">
-        {["Easy", "Medium", "Hard"].map((l, i) => (
+      <div className="flex gap-4" role="radiogroup" aria-label={sudoku.option.label}>
+        {sudoku.option.values.map((l, i) => (
           <button
             key={l}
             type="button"
@@ -52,7 +54,7 @@ export function SudokuStart({ lang }: { lang: string }) {
         }}
         className="flex h-44 items-center gap-8 rounded-shell bg-brand px-24 text-[13px] font-semibold text-on-brand transition-colors duration-(--duration-fast) hover:bg-brand-hover"
       >
-        Play Sudoku
+        {sudoku.play}
         <ArrowRightIcon className="size-16" />
       </Link>
     </div>

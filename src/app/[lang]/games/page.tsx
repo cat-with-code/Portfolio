@@ -1,19 +1,23 @@
 import type { Metadata } from "next";
 import { CoverCard, PlayButton, RowCard, SplitCard } from "@/components/games/cards";
 import { LibraryCount, SudokuStart } from "@/components/games/hub-client";
-import { games, hub, sections, type GameKey, type SectionKey } from "@/content/games";
+import { games as english, type GameKey, type SectionKey } from "@/content/games";
+import { tr } from "@/i18n/content";
 import { getLocale } from "@/i18n/dictionaries";
-import { pageMetadata, sectionDescriptions } from "@/lib/seo";
+import { pageMetadata, sectionMeta } from "@/lib/seo";
 
-const count = (s: SectionKey) => Object.values(games).filter((g) => g.section === s).length;
+const count = (s: SectionKey) => Object.values(english).filter((g) => g.section === s).length;
 
-function Section({ id, children }: { id: SectionKey; children: React.ReactNode }) {
+async function Section({ id, children }: { id: SectionKey; children: React.ReactNode }) {
+  const lang = await getLocale();
+  const sections = tr(lang, "sections");
+  const hub = tr(lang, "hub");
   const s = sections.find((x) => x.key === id)!;
   return (
     <section className="flex w-full flex-col gap-16 pt-16" aria-labelledby={`games-${id}`}>
       <div className="flex items-center justify-between">
         <h2 id={`games-${id}`} className="type-page-title text-primary">{s.title}</h2>
-        <span className="type-table-heading text-secondary">{count(id)} GAMES</span>
+        <span className="type-table-heading text-secondary">{hub.sectionCount(count(id))}</span>
       </div>
       {children}
     </section>
@@ -26,12 +30,15 @@ function Art({ game, className }: { game: GameKey; className: string }) {
 }
 
 export async function generateMetadata(): Promise<Metadata> {
-  return pageMetadata({ lang: await getLocale(), path: "/games", title: "Games", description: sectionDescriptions.games });
+  const lang = await getLocale();
+  return pageMetadata({ lang, path: "/games", ...sectionMeta(lang, "games") });
 }
 
 /** Games — Game Hub (Figma Desktop 694:11927 · Tablet 696:32013 · Mobile 696:38675). */
 export default async function GamesPage() {
   const lang = await getLocale();
+  const games = tr(lang, "games");
+  const hub = tr(lang, "hub");
   const chess = games.chess;
   return (
     <div className="flex w-full flex-col gap-16 pb-64 tablet:gap-20 desktop:gap-16">
@@ -78,7 +85,7 @@ export default async function GamesPage() {
           <article className="flex w-full flex-col items-stretch gap-16 rounded-card border border-general-subtle bg-accent-violet-subtle p-20 tablet:w-394 tablet:shrink-0">
             <div className="flex items-center justify-between">
               <h3 className="text-[22px] leading-[25px] font-semibold text-primary">Sudoku</h3>
-              <span className="rounded-md bg-surface-primary px-12 py-4 text-[11px] leading-[13px] font-medium text-secondary">LOGIC</span>
+              <span className="rounded-md bg-surface-primary px-12 py-4 text-[11px] leading-[13px] font-medium text-secondary">{games.sudoku.badge}</span>
             </div>
             <Art game="sudoku" className="mx-auto size-156 rounded-md" />
             <div className="flex flex-col items-center gap-4 text-center">

@@ -60,5 +60,9 @@
     "search": "Search the site",
     "explore": "OR EXPLORE"
   },
-  "loading": "Loading…"
+  "loading": "Loading…",
+  "translated": {
+    "note": "Auto-translated from English",
+    "link": "Read in English"
+  }
 }

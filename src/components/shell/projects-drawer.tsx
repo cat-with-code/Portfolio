@@ -7,9 +7,10 @@ import { CloseIcon } from "@/components/icons";
 import { IconButton } from "@/components/ui/icon-button";
 import { PanelClose, SidePanel } from "@/components/ui/side-panel";
 import { useSiteContent } from "@/components/content/site-content";
-import { directory, type DirectoryProject } from "@/content/projects";
+import { type DirectoryProject } from "@/content/projects";
 import type { Dictionary } from "@/i18n/dictionaries";
 import { useDrawer, useDrawerState } from "./drawer-provider";
+import { useT } from "@/i18n/lang-context";
 
 /** Projects / Directory row (Figma 499:10676): Default / Hover (color/bg/surface-hover). */
 function Row({ project, lang, onNavigate }: { project: DirectoryProject; lang: string; onNavigate: () => void }) {
@@ -40,6 +41,8 @@ function Row({ project, lang, onNavigate }: { project: DirectoryProject; lang: s
 
 /** All projects drawer (Figma Projects / Directory sliding panel 1117:100222 · Mobile 1117:105627). */
 export function ProjectsDrawer({ lang, dict }: { lang: string; dict: Dictionary }) {
+  const units = useT("units");
+  const directory = useT("directory");
   const { projects: directoryProjects } = useSiteContent();
   const state = useDrawerState("projects");
   const { setOpen } = useDrawer();
@@ -58,7 +61,7 @@ export function ProjectsDrawer({ lang, dict }: { lang: string; dict: Dictionary 
       </div>
       <p className="type-ui w-full shrink-0 text-secondary">{directory.summary}</p>
       <div className="type-eyebrow flex h-25 w-full shrink-0 items-start justify-between gap-8 overflow-clip">
-        <p className="text-primary">{String(directoryProjects.length).padStart(2, "0")} PROJECTS</p>
+        <p className="text-primary">{units.projects(directoryProjects.length)}</p>
         <p className="text-secondary">{directory.scrollLabel}</p>
       </div>
       <div className="flex min-h-0 w-full flex-1 flex-col items-start gap-12 overflow-x-clip overflow-y-auto [scrollbar-width:none]">

@@ -71,7 +71,8 @@
   --animate-panel-in: panel-in-right 400ms var(--ease-figma-out);
   --animate-panel-out: panel-out-right 400ms var(--ease-figma-out);
   /* Skeleton loaders: a soft light sweeping across the placeholder blocks. Loops only with motion allowed. */
-  --animate-shimmer: shimmer 1600ms ease-in-out infinite;
+  /* Skeleton loaders: one soft wave sweeping left → right across every block on the screen at once. */
+  --animate-shimmer: shimmer 1300ms ease-in-out infinite;
   /* 404: the avatar drifts gently; the page fades up. */
   --animate-float: float 4000ms ease-in-out infinite;
   --animate-rise-in: rise-in 600ms var(--ease-figma-out) both;
@@ -112,10 +113,10 @@
   }
   @keyframes shimmer {
     from {
-      transform: translateX(-100%);
+      background-position: -130vw 0;
     }
     to {
-      transform: translateX(100%);
+      background-position: 30vw 0;
     }
   }
   @keyframes float {
@@ -144,4 +145,28 @@
   0%, 100% { transform: translateX(0); }
   25% { transform: translateX(-5px); }
   75% { transform: translateX(5px); }
+}
+
+/*
+ * Skeleton block: a grey placeholder with a light band. The band is sized to the screen and fixed to it, so all blocks
+ * share one wave that travels across the page (animate-shimmer moves it). Still with "Reduce motion".
+ */
+@utility skeleton-bone {
+  background-color: color-mix(in oklab, var(--color-bg-surface-secondary), var(--color-text-primary) 7%);
+  background-image: linear-gradient(100deg, transparent 35%, var(--skeleton-shine) 50%, transparent 65%);
+  background-size: 200vw 100%;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-position: -130vw 0;
+}
+:root {
+  --skeleton-shine: rgb(255 255 255 / 0.75);
+}
+:root[data-theme="dark"] {
+  --skeleton-shine: rgb(255 255 255 / 0.09);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]):not([data-theme="dark"]) {
+    --skeleton-shine: rgb(255 255 255 / 0.09);
+  }
 }

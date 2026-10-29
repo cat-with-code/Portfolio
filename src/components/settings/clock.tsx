@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { SparklesIcon } from "@/components/icons";
 import { gregorianLines, holyDayInfo, khmerDigits, khmerLines, phnomPenhParts } from "@/lib/khmer-calendar";
-import { settingsCopy } from "@/content/settings";
+import { useLang, useT } from "@/i18n/lang-context";
 
 export type Calendar = "gregorian" | "khmer";
 
@@ -113,11 +113,13 @@ function HolyDayCard({ day }: { day: { year: number; month: number; day: number 
 
 /** Local time card body: clock face + digital time, city, divider and date lines. */
 export function LocalTime({ calendar }: { calendar: Calendar }) {
+  const lang = useLang();
+  const settingsCopy = useT("settingsCopy");
   const now = useNow();
   const khmer = calendar === "khmer";
   const h12 = now.hour % 12 || 12;
   const time = `${h12}:${String(now.minute).padStart(2, "0")}:${String(now.second).padStart(2, "0")}`;
-  const g = gregorianLines(now);
+  const g = gregorianLines(now, lang, settingsCopy.weekDetail);
   const k = khmerLines(now);
   return (
     <>

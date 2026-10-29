@@ -3,7 +3,9 @@ import { NotFoundView } from "@/components/feedback/not-found-view";
 import { BlogIcon, ContactIcon, GamesIcon, ProjectsIcon, StudyIcon } from "@/components/icons";
 import { getDictionary, getLocale } from "@/i18n/dictionaries";
 
-export const metadata: Metadata = { title: "Page not found", robots: { index: false } };
+export async function generateMetadata(): Promise<Metadata> {
+  return { title: (await getDictionary()).notFound.title, robots: { index: false } };
+}
 
 /** 404 for the site: shown for unknown addresses and anything that calls notFound(). */
 export default async function NotFound() {

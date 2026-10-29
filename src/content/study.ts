@@ -86,11 +86,14 @@ export const tracks: Record<Vibe, Track[]> = {
   piano: [["Letters at dawn", "3:56"]],
 };
 
-/** "Lofi · 2 of 3" when a vibe has several tracks, "Lofi · focus collection" when it has one. */
-export const trackCaption = (list: Record<Vibe, Track[]>, vibe: Vibe, index: number) => {
-  const label = vibes.find((v) => v.key === vibe)!.label;
+/**
+ * "Lofi · 2 of 3" when a vibe has several tracks, "Lofi · focus collection" when it has one.
+ * Pass `text` (the translated vibes and audioCopy) on translated pages.
+ */
+export const trackCaption = (list: Record<Vibe, Track[]>, vibe: Vibe, index: number, text: { vibes: typeof vibes; audioCopy: typeof audioCopy } = { vibes, audioCopy }) => {
+  const label = text.vibes.find((v) => v.key === vibe)!.label;
   const n = list[vibe].length;
-  return n > 1 ? `${label} · ${index + 1} of ${n}` : `${label} · ${audioCopy.collection}`;
+  return n > 1 ? `${label} · ${text.audioCopy.of(index + 1, n)}` : `${label} · ${text.audioCopy.collection}`;
 };
 
 export const audioCopy = {
@@ -98,6 +101,7 @@ export const audioCopy = {
   soundStyle: "SOUND STYLE",
   custom: "Custom",
   collection: "focus collection",
+  of: (i: number, n: number) => `${i} of ${n}`,
   picker: { eyebrow: "SOUND STYLE", caption: (n: number) => `${n} tracks · pick one to start`, hint: "Press and hold a style to pick a track" },
   library: { title: "Your focus library", body: "Choose a vibe. Find your next soundtrack.", select: "Select", playing: "Playing" },
   volume: { label: "Volume", hint: "Tap to mute · press and hold for volume" },
@@ -131,6 +135,10 @@ export const audioCopy = {
 export const daytimeCopy = {
   eyebrow: "◉  YOUR LOCAL TIME",
   location: "PHNOM PENH  ·  GMT+7",
+  am: "AM",
+  /** Weather conditions, in the order of the codes in study/daytime.tsx */
+  conditions: ["Clear sky", "Mainly clear", "Partly cloudy", "Overcast", "Foggy", "Drizzle", "Rain", "Rain showers", "Thunderstorm"],
+  pm: "PM",
   weather: "WEATHER NOW",
   live: "LIVE  ·  OPEN-METEO",
   offline: "WEATHER UNAVAILABLE",

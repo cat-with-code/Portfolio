@@ -14,8 +14,8 @@ export const hasLocale = (value: string): value is Locale => (locales as readonl
 
 type DeepPartial<T> = { [K in keyof T]?: T[K] extends object ? DeepPartial<T[K]> : T[K] };
 
-// Khmer and Chinese strings come from the Figma "Interface language" collection. Anything without a
-// translation there falls back to English instead of an invented translation.
+// Khmer and Chinese strings: the Figma "Interface language" collection first, then translations written by
+// Claude for everything Figma doesn't cover (the owner chose auto-translation). Anything still missing shows in English.
 function withFallback<T extends object>(base: T, override: DeepPartial<T>): T {
   const out = { ...base } as Record<string, unknown>;
   for (const [key, value] of Object.entries(override)) {

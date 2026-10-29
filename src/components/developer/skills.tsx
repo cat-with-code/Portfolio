@@ -11,7 +11,8 @@ import { SkillPrototypingLargeArt } from "@/components/illustrations/skill-proto
 import { SkillSystemsArt } from "@/components/illustrations/skill-systems";
 import { SkillSystemsLargeArt } from "@/components/illustrations/skill-systems-large";
 import { IconButton } from "@/components/ui/icon-button";
-import { developer } from "@/content/developer";
+import { useT } from "@/i18n/lang-context";
+import type { developer } from "@/content/developer";
 
 type Art = ComponentType<SVGProps<SVGSVGElement>>;
 type Skill = (typeof developer.skills)[number];
@@ -73,6 +74,7 @@ function LargeCard({ skill }: { skill: Skill }) {
  * Previous / Next icon buttons (disabled at the ends), swipe left/right.
  */
 function SkillsCarousel() {
+  const developer = useT("developer");
   const [index, setIndex] = useState(0);
   const start = useRef<number | null>(null);
   const last = developer.skills.length - 1;
@@ -117,6 +119,7 @@ function SkillsCarousel() {
 
 /** Skills and capabilities — Mobile carousel · Tablet 2×2 Row cards · Desktop 4 Compact cards */
 export function Skills() {
+  const developer = useT("developer");
   return (
     <section aria-label="Skills and capabilities" className="w-full">
       <SkillsCarousel />

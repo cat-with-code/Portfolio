@@ -5,20 +5,22 @@ import { DirectoryButton, DirectoryCaption } from "@/components/projects/directo
 import { Explorations } from "@/components/projects/explorations";
 import { ProjectCard } from "@/components/projects/project-card";
 import { SectionHeading } from "@/components/ui/section-heading";
-import { developer } from "@/content/developer";
-import { projectsPage as p } from "@/content/projects";
 import { getSiteContent } from "@/lib/site-content";
 import { getLocale } from "@/i18n/dictionaries";
-import { pageMetadata, sectionDescriptions } from "@/lib/seo";
+import { pageMetadata, sectionMeta } from "@/lib/seo";
+import { tr } from "@/i18n/content";
 
 export async function generateMetadata(): Promise<Metadata> {
-  return pageMetadata({ lang: await getLocale(), path: "/projects", title: "Projects", description: sectionDescriptions.projects });
+  const lang = await getLocale();
+  return pageMetadata({ lang, path: "/projects", ...sectionMeta(lang, "projects") });
 }
 
 /** Projects — Bento editorial layout (Figma Desktop 694:22512 · Tablet 696:37956 · Mobile 696:44618). */
 export default async function ProjectsPage() {
   const lang = await getLocale();
-  const { projectCards, projects } = await getSiteContent();
+  const developer = tr(lang, "developer");
+  const p = tr(lang, "projectsPage");
+  const { projectCards, projects } = await getSiteContent(lang);
   // Game Hub first on this page (Projects / Try it yourself 860:53385).
   const tryIt = [...developer.tryIt].reverse();
   return (
@@ -47,7 +49,7 @@ export default async function ProjectsPage() {
           </div>
           <div className="flex w-full flex-wrap items-stretch gap-(--layout-gap)">
             {tryIt.map((item) => (
-              <TryItCard key={item.key} lang={lang} item={item} className="min-w-300" />
+              <TryItCard key={item.key} lang={lang} item={item} chip={developer.tryItChip} className="min-w-300" />
             ))}
           </div>
         </div>

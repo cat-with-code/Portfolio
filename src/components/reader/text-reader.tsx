@@ -4,6 +4,7 @@ import { useEffect, useRef } from "react";
 import { CirclePlayIcon, PauseIcon } from "@/components/icons";
 import { clock, estimate, PLAYING } from "@/lib/speech";
 import { useReader, type ReaderLabels } from "./reader-provider";
+import { useT } from "@/i18n/lang-context";
 
 /**
  * Study / Text reader (Figma 892:3283) — "Listen instead": reads the text aloud with the browser's
@@ -18,6 +19,7 @@ export function TextReader({ title, text, lang, labels, bordered = false }: {
   /** The book brief's reader has a border (color/border/general/default) */
   bordered?: boolean;
 }) {
+  const units = useT("units");
   const r = useReader();
   const id = `${lang}:${title}`;
   const mine = r.session?.id === id;
@@ -62,7 +64,7 @@ export function TextReader({ title, text, lang, labels, bordered = false }: {
         <span className="flex min-w-0 flex-1 flex-col items-start gap-4">
           <span className="type-label w-full truncate text-primary">{active ? labels.playing : title}</span>
           <span className="type-caption w-full truncate whitespace-pre text-muted">
-            {active ? `${clock(elapsed)} / ${clock(total)}` : `${labels.idleMeta}  ·  ${Math.max(1, Math.round(total / 60))} min`}
+            {active ? `${clock(elapsed)} / ${clock(total)}` : `${labels.idleMeta}  ·  ${units.minutes(Math.max(1, Math.round(total / 60)))}`}
           </span>
         </span>
         <span aria-hidden className="hidden h-22 w-136 shrink-0 items-center gap-4 min-[400px]:flex">

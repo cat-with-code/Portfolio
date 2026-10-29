@@ -1,5 +1,6 @@
 import { ArrowUpRightIcon } from "@/components/icons";
-import { map } from "@/content/contact";
+import { tr } from "@/i18n/content";
+import { getLocale } from "@/i18n/dictionaries";
 
 /*
  * Contact / Map (Figma 1132:2684 — Layout Desktop 1078×320 · Tablet 902×300 · Mobile 356×320).
@@ -49,7 +50,9 @@ function StreetGrid() {
   );
 }
 
-export function ContactMap() {
+export async function ContactMap() {
+  const lang = await getLocale();
+  const map = tr(lang, "map");
   return (
     <section aria-label={map.title} className="relative h-320 w-full shrink-0 overflow-clip rounded-card border border-general-default bg-surface-subtle tablet:h-300 desktop:h-320">
       {/* Map art — Figma places it at inset −1 so its geometry is measured from the outer edge. */}
@@ -58,8 +61,8 @@ export function ContactMap() {
           <span key={p} className={`absolute rounded-[10px] bg-accent-green-subtle ${p}`} />
         ))}
         <StreetGrid />
-        {lines.map((l) => (
-          <svg key={l.d} viewBox="0 0 1 1" preserveAspectRatio="none" className={`absolute overflow-visible ${l.box} ${l.width}`}>
+        {lines.map((l, i) => (
+          <svg key={i} viewBox="0 0 1 1" preserveAspectRatio="none" className={`absolute overflow-visible ${l.box} ${l.width}`}>
             <path
               d={l.d}
               fill="none"

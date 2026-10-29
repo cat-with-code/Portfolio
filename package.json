@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "eslint",
     "tokens": "node scripts/build-tokens.mjs",
-    "illustrations": "node scripts/build-illustrations.mjs"
+    "illustrations": "node scripts/build-illustrations.mjs",
+    "translations": "tsx --env-file=.env.local scripts/translations.mts"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.1158.0",

@@ -4,10 +4,11 @@ import { useSiteContent } from "@/components/content/site-content";
 import type { ReactNode } from "react";
 import { ArrowUpRightIcon } from "@/components/icons";
 import { useDrawer } from "@/components/shell/drawer-provider";
-import { magazine, type Placement, type Post } from "@/content/blog";
+import { type Placement, type Post } from "@/content/blog";
 import { PostArt } from "./topic-art";
+import { useT } from "@/i18n/lang-context";
 
-export const metaLine = (post: Pick<Post, "category" | "minutes">) => `${post.category}  ·  ${post.minutes} MIN READ`;
+export const metaLine = (post: Pick<Post, "category" | "minutes">, minRead: (n: number) => string) => `${post.category}  ·  ${minRead(post.minutes)}`;
 const eyebrow = (p: Placement) => (p.kicker ? `${p.number}  /  ${p.kicker}` : p.number);
 
 /** Every card opens the post in the "Inside the story" preview drawer. */
@@ -21,6 +22,7 @@ function CardButton({ slug, className, children }: { slug: string; className: st
 }
 
 function ReadCta() {
+  const magazine = useT("magazine");
   return (
     <span className="type-label flex shrink-0 items-center gap-4 whitespace-nowrap text-brand group-hover/post:text-brand-hover">
       {magazine.readStory}
@@ -32,9 +34,10 @@ function ReadCta() {
 }
 
 function Footer({ post, className = "" }: { post: Post; className?: string }) {
+  const units = useT("units");
   return (
     <span className={`flex w-full items-center gap-12 px-4 pt-4 ${className}`}>
-      <span className="type-table-heading min-w-0 flex-1 whitespace-pre-wrap text-muted">{metaLine(post)}</span>
+      <span className="type-table-heading min-w-0 flex-1 whitespace-pre-wrap text-muted">{metaLine(post, units.minRead)}</span>
       <ReadCta />
     </span>
   );
@@ -76,6 +79,7 @@ export function CoverStoryCard({ placement }: { placement: Placement }) {
  * Mobile: Standard (wide art on top, meta + Read the story underneath).
  */
 export function FeatureCard({ placement }: { placement: Placement }) {
+  const units = useT("units");
   const { posts } = useSiteContent();
   const post = posts[placement.slug];
   // Unpublished or deleted posts simply leave their slot empty.
@@ -96,7 +100,7 @@ export function FeatureCard({ placement }: { placement: Placement }) {
       <span className="flex w-full min-w-0 flex-col items-start gap-8 px-4 tablet:flex-1 tablet:gap-4 tablet:px-0">
         <span className="type-table-heading w-full whitespace-pre-wrap text-brand">{eyebrow(placement)}</span>
         <span className="type-card-title w-full text-primary">{post.title}</span>
-        <span className="type-caption hidden w-full text-accent-green tablet:block">{post.minutes} min read</span>
+        <span className="type-caption hidden w-full text-accent-green tablet:block">{units.minReadShort(post.minutes)}</span>
       </span>
       <Footer post={post} className="tablet:hidden" />
     </CardButton>
@@ -132,6 +136,7 @@ export function WideCard({ placement }: { placement: Placement }) {
 
 /** Archive row — Blog / Post card Size=Compact: 84 thumbnail (wide art cropped), copy, arrow. */
 export function ArchiveCard({ placement }: { placement: Placement }) {
+  const units = useT("units");
   const { posts } = useSiteContent();
   const post = posts[placement.slug];
   // Unpublished or deleted posts simply leave their slot empty.
@@ -145,7 +150,7 @@ export function ArchiveCard({ placement }: { placement: Placement }) {
       </span>
       <span className="flex min-w-0 flex-1 flex-col items-start gap-4">
         <span className="type-table-heading w-full text-brand">{placement.number}</span>
-        <span className="type-table-heading w-full whitespace-pre-wrap text-muted">{metaLine(post)}</span>
+        <span className="type-table-heading w-full whitespace-pre-wrap text-muted">{metaLine(post, units.minRead)}</span>
         <span className="type-card-title w-full text-primary">{post.title}</span>
         <span className="type-caption w-full text-muted">{placement.excerpt ?? post.excerpt}</span>
       </span>

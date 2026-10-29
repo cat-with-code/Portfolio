@@ -1,4 +1,5 @@
 import momentkh from "@thyrith/momentkh";
+import { longDate } from "@/i18n/dates";
 
 const KHMER_DIGITS = "០១២៣៤៥៦៧៨៩";
 export const khmerDigits = (s: string | number) => String(s).replace(/\d/g, (d) => KHMER_DIGITS[Number(d)]);
@@ -30,9 +31,9 @@ const lunar = (d: Ymd) => convert(d).khmer;
 const fmt = (d: Ymd, pattern: string) => momentkh.format(convert(d), pattern);
 
 /** Settings / Date — Calendar=Gregorian */
-export function gregorianLines(d: Ymd) {
+export function gregorianLines(d: Ymd, lang = "en", detail = (week: number, day: number, days: number) => `Week ${week}  ·  Day ${day} of ${days}`) {
   const date = new Date(Date.UTC(d.year, d.month - 1, d.day));
-  const main = new Intl.DateTimeFormat("en-GB", { timeZone: "UTC", weekday: "long", day: "numeric", month: "long", year: "numeric" }).format(date);
+  const main = longDate(lang, date);
   const start = Date.UTC(d.year, 0, 1);
   const dayOfYear = Math.round((date.getTime() - start) / 86400000) + 1;
   const daysInYear = (d.year % 4 === 0 && d.year % 100 !== 0) || d.year % 400 === 0 ? 366 : 365;
@@ -40,7 +41,7 @@ export function gregorianLines(d: Ymd) {
   const t = new Date(date);
   t.setUTCDate(t.getUTCDate() + 4 - (t.getUTCDay() || 7));
   const week = Math.ceil(((t.getTime() - Date.UTC(t.getUTCFullYear(), 0, 1)) / 86400000 + 1) / 7);
-  return { main, detail: `Week ${week}  ·  Day ${dayOfYear} of ${daysInYear}` };
+  return { main, detail: detail(week, dayOfYear, daysInYear) };
 }
 
 /** Settings / Date — Calendar=Khmer (lunar date, year names, matching solar date) */

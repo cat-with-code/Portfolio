@@ -4,11 +4,13 @@ import { useSiteContent } from "@/components/content/site-content";
 import { useRef, useState } from "react";
 import { BookArt } from "@/components/blog/book-drawers";
 import { TextReader } from "@/components/reader/text-reader";
-import { caseStudyCopy } from "@/content/case-studies";
-import { recentlyRead as rr } from "@/content/study";
+import { useLang, useT } from "@/i18n/lang-context";
 
 /** Study / Recently read carousel (Figma 891:86899): one book at a time, dots + swipe. */
 export function RecentlyRead() {
+  const rr = useT("recentlyRead");
+  const lang = useLang();
+  const caseStudyCopy = useT("caseStudyCopy");
   const { books } = useSiteContent();
   // Books that were unpublished or deleted drop out of the carousel.
   const items = rr.books.flatMap((b) => {
@@ -48,7 +50,7 @@ export function RecentlyRead() {
                 <h3 className="type-page-title w-full text-primary">{book.title}</h3>
                 <p className="type-caption w-full whitespace-pre-wrap text-secondary">{`${book.author}  ·  ${topic}`}</p>
                 <p className="type-body w-full text-secondary tablet:line-clamp-2">{book.brief.bigIdea}</p>
-                <TextReader title={book.title} text={`${book.title}, by ${book.author}. ${book.brief.bigIdea}`} lang="en" labels={caseStudyCopy.reader} />
+                <TextReader title={book.title} text={`${book.title}${lang === "en" ? ", by" : " —"} ${book.author}. ${book.brief.bigIdea}`} lang={lang} labels={caseStudyCopy.reader} />
                 <div className="flex w-full items-start justify-between gap-8">
                   <span className="type-caption text-secondary">{rr.progress}</span>
                   <span className="type-label text-brand">{progress}%</span>

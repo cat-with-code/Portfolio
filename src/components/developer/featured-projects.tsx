@@ -5,7 +5,8 @@ import Link from "next/link";
 import { useRef, useState } from "react";
 import { covers } from "@/components/projects/project-cover";
 import { useDrawer } from "@/components/shell/drawer-provider";
-import { developer, type FeaturedProject } from "@/content/developer";
+import { type FeaturedProject } from "@/content/developer";
+import { useT } from "@/i18n/lang-context";
 
 /** Artwork box per view, as % of the square slide (from the Figma variants). */
 const views = [
@@ -69,6 +70,7 @@ function Gallery({ project }: { project: FeaturedProject }) {
 
 /** Projects / Featured project carousel / Wide (Figma 1114:3471) — 5 projects, dots switch project. */
 export function FeaturedProjects({ lang }: { lang: string }) {
+  const developer = useT("developer");
   const [active, setActive] = useState(0);
   const { setOpen } = useDrawer();
   const p = developer.featured[active];

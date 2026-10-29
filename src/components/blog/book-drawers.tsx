@@ -13,9 +13,9 @@ import { BookPsychologyOfMoneyArt } from "@/components/illustrations/book-psycho
 import { TextReader } from "@/components/reader/text-reader";
 import { useDrawer, useDrawerPayload, useDrawerState } from "@/components/shell/drawer-provider";
 import { SidePanel } from "@/components/ui/side-panel";
-import { caseStudyCopy } from "@/content/case-studies";
-import { bookCover, library, type Book } from "@/content/books";
+import { bookCover, type Book } from "@/content/books";
 import { GlyphClose, panelPlacement } from "./blog-drawers";
+import { useLang, useT } from "@/i18n/lang-context";
 
 const covers: Record<string, ComponentType<SVGProps<SVGSVGElement>>> = {
   "atomic-habits": BookAtomicHabitsArt,
@@ -42,6 +42,7 @@ export function BookArt({ book, className = "" }: { book: Book; className?: stri
 
 /** Study / Book Library drawer (Figma 694:20083): one row per book; Brief opens the book brief. */
 export function LibraryDrawer({ closeLabel }: { closeLabel: string }) {
+  const library = useT("library");
   const { books } = useSiteContent();
   const state = useDrawerState("book-library");
   const { setOpen } = useDrawer();
@@ -90,13 +91,16 @@ export function LibraryDrawer({ closeLabel }: { closeLabel: string }) {
 
 /** Study / Book brief drawer (Figma 694:21938 · Study / Book brief 1195:4785). */
 export function BriefDrawer({ closeLabel }: { closeLabel: string }) {
+  const lang = useLang();
+  const library = useT("library");
+  const caseStudyCopy = useT("caseStudyCopy");
   const state = useDrawerState("book-brief");
   const { setOpen } = useDrawer();
   const key = useDrawerPayload("book-brief");
   const { books } = useSiteContent();
   const book = books.find((b) => b.key === key) ?? books[0];
   if (!book) return null;
-  const spoken = [book.title, `by ${book.author}.`, book.brief.bigIdea, ...book.brief.ideas, book.brief.sentence, book.brief.question].join(" ");
+  const spoken = [book.title, lang === "en" ? `by ${book.author}.` : `— ${book.author}.`, book.brief.bigIdea, ...book.brief.ideas, book.brief.sentence, book.brief.question].join(" ");
   return (
     <SidePanel {...state} title={book.title} className={`${panelPlacement} border border-general-subtle bg-surface-elevated`}>
       <div className="flex w-full shrink-0 items-center justify-between gap-12 tablet:gap-10">
@@ -115,7 +119,7 @@ export function BriefDrawer({ closeLabel }: { closeLabel: string }) {
               <h2 className="type-kpi w-full text-primary">{book.title}</h2>
               <p className="type-ui w-full whitespace-pre-wrap text-secondary">{`${book.author}  ·  ${book.topic}`}</p>
             </div>
-            <TextReader key={book.key} title={book.title} text={spoken} lang="en" labels={caseStudyCopy.reader} bordered />
+            <TextReader key={book.key} title={book.title} text={spoken} lang={lang} labels={caseStudyCopy.reader} bordered />
           </div>
           <section className="flex w-full flex-col gap-8">
             <p className="type-eyebrow text-brand">{library.bigIdea}</p>

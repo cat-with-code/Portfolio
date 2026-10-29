@@ -8,9 +8,7 @@ import type { ReactNode } from "react";
 
 function Bone({ className = "" }: { className?: string }) {
   return (
-    <span aria-hidden className={`relative block shrink-0 overflow-clip bg-surface-secondary ${className}`}>
-      <span className="absolute inset-0 -translate-x-full bg-linear-to-r from-transparent via-(--color-bg-surface-primary) to-transparent opacity-70 motion-safe:animate-shimmer" />
-    </span>
+    <span aria-hidden className={`skeleton-bone block shrink-0 motion-safe:animate-shimmer ${className}`} />
   );
 }
 

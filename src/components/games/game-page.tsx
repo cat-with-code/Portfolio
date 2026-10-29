@@ -3,9 +3,10 @@
 import dynamic from "next/dynamic";
 import { useCallback, useEffect, useRef, useState, type ComponentType, type ReactNode } from "react";
 import { ChevronLeftIcon, PauseIcon, PlayFilledIcon, PencilIcon, VolumeOffIcon, VolumeOnIcon } from "@/components/icons";
-import { games, panelCopy as pc, type GameKey } from "@/content/games";
+import { type GameKey } from "@/content/games";
 import { BotIcon, InfoIcon, LightbulbIcon, LinkIcon20, TrophyIcon, UndoIcon, UserIcon, UsersIcon, ZapIcon } from "./icons";
 import type { Controls, DuelEnd, GameProps, Mode, Report, SoloEnd } from "./types";
+import { useT } from "@/i18n/lang-context";
 
 const load = (fn: () => Promise<{ default: ComponentType<GameProps> }>) => dynamic(fn, { ssr: false, loading: () => <div className="size-full animate-pulse rounded-card bg-surface-primary/40" /> });
 const registry: Record<GameKey, ComponentType<GameProps>> = {
@@ -148,6 +149,8 @@ const Avatar = ({ children, tone }: { children: ReactNode; tone: "brand" | "viol
 
 /** Games / Game page (Figma 1239:95379) — board stage + Games / Play panel (Setup → Playing → Result). */
 export function GamePlay({ gameKey, stageClass }: { gameKey: GameKey; stageClass: string }) {
+  const pc = useT("panelCopy");
+  const games = useT("games");
   const game = games[gameKey];
   const duel = game.kind === "duel";
   const Game = registry[gameKey];

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ArrowRightIcon } from "@/components/icons";
-import { games, type GameKey } from "@/content/games";
+import { games as english, type GameKey } from "@/content/games";
+import { tr } from "@/i18n/content";
 
 export const href = (lang: string, key: GameKey) => `/${lang}/games/${key}`;
 
@@ -9,6 +10,7 @@ export function Badge({ children }: { children: string }) {
 }
 
 export function PlayButton({ lang, game, label, className = "" }: { lang: string; game: GameKey; label?: string; className?: string }) {
+  const games = tr(lang, "games");
   return (
     <Link
       href={href(lang, game)}
@@ -28,12 +30,13 @@ function Art({ game, className = "" }: { game: GameKey; className?: string }) {
 }
 
 const shell = (game: GameKey) => {
-  const tint = games[game].tint;
+  const tint = english[game].tint;
   return `${tint} ${tint === "bg-surface-primary" ? "border border-general-default" : ""} rounded-card`;
 };
 
 /** Games / Game card — Layout=Row: 112 art, copy, round play button. */
 export function RowCard({ lang, game }: { lang: string; game: GameKey }) {
+  const games = tr(lang, "games");
   const g = games[game];
   return (
     <article className={`flex w-full items-center gap-16 p-16 ${shell(game)}`}>
@@ -52,6 +55,7 @@ export function RowCard({ lang, game }: { lang: string; game: GameKey }) {
 
 /** Games / Game card — Layout=Cover: art on top, centred copy and a play pill. */
 export function CoverCard({ lang, game, artHeight = "h-144" }: { lang: string; game: GameKey; artHeight?: string }) {
+  const games = tr(lang, "games");
   const g = games[game];
   return (
     <article className={`flex w-full flex-col items-stretch gap-12 p-16 ${shell(game)}`}>
@@ -70,6 +74,7 @@ export function CoverCard({ lang, game, artHeight = "h-144" }: { lang: string; g
 
 /** Games / Game card — Layout=Split / Split reversed: copy beside the art (stacked on phones). */
 export function SplitCard({ lang, game, reversed = false, artClass = "" }: { lang: string; game: GameKey; reversed?: boolean; artClass?: string }) {
+  const games = tr(lang, "games");
   const g = games[game];
   return (
     <article className={`flex w-full flex-col items-stretch gap-12 p-16 tablet:items-center tablet:gap-20 tablet:p-20 ${reversed ? "tablet:flex-row-reverse" : "tablet:flex-row"} ${shell(game)}`}>

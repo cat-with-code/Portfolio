@@ -7,10 +7,11 @@ import { useDrawerState } from "@/components/shell/drawer-provider";
 import { applyTheme } from "@/components/shell/theme-toggle";
 import { IconButton } from "@/components/ui/icon-button";
 import { PanelClose, SidePanel } from "@/components/ui/side-panel";
-import { languageOptions, settingsCopy } from "@/content/settings";
+import { languageOptions, settingsCopy as english } from "@/content/settings";
 import type { Dictionary } from "@/i18n/dictionaries";
 import { rememberLocale } from "@/lib/locale-cookie";
 import { LocalTime, type Calendar } from "./clock";
+import { useT } from "@/i18n/lang-context";
 
 type Mode = "light" | "dark" | "system";
 
@@ -85,10 +86,11 @@ function Card({ title, help, children, gap = "gap-8" }: { title: ReactNode; help
 
 /** Settings drawer (Figma Desktop 707:43772 · Tablet 707:43867 · Mobile 707:43956). */
 export function SettingsDrawer({ lang, dict }: { lang: string; dict: Dictionary }) {
+  const settingsCopy = useT("settingsCopy");
   const state = useDrawerState("settings");
   const mode = useThemeMode();
   const router = useRouter();
-  const [voice, setVoice] = useStored<(typeof settingsCopy.voices)[number]>("voice", "Female");
+  const [voice, setVoice] = useStored<(typeof english.voices)[number]>("voice", "Female");
   const [calendar, setCalendar] = useStored<Calendar>("calendar", "gregorian");
 
   const switchLanguage = (next: string) => {
@@ -143,9 +145,9 @@ export function SettingsDrawer({ lang, dict }: { lang: string; dict: Dictionary 
 
         <Card title={settingsCopy.voiceTitle} help={settingsCopy.voiceHelp}>
           <div className="flex h-48 w-full items-center gap-8">
-            {settingsCopy.voices.map((v) => (
+            {english.voices.map((v, i) => (
               <Option key={v} selected={voice === v} onClick={() => setVoice(v)}>
-                <span className="shrink-0">{v}</span>
+                <span className="shrink-0">{settingsCopy.voiceLabels[i]}</span>
               </Option>
             ))}
           </div>

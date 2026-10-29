@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import type { GameProps } from "../types";
 import { useSwipe } from "./use-swipe";
+import { useT } from "@/i18n/lang-context";
 
 type Grid = number[]; // 16 cells, 0 = empty
 type Dir = "left" | "right" | "up" | "down";
@@ -70,6 +71,7 @@ const TILE: Record<number, string> = {
 
 /** 2048 — slide and merge; goal 2048, 4096 or endless. */
 export default function Twenty48({ option, paused, onReport, onEnd, onControls }: GameProps) {
+  const t = useT("panelCopy").inGame.twenty48;
   const goal = [2048, 4096, Infinity][option];
   const [grid, setGrid] = useState<Grid>(() => addTile(addTile(Array(16).fill(0))));
   const [pts, setPts] = useState(0);
@@ -131,7 +133,7 @@ export default function Twenty48({ option, paused, onReport, onEnd, onControls }
           </div>
         ))}
       </div>
-      <p className="type-caption h-18 text-secondary">{hint ? `Try swiping ${hint}.` : "Arrow keys or swipe to move."}</p>
+      <p className="type-caption h-18 text-secondary">{hint ? t.swipe(hint) : t.keys}</p>
     </div>
   );
 }

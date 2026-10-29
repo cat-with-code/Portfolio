@@ -11,6 +11,7 @@ import "server-only";
 import { createClient } from "@supabase/supabase-js";
 import { cacheLife, cacheTag } from "next/cache";
 import type { SiteContent } from "@/components/content/site-content";
+import { translateRow } from "./content-translations";
 import { posts as filePosts, type Post } from "@/content/blog";
 import type { Block } from "@/content/blocks";
 import { books as fileBooks, type Book } from "@/content/books";
@@ -35,7 +36,7 @@ type Status = "draft" | "published";
 type Client = ReturnType<typeof createClient>;
 
 /** Reads every content table with `db`; visitors' reads are limited to published rows (the database enforces it too). */
-async function load(db: Client, publishedOnly: boolean): Promise<SiteContent> {
+async function load(db: Client, publishedOnly: boolean, lang = "en"): Promise<SiteContent> {
   const pick = <T,>(q: T & { eq: (c: string, v: string) => T }) => (publishedOnly ? q.eq("status", "published") : q);
   const [posts, projects, tracks, books, links] = await Promise.all([
     pick(db.from("posts").select("slug,title,display_title,topic,filter,category,minutes,excerpt,dek,cover_url,body,published_at,status")).order("sort"),
@@ -47,10 +48,11 @@ async function load(db: Client, publishedOnly: boolean): Promise<SiteContent> {
   const failed = [posts, projects, tracks, books, links].find((r) => r.error);
   if (failed?.error) throw new Error(`Couldn't load content from Supabase: ${failed.error.message}`);
 
-  const postRows = (posts.data ?? []) as (PostRow & { status: Status })[];
-  const projectRows = (projects.data ?? []) as (ProjectRow & { status: Status })[];
+  // Visitors reading in Khmer / Chinese get the translated text where it's up to date (the dashboard stays English).
+  const postRows = ((posts.data ?? []) as (PostRow & { status: Status })[]).map((r) => translateRow("posts", r, lang));
+  const projectRows = ((projects.data ?? []) as (ProjectRow & { status: Status })[]).map((r) => translateRow("projects", r, lang));
   const trackRows = (tracks.data ?? []) as (TrackRow & { id: string; status: Status })[];
-  const bookRows = (books.data ?? []) as (BookRow & { status: Status })[];
+  const bookRows = ((books.data ?? []) as (BookRow & { status: Status })[]).map((r) => translateRow("books", r, lang));
   const content: SiteContent = {
     posts: Object.fromEntries(
       postRows.map((p) => [
@@ -104,13 +106,13 @@ async function load(db: Client, publishedOnly: boolean): Promise<SiteContent> {
   return content;
 }
 
-/** What visitors see: published content, cached and tagged "content". */
-export async function getSiteContent(): Promise<SiteContent> {
+/** What visitors see: published content in `lang` (English when there's no translation), cached and tagged "content". */
+export async function getSiteContent(lang = "en"): Promise<SiteContent> {
   "use cache";
   cacheTag("content");
   cacheLife("hours");
   if (!supabaseConfigured) return fromFiles();
-  return load(createClient(url!, anonKey!, { auth: { persistSession: false, autoRefreshToken: false } }), true);
+  return load(createClient(url!, anonKey!, { auth: { persistSession: false, autoRefreshToken: false } }), true, lang);
 }
 
 /**

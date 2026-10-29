@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import type { GameProps } from "../types";
+import { useT } from "@/i18n/lang-context";
 
 type Hand = 0 | 1 | 2; // rock, paper, scissors
 const HANDS = [
@@ -68,8 +69,9 @@ export default function RockPaperScissors({ mode, level, paused, onReport, onEnd
     }
   };
 
-  const outcome = reveal && a !== null && b !== null ? (a === b ? "Draw" : beats(a, b) ? (mode === 1 ? "You win the round" : "Player 1 wins the round") : mode === 1 ? "Sdabby wins the round" : "Player 2 wins the round") : null;
-  const prompt = mode === 2 ? (a === null ? "Player 1 — choose in secret" : b === null ? "Player 2 — your turn" : "") : "Make your move";
+  const t = useT("panelCopy").inGame.rps;
+  const outcome = reveal && a !== null && b !== null ? (a === b ? t.draw : beats(a, b) ? (mode === 1 ? t.youRound : t.playerRound(1)) : mode === 1 ? t.sdabbyRound : t.playerRound(2)) : null;
+  const prompt = mode === 2 ? (a === null ? t.chooseSecret : b === null ? t.p2Turn : "") : t.makeMove;
 
   return (
     <div className="flex w-full max-w-(--board) flex-col items-center gap-24">
@@ -79,7 +81,7 @@ export default function RockPaperScissors({ mode, level, paused, onReport, onEnd
             <div className={`flex size-120 items-center justify-center rounded-full text-[56px] shadow-[0_6px_0_rgb(0_0_0/0.18)] ${i === 0 ? "bg-[#cfe3f7]" : "bg-[#f7d3d1]"}`} aria-live="polite">
               {reveal && h !== null ? HANDS[h].glyph : h !== null ? "✔︎" : "?"}
             </div>
-            <span className="type-label text-secondary">{i === 0 ? (mode === 1 ? "You" : "Player 1") : mode === 1 ? "Sdabby" : "Player 2"}</span>
+            <span className="type-label text-secondary">{i === 0 ? (mode === 1 ? t.you : t.player(1)) : mode === 1 ? "Sdabby" : t.player(2)}</span>
           </div>
         ))}
       </div>
@@ -94,7 +96,7 @@ export default function RockPaperScissors({ mode, level, paused, onReport, onEnd
             className="flex w-108 cursor-pointer flex-col items-center gap-4 rounded-xl bg-surface-primary py-12 shadow-[0_4px_0_rgb(0_0_0/0.12)] transition-transform duration-150 hover:-translate-y-2 disabled:cursor-not-allowed disabled:opacity-(--opacity-disabled) disabled:hover:translate-y-0"
           >
             <span className="text-[36px] leading-none" aria-hidden>{h.glyph}</span>
-            <span className="type-label text-primary">{h.name}</span>
+            <span className="type-label text-primary">{t.moves[i]}</span>
           </button>
         ))}
       </div>

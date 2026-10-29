@@ -1,16 +1,18 @@
 import type { ComponentType } from "react";
 import { BadgeCheckIcon, MonitorIcon, MoonFilledIcon } from "@/components/icons";
 import { projectsPage } from "@/content/projects";
+import { tr } from "@/i18n/content";
+import { getLocale } from "@/i18n/dictionaries";
 
-const { explorations: e } = projectsPage;
-const icons: Record<(typeof e.workbench.topics)[number]["key"], ComponentType<{ className?: string }>> = {
+const icons: Record<(typeof projectsPage.explorations.workbench.topics)[number]["key"], ComponentType<{ className?: string }>> = {
   responsive: MonitorIcon,
   themes: MoonFilledIcon,
   accessible: BadgeCheckIcon,
 };
 
 /** Projects / Explorations panel (Figma 859:2248): intro + focus areas, "On the workbench" topics. Wraps to one column. */
-export function Explorations() {
+export async function Explorations() {
+  const e = tr(await getLocale(), "projectsPage").explorations;
   return (
     <section className="flex w-full flex-wrap content-start items-start gap-x-32 gap-y-24 rounded-card bg-surface-primary p-24">
       <div className="flex min-w-280 flex-1 flex-col items-start gap-12 overflow-clip">

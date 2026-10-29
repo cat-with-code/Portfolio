@@ -2,7 +2,9 @@
 
 import { useEffect, useState, useSyncExternalStore } from "react";
 import { CalendarIcon, CoffeeIcon, MoonFilledIcon, SunSmallIcon } from "@/components/icons";
-import { daytimeCopy as d } from "@/content/study";
+import { useLang, useT } from "@/i18n/lang-context";
+import type { daytimeCopy } from "@/content/study";
+import { longDate } from "@/i18n/dates";
 
 const TZ = "Asia/Phnom_Penh";
 
@@ -24,33 +26,37 @@ function subscribe(cb: () => void) {
   return () => clearInterval(id);
 }
 export function usePhnomPenhTime() {
+  const lang = useLang();
   const snap = useSyncExternalStore(subscribe, snapshot, () => null);
   if (!snap) return null;
   const { hour, minute, weekday, day, month, year } = snap.parts;
   const h = Number(hour);
   const m = Number(minute);
-  return { h, m, minutes: h * 60 + m, date: `${weekday}, ${day} ${month} ${year}` };
+  // The date in the page's language: "Thursday, 29 October 2026", "ថ្ងៃព្រហស្បតិ៍ ទី29 ខែតុលា ឆ្នាំ2026", "2026年10月29日星期四"
+  const date = lang === "en" ? `${weekday}, ${day} ${month} ${year}` : longDate(lang, new Date(snap.at), { timeZone: TZ });
+  return { h, m, minutes: h * 60 + m, date };
 }
 const pad = (n: number) => String(n).padStart(2, "0");
 const twelve = (minutes: number) => {
   const h = Math.floor(minutes / 60) % 24;
-  return { text: `${pad(h % 12 || 12)}:${pad(minutes % 60)}`, ampm: h < 12 ? "AM" : "PM" };
+  return { text: `${pad(h % 12 || 12)}:${pad(minutes % 60)}`, am: h < 12 };
 };
 
 // ── Weather (Open-Meteo, no key) ──
 
-const WMO: [number[], string][] = [
-  [[0], "Clear sky"],
-  [[1], "Mainly clear"],
-  [[2], "Partly cloudy"],
-  [[3], "Overcast"],
-  [[45, 48], "Foggy"],
-  [[51, 53, 55, 56, 57], "Drizzle"],
-  [[61, 63, 65, 66, 67], "Rain"],
-  [[80, 81, 82], "Rain showers"],
-  [[95, 96, 99], "Thunderstorm"],
+/** Open-Meteo weather codes → the condition's place in daytimeCopy.conditions */
+const WMO: number[][] = [
+  [0],
+  [1],
+  [2],
+  [3],
+  [45, 48],
+  [51, 53, 55, 56, 57],
+  [61, 63, 65, 66, 67],
+  [80, 81, 82],
+  [95, 96, 99],
 ];
-type Weather = { temp: number; label: string } | "error" | null;
+type Weather = { temp: number; condition: number } | "error" | null;
 function useWeather() {
   const [w, setW] = useState<Weather>(null);
   useEffect(() => {
@@ -61,7 +67,7 @@ function useWeather() {
         .then((j) => {
           if (!alive) return;
           const code = j.current.weather_code as number;
-          setW({ temp: Math.round(j.current.temperature_2m), label: WMO.find(([codes]) => codes.includes(code))?.[1] ?? "—" });
+          setW({ temp: Math.round(j.current.temperature_2m), condition: WMO.findIndex((codes) => codes.includes(code)) });
         })
         .catch(() => alive && setW("error"));
     load();
@@ -89,6 +95,7 @@ function WeatherArt() {
 }
 
 function WeatherPanel({ className = "" }: { className?: string }) {
+  const d = useT("daytimeCopy");
   const w = useWeather();
   return (
     <div
@@ -102,7 +109,7 @@ function WeatherPanel({ className = "" }: { className?: string }) {
       <div className="flex w-full items-center justify-between">
         <div className="flex flex-col gap-4 whitespace-nowrap">
           <p className="type-kpi">{w && w !== "error" ? `${w.temp}°C` : "—"}</p>
-          <p className="type-label">{w && w !== "error" ? w.label : w === "error" ? d.offline.toLowerCase() : "…"}</p>
+          <p className="type-label">{w && w !== "error" ? (d.conditions[w.condition] ?? "—") : w === "error" ? d.offline.toLowerCase() : "…"}</p>
         </div>
         <WeatherArt />
       </div>
@@ -111,10 +118,11 @@ function WeatherPanel({ className = "" }: { className?: string }) {
   );
 }
 
-const greeting = (h: number) => (h < 5 ? d.greetings.night : h < 12 ? d.greetings.morning : h < 18 ? d.greetings.afternoon : h < 22 ? d.greetings.evening : d.greetings.night);
+const greeting = (h: number, d: typeof daytimeCopy) => (h < 5 ? d.greetings.night : h < 12 ? d.greetings.morning : h < 18 ? d.greetings.afternoon : h < 22 ? d.greetings.evening : d.greetings.night);
 
 /** Study / Daytime clock (725:2070): Desktop = weather beside the time, Compact = weather below. */
 export function LocalClock({ className = "" }: { className?: string }) {
+  const d = useT("daytimeCopy");
   const t = usePhnomPenhTime();
   const time = t ? twelve(t.minutes) : null;
   return (
@@ -129,9 +137,9 @@ export function LocalClock({ className = "" }: { className?: string }) {
       <p className="type-eyebrow w-full whitespace-pre text-brand desktop:absolute desktop:top-20 desktop:left-22 desktop:w-236">{d.eyebrow}</p>
       <p className="relative flex items-baseline gap-10 text-[53px] font-bold text-primary tabular-nums desktop:absolute desktop:top-64 desktop:left-21 desktop:leading-[normal]">
         <time suppressHydrationWarning>{time?.text ?? "--:--"}</time>
-        <span className="type-subheading hidden text-brand desktop:inline">{time?.ampm ?? ""}</span>
+        <span className="type-subheading hidden text-brand desktop:inline">{time ? (time.am ? d.am : d.pm) : ""}</span>
       </p>
-      <p className="type-subheading w-full text-primary desktop:absolute desktop:top-134 desktop:left-22 desktop:w-207">{t ? greeting(t.h) : " "}</p>
+      <p className="type-subheading w-full text-primary desktop:absolute desktop:top-134 desktop:left-22 desktop:w-207">{t ? greeting(t.h, d) : " "}</p>
       <p className="type-label w-full text-secondary desktop:absolute desktop:top-159 desktop:left-22 desktop:w-207">{t?.date ?? " "}</p>
       <p className="type-eyebrow flex h-24 w-full items-center justify-center rounded-full bg-surface-primary whitespace-pre text-brand opacity-88 desktop:absolute desktop:top-189 desktop:left-22 desktop:w-208">
         {d.location}
@@ -151,6 +159,7 @@ function dayPart(minutes: number) {
 
 /** Study / Day rhythm (Default 340×228; Tall on tablet adds the sun path). */
 export function DayRhythm({ tall = false, className = "" }: { tall?: boolean; className?: string }) {
+  const d = useT("daytimeCopy");
   const t = usePhnomPenhTime();
   const { index, fraction } = t ? dayPart(t.minutes) : { index: 0, fraction: 0 };
   const part = index >= 0 ? d.rhythm.parts[index] : null;
@@ -212,6 +221,7 @@ export function DayRhythm({ tall = false, className = "" }: { tall?: boolean; cl
 
 /** Study / Focus window (Default; Tall on tablet adds the session timeline and day totals). */
 export function FocusWindow({ tall = false, className = "" }: { tall?: boolean; className?: string }) {
+  const d = useT("daytimeCopy");
   const t = usePhnomPenhTime();
   const start = t ? Math.ceil((t.minutes + 1) / 30) * 30 : 480;
   const a = twelve(start);
@@ -230,7 +240,7 @@ export function FocusWindow({ tall = false, className = "" }: { tall?: boolean; 
       </div>
       <div className="flex w-full flex-col gap-2">
         <p className="type-page-title text-primary tabular-nums">{`${a.text}–${b.text}`}</p>
-        <p className="type-eyebrow whitespace-pre text-brand">{`${a.ampm}  ·  ${d.window.suffix}`}</p>
+        <p className="type-eyebrow whitespace-pre text-brand">{`${a.am ? d.am : d.pm}  ·  ${d.window.suffix}`}</p>
       </div>
       {tall ? (
         <>

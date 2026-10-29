@@ -182,6 +182,8 @@ export const hub = {
   title: "Where design meets play.",
   body: "Classic games, explored through interface design and code. Try a round.",
   count: "16 GAMES",
+  /** Games in one section of the hub */
+  sectionCount: (n: number) => `${n} GAMES`,
   browse: "Browse all games ↗",
   editorsPick: "✦  EDITOR’S PICK",
   chessTags: ["STRATEGY", "1–2 PLAYERS"],
@@ -278,7 +280,26 @@ export const panelCopy = {
     loss: "Loss",
     drawShort: "Draw",
   },
+  /** Text shown inside a few games while playing */
+  inGame: {
+    rps: {
+      moves: ["Rock", "Paper", "Scissors"],
+      draw: "Draw",
+      youRound: "You win the round",
+      sdabbyRound: "Sdabby wins the round",
+      playerRound: (n: number) => `Player ${n} wins the round`,
+      chooseSecret: "Player 1 — choose in secret",
+      p2Turn: "Player 2 — your turn",
+      makeMove: "Make your move",
+      you: "You",
+      player: (n: number) => `Player ${n}`,
+    },
+    chess: { checkmate: "Checkmate", draw: "Draw", thinking: "Sdabby is thinking…", check: "Check!" },
+    twenty48: { swipe: (dir: "up" | "down" | "left" | "right") => `Try swiping ${dir}.`, keys: "Arrow keys or swipe to move." },
+  },
   howTo: "HOW TO PLAY",
+  /** Page title for search results: "Chess — play online" */
+  pageTitle: (game: string) => `${game} — play online`,
   more: "More games to try",
   back: "Back to Game Hub",
   crumb: (section: string) => `GAMES  /  ${section}`,

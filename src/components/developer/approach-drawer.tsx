@@ -7,13 +7,13 @@ import { Button } from "@/components/ui/button";
 import { DrawerHeader } from "@/components/ui/drawer-header";
 import { IconButton } from "@/components/ui/icon-button";
 import { PanelClose, SidePanel } from "@/components/ui/side-panel";
-import { developer } from "@/content/developer";
+import { useT } from "@/i18n/lang-context";
 
-const a = developer.approach;
 const icons: Record<string, ComponentType<SVGProps<SVGSVGElement>>> = { monitor: MonitorIcon, code: CodeIcon, grid: GridIcon, play: CirclePlayIcon };
 
 /** "About my approach" / "My approach" — Button Secondary Small that opens the drawer. */
 export function ApproachButton() {
+  const developer = useT("developer");
   const { setOpen } = useDrawer();
   return (
     <Button variant="secondary" size="small" onClick={() => setOpen("approach")}>
@@ -25,6 +25,7 @@ export function ApproachButton() {
 
 /** Developer / About approach drawer: 640px panel inset 24px from the right (Mobile: full width, 8px inset). */
 export function ApproachDrawer({ closeLabel }: { closeLabel: string }) {
+  const a = useT("developer").approach;
   const state = useDrawerState("approach");
   return (
     <SidePanel {...state} title={a.title} className="inset-8 items-start gap-16 border border-general-default bg-surface-primary p-24 tablet:inset-y-24 tablet:right-24 tablet:left-auto tablet:w-640">

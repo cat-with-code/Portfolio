@@ -3,6 +3,7 @@ import { Suspense, type ReactNode } from "react";
 import { SignatureLogo } from "@/components/icons";
 import { Badge } from "@/components/ui/badge";
 import type { Dictionary } from "@/i18n/dictionaries";
+import { LangProvider } from "@/i18n/lang-context";
 import { BrowseDrawer, PostDrawer } from "@/components/blog/blog-drawers";
 import { BriefDrawer, LibraryDrawer } from "@/components/blog/book-drawers";
 import { ApproachDrawer } from "@/components/developer/approach-drawer";
@@ -31,6 +32,7 @@ import { ThemeToggle } from "./theme-toggle";
 export function AppShell({ lang, dict, children }: { lang: string; dict: Dictionary; children: ReactNode }) {
   const home = `/${lang}`;
   return (
+    <LangProvider lang={lang}>
     <DrawerProvider>
     <SearchProvider>
     {/* Study music and the text reader live here so they keep playing across pages. */}
@@ -103,5 +105,6 @@ export function AppShell({ lang, dict, children }: { lang: string; dict: Diction
     </StudyProvider>
     </SearchProvider>
     </DrawerProvider>
+    </LangProvider>
   );
 }

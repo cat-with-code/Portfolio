@@ -7,8 +7,9 @@ import { useState } from "react";
 import { Blocks } from "@/components/content/blocks";
 import { PanelClose, SidePanel } from "@/components/ui/side-panel";
 import { useDrawer, useDrawerPayload, useDrawerState } from "@/components/shell/drawer-provider";
-import { browse, preview, type PostTopicFilter } from "@/content/blog";
+import { type PostTopicFilter } from "@/content/blog";
 import { PostArt } from "./topic-art";
+import { useT } from "@/i18n/lang-context";
 
 /** Blog drawers place their panel like the other drawers: 544 wide, 24 from the edges; full width (8 inset) on phones. */
 export const panelPlacement = "inset-8 gap-16 p-24 tablet:inset-y-24 tablet:right-24 tablet:left-auto tablet:w-544";
@@ -39,6 +40,8 @@ function Header({ eyebrow, title, closeLabel, height }: { eyebrow: string; title
 
 /** Blog / Browse posts drawer (Figma 694:19844): topic chips filter the list; a row opens its preview. */
 export function BrowseDrawer({ closeLabel }: { closeLabel: string }) {
+  const units = useT("units");
+  const browse = useT("browse");
   const state = useDrawerState("blog-browse");
   const { setOpen } = useDrawer();
   const [filter, setFilter] = useState<"all" | PostTopicFilter>("all");
@@ -62,7 +65,7 @@ export function BrowseDrawer({ closeLabel }: { closeLabel: string }) {
         ))}
       </div>
       <div className="type-eyebrow flex h-30 w-full shrink-0 items-start justify-between gap-8">
-        <p className="text-primary">{String(list.length).padStart(2, "0")} POSTS</p>
+        <p className="text-primary">{units.posts(list.length)}</p>
         <p className="text-secondary">{browse.note}</p>
       </div>
       <div className="flex min-h-0 w-full flex-1 flex-col overflow-y-auto [scrollbar-width:none]">
@@ -83,7 +86,7 @@ export function BrowseDrawer({ closeLabel }: { closeLabel: string }) {
                 <span className="type-card-title w-full text-primary">{post.title}</span>
                 <span className="type-caption w-full text-secondary">{post.dek}</span>
                 <span className="min-h-0 flex-1" />
-                <span className="type-eyebrow w-full text-accent-green">{post.minutes} MIN READ</span>
+                <span className="type-eyebrow w-full text-accent-green">{units.minRead(post.minutes)}</span>
               </span>
             </button>
             <span aria-hidden className="h-px w-full shrink-0 bg-(--color-border-line-divider)" />
@@ -96,6 +99,9 @@ export function BrowseDrawer({ closeLabel }: { closeLabel: string }) {
 
 /** Blog / Post preview drawer — "Inside the story" (Figma 694:20009). */
 export function PostDrawer({ closeLabel }: { closeLabel: string }) {
+  const units = useT("units");
+  const browse = useT("browse");
+  const preview = useT("preview");
   const state = useDrawerState("blog-post");
   const { setOpen } = useDrawer();
   const { posts } = useSiteContent();
@@ -107,7 +113,7 @@ export function PostDrawer({ closeLabel }: { closeLabel: string }) {
       <Header eyebrow={preview.eyebrow} title={preview.title} closeLabel={closeLabel} height="h-62" />
       <p className="type-eyebrow w-full shrink-0 whitespace-pre-wrap text-secondary">
         {`${preview.sample}  ·  ${post.category}  ·  `}
-        <span className="text-accent-green">{post.minutes} MIN READ</span>
+        <span className="text-accent-green">{units.minRead(post.minutes)}</span>
       </p>
       <article className="flex min-h-0 w-full flex-1 flex-col items-start gap-14 overflow-y-auto rounded-card px-16 pt-16 pb-32 [scrollbar-width:none]">
         <h2 className="w-full text-[31px] leading-[40px] font-semibold whitespace-pre-line text-primary">{post.displayTitle ?? post.title}</h2>

@@ -11,23 +11,24 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
-  const { caseStudies, projects } = await getSiteContent();
+  const lang = await getLocale();
+  const { caseStudies, projects } = await getSiteContent(lang);
   const study = caseStudies.find((s) => s.key === slug);
   if (!study) return {};
   const card = projects.find((p) => p.key === slug);
-  return pageMetadata({ lang: await getLocale(), path: `/projects/${slug}`, title: study.title, description: study.summary || card?.description || study.overview.lead, image: card?.coverImage });
+  return pageMetadata({ lang, path: `/projects/${slug}`, title: study.title, description: study.summary || card?.description || study.overview.lead, image: card?.coverImage });
 }
 
 /** Project details (Figma Desktop 1108:92447 · Tablet 1109:73500 · Mobile 1109:95062, one per project). */
 export default async function ProjectPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const { caseStudies, projects } = await getSiteContent();
+  const lang = await getLocale();
+  const { caseStudies, projects } = await getSiteContent(lang);
   const index = caseStudies.findIndex((s) => s.key === slug);
   const study = caseStudies[index];
   if (!study) notFound();
   const next = caseStudies[(index + 1) % caseStudies.length];
   const image = projects.find((p) => p.key === slug)?.coverImage;
-  const lang = await getLocale();
   return (
     <div className="flex w-full flex-col items-start gap-(--layout-gap) pb-32">
       <script
@@ -40,7 +41,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
             url: absolute(`/${lang}/projects/${study.key}`),
             ...(image ? { image: absolute(image) } : {}),
             genre: study.eyebrow,
-            inLanguage: "en",
+            inLanguage: lang,
             author: personJsonLd(lang),
           }),
         }}

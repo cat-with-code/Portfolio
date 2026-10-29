@@ -2,7 +2,7 @@
 
 import { useState, type ReactNode } from "react";
 import { CalendarIcon, ChevronDownIcon, MailIcon, MapIcon } from "@/components/icons";
-import { availability, faq } from "@/content/contact";
+import { useT } from "@/i18n/lang-context";
 
 function Detail({ icon, label, children }: { icon: ReactNode; label: string; children: ReactNode }) {
   return (
@@ -18,6 +18,7 @@ function Detail({ icon, label, children }: { icon: ReactNode; label: string; chi
 
 /** Contact / Availability card (Figma 842:2037). */
 export function AvailabilityCard() {
+  const availability = useT("availability");
   const email = availability.email.value;
   return (
     <section className="flex w-full flex-col items-start gap-16 rounded-card bg-accent-green-subtle p-20" aria-labelledby="contact-availability">
@@ -74,6 +75,7 @@ function FaqItem({ q, a }: { q: string; a: string }) {
 }
 
 export function Faq() {
+  const faq = useT("faq");
   return (
     <section className="flex w-full flex-col items-start gap-12" aria-labelledby="contact-faq">
       <h2 id="contact-faq" className="type-table-heading whitespace-nowrap text-muted">{faq.label}</h2>

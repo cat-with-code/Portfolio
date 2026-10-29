@@ -2,8 +2,12 @@
 
 import { useCallback, useEffect, useState, type CSSProperties } from "react";
 import { CirclePlayIcon, PauseIcon } from "@/components/icons";
-import { clockCopy as c, techniques, type Stage, type Technique } from "@/content/study";
+import { clockCopy, type Stage, type Technique } from "@/content/study";
+
+/** Pomodoro rounds per set (a number, so it never changes with the language). */
+const ROUNDS = clockCopy.rounds;
 import { useStudy } from "./study-provider";
+import { useT } from "@/i18n/lang-context";
 
 const ORDER: Technique[] = ["pomodoro", "deep", "flow"];
 type Run = { stage: Stage; round: number; startedAt: number; endsAt: number; total: number; soonDismissed: boolean };
@@ -67,6 +71,8 @@ function MethodCard({ name, detail, ratio, selected, dot, onClick, disabled }: {
 
 /** Study / Focus clock (Figma 316:6513): Pomodoro, Deep Focus or Flowtime — ready, running, break soon, break. */
 export function FocusClock() {
+  const c = useT("clockCopy");
+  const techniques = useT("techniques");
   const { technique, setTechnique, addSession } = useStudy();
   const [run, setRun] = useState<Run>({ stage: "ready", round: 1, startedAt: 0, endsAt: 0, total: 1, soonDismissed: false });
   const [now, setNow] = useState(0);
@@ -82,7 +88,7 @@ export function FocusClock() {
         switch (action) {
           case "start":
           case "next":
-            return { ...r, stage: "running", round: action === "next" ? (r.round % c.rounds) + 1 : r.round, startedAt: at, endsAt: at + t.focus * 60_000, total: t.focus * 60, soonDismissed: false };
+            return { ...r, stage: "running", round: action === "next" ? (r.round % ROUNDS) + 1 : r.round, startedAt: at, endsAt: at + t.focus * 60_000, total: t.focus * 60, soonDismissed: false };
           case "break": {
             const rest = technique === "flow" ? Math.max(60, Math.round((at - r.startedAt) / 5000)) : t.rest * 60;
             return { ...r, stage: "break", endsAt: at + rest * 1000, total: rest };
@@ -106,7 +112,7 @@ export function FocusClock() {
       if (technique === "flow" && stage === "running") return;
       if (stage === "running" && left <= 60 && !run.soonDismissed) setRun((r) => ({ ...r, stage: "soon" }));
       if ((stage === "running" || stage === "soon") && left <= 0) act("break", n);
-      if (stage === "break" && left <= 0) setRun((r) => ({ ...r, stage: "ready", round: (r.round % c.rounds) + 1 }));
+      if (stage === "break" && left <= 0) setRun((r) => ({ ...r, stage: "ready", round: (r.round % ROUNDS) + 1 }));
     }, 250);
     return () => clearInterval(id);
   }, [stage, technique, run.endsAt, run.soonDismissed, act]);

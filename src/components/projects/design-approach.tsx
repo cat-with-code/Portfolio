@@ -1,9 +1,10 @@
 import type { ComponentType } from "react";
 import { FlagIcon, PencilIcon, RefreshIcon, SearchIcon } from "@/components/icons";
 import { projectsPage } from "@/content/projects";
+import { tr } from "@/i18n/content";
+import { getLocale } from "@/i18n/dictionaries";
 
-const { approach } = projectsPage;
-const icons: Record<(typeof approach.steps)[number]["key"], ComponentType<{ className?: string }>> = {
+const icons: Record<(typeof projectsPage.approach.steps)[number]["key"], ComponentType<{ className?: string }>> = {
   discover: SearchIcon,
   define: FlagIcon,
   design: PencilIcon,
@@ -11,7 +12,8 @@ const icons: Record<(typeof approach.steps)[number]["key"], ComponentType<{ clas
 };
 
 /** Projects / Design approach (Figma 1099:2399): Row = Desktop (4 cards), Grid = Tablet (2×2). Hidden on Mobile. */
-export function DesignApproach() {
+export async function DesignApproach() {
+  const approach = tr(await getLocale(), "projectsPage").approach;
   return (
     <section className="hidden w-full flex-col items-start gap-24 tablet:flex">
       <div className="flex w-full flex-col items-start gap-8 overflow-clip">
@@ -41,7 +43,8 @@ export function DesignApproach() {
 }
 
 /** Projects / Process section (Figma 696:44641): Mobile version of the design approach — numbered list with dividers. */
-export function ProcessList() {
+export async function ProcessList() {
+  const approach = tr(await getLocale(), "projectsPage").approach;
   return (
     <section className="flex w-full flex-col items-start gap-16 tablet:hidden">
       <div className="flex w-full flex-col items-start gap-12 overflow-clip">

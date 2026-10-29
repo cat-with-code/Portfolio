@@ -4,9 +4,13 @@ export const settingsCopy = {
   languageHelp: "Choose English, Khmer, or Chinese.",
   voiceTitle: "Reading voice",
   voiceHelp: "Choose the voice used when you listen to books, blog posts, and projects.",
+  /** Saved values (kept in the visitor's browser — never translated) and the labels shown for them */
   voices: ["Female", "Male", "Neutral"] as const,
+  voiceLabels: ["Female", "Male", "Neutral"],
   localTime: "Local time",
   calendarGregorian: "Gregorian",
+  /** Second line under the Gregorian date */
+  weekDetail: (week: number, day: number, days: number) => `Week ${week}  ·  Day ${day} of ${days}`,
   calendarKhmer: "ខ្មែរ",
   city: "Phnom Penh  ·  GMT+7",
   cityKhmer: "ភ្នំពេញ  ·  GMT+៧",

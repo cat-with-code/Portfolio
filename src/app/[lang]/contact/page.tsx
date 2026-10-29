@@ -3,12 +3,13 @@ import { ContactForm } from "@/components/contact/contact-form";
 import { ContactMap } from "@/components/contact/contact-map";
 import { AvailabilityCard, Faq } from "@/components/contact/sidebar";
 import { SectionHeading } from "@/components/ui/section-heading";
-import { contact } from "@/content/contact";
 import { getLocale } from "@/i18n/dictionaries";
-import { pageMetadata, sectionDescriptions } from "@/lib/seo";
+import { pageMetadata, sectionMeta } from "@/lib/seo";
+import { tr } from "@/i18n/content";
 
 export async function generateMetadata(): Promise<Metadata> {
-  return pageMetadata({ lang: await getLocale(), path: "/contact", title: "Contact", description: sectionDescriptions.contact });
+  const lang = await getLocale();
+  return pageMetadata({ lang, path: "/contact", ...sectionMeta(lang, "contact") });
 }
 
 /**
@@ -16,7 +17,9 @@ export async function generateMetadata(): Promise<Metadata> {
  * Desktop/Tablet: heading → form beside a 360 (Tablet 320) sidebar of availability + FAQ → map.
  * Mobile: map → heading → availability → form → FAQ.
  */
-export default function ContactPage() {
+export default async function ContactPage() {
+  const lang = await getLocale();
+  const contact = tr(lang, "contact");
   return (
     <div className="flex w-full flex-col items-stretch gap-16 pb-96 tablet:gap-20 desktop:gap-24">
       <div className="order-2 tablet:order-none">

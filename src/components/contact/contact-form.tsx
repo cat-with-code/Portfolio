@@ -4,8 +4,8 @@ import { useId, useState, useTransition } from "react";
 import { Button } from "@/components/ui/button";
 import { fieldControl as control, fieldInput as input, FieldShell } from "@/components/ui/field";
 import { ArrowUpIcon, CheckIcon, MailIcon } from "@/components/icons";
-import { availability, form } from "@/content/contact";
 import { sendContactMessage } from "@/lib/contact-action";
+import { useT } from "@/i18n/lang-context";
 
 type Field = "name" | "email" | "message";
 type Errors = Partial<Record<Field, string>>;
@@ -38,6 +38,8 @@ function Chip({ label, on, onToggle }: { label: string; on: boolean; onToggle: (
 
 /** Contact / Form card (Figma 842:2134) — "Send message" → Sent; "Send another message" → back. */
 export function ContactForm() {
+  const availability = useT("availability");
+  const form = useT("form");
   const id = useId();
   const [values, setValues] = useState({ name: "", email: "", message: "", website: "" });
   const [choices, setChoices] = useState<string[]>(form.defaultChoices);

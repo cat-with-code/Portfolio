@@ -2,13 +2,13 @@
 
 import { useState } from "react";
 import { ChevronDownIcon } from "@/components/icons";
-import { magazine } from "@/content/blog";
 import { ArchiveCard } from "./post-card";
+import { useT } from "@/i18n/lang-context";
 
-const { archive } = magazine;
 
 /** Archive / Post list: five rows, then "View more" shows the rest (Blog / View more button 1095:2368, disabled once all are shown). */
 export function Archive() {
+  const { archive } = useT("magazine");
   const [all, setAll] = useState(false);
   const shown = all ? archive.posts : archive.posts.slice(0, archive.initial);
   const done = shown.length === archive.posts.length;

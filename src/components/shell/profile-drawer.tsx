@@ -6,9 +6,10 @@ import type { ComponentType, ReactNode, SVGProps } from "react";
 import { ArrowUpRightIcon, CloseIcon, ContactIcon, FacebookIcon, GitHubIcon, InstagramIcon, MapIcon, TelegramIcon, XIcon } from "@/components/icons";
 import { buttonClasses } from "@/components/ui/button";
 import { PanelClose, SidePanel } from "@/components/ui/side-panel";
-import { contactRows, profile, profileLinks, socials } from "@/content/profile";
+import { profileLinks, socials } from "@/content/profile";
 import type { Dictionary } from "@/i18n/dictionaries";
 import { useDrawer, useDrawerState } from "./drawer-provider";
+import { useT } from "@/i18n/lang-context";
 
 const contactIcons: Record<string, ComponentType<SVGProps<SVGSVGElement>>> = { email: ContactIcon, telegram: TelegramIcon };
 const socialIcons: Record<string, ComponentType<SVGProps<SVGSVGElement>>> = { github: GitHubIcon, instagram: InstagramIcon, facebook: FacebookIcon, x: XIcon };
@@ -29,6 +30,8 @@ const Label = ({ children }: { children: ReactNode }) => <p className="type-tabl
 
 /** Developer profile drawer (Figma Desktop 1143:108025 · Tablet 837:61013 · Mobile 837:46054). */
 export function ProfileDrawer({ lang, dict }: { lang: string; dict: Dictionary }) {
+  const contactRows = useT("contactRows");
+  const profile = useT("profile");
   const state = useDrawerState("profile");
   const { setOpen } = useDrawer();
   const router = useRouter();

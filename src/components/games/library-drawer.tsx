@@ -4,10 +4,13 @@ import Link from "next/link";
 import { GlyphClose, panelPlacement } from "@/components/blog/blog-drawers";
 import { useDrawer, useDrawerState } from "@/components/shell/drawer-provider";
 import { SidePanel } from "@/components/ui/side-panel";
-import { gameOrder, games, hub } from "@/content/games";
+import { gameOrder } from "@/content/games";
+import { useT } from "@/i18n/lang-context";
 
 /** Games / Game Library drawer (Figma 694:12681): all sixteen games with a Play button each. */
 export function GameLibraryDrawer({ lang, closeLabel }: { lang: string; closeLabel: string }) {
+  const games = useT("games");
+  const hub = useT("hub");
   const state = useDrawerState("game-library");
   const { setOpen } = useDrawer();
   return (

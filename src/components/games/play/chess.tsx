@@ -3,6 +3,7 @@
 import { Chess, type Move, type Square } from "chess.js";
 import { useEffect, useRef, useState } from "react";
 import type { GameProps } from "../types";
+import { useT } from "@/i18n/lang-context";
 
 const GLYPH: Record<string, string> = { k: "♚", q: "♛", r: "♜", b: "♝", n: "♞", p: "♟" };
 const VALUE: Record<string, number> = { p: 100, n: 320, b: 330, r: 500, q: 900, k: 0 };
@@ -66,6 +67,7 @@ const clock = (s: number) => `${Math.floor(s / 60)}:${String(Math.floor(s % 60))
 
 /** Chess — full rules (castling, en passant, promotion to queen), optional clocks. */
 export default function ChessGame({ mode, level, side, option, paused, onReport, onEnd, onControls }: GameProps) {
+  const t = useT("panelCopy").inGame.chess;
   const [g] = useState(() => new Chess());
   const [fen, setFen] = useState(() => g.fen());
   const [sel, setSel] = useState<Square | null>(null);
@@ -196,7 +198,7 @@ export default function ChessGame({ mode, level, side, option, paused, onReport,
       </div>
       {clockRow(flipped ? "b" : "w")}
       <p className="type-caption h-18 text-center text-secondary" aria-live="polite">
-        {g.isCheckmate() ? "Checkmate" : g.isDraw() || g.isStalemate() ? "Draw" : thinking ? "Sdabby is thinking…" : inCheck ? "Check!" : ""}
+        {g.isCheckmate() ? t.checkmate : g.isDraw() || g.isStalemate() ? t.draw : thinking ? t.thinking : inCheck ? t.check : ""}
       </p>
     </div>
   );

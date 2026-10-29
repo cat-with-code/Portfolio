@@ -5,11 +5,13 @@ import { PostArt } from "@/components/blog/topic-art";
 import { Blocks } from "@/components/content/blocks";
 import { ArrowRightIcon } from "@/components/icons";
 import { TextReader } from "@/components/reader/text-reader";
-import { postPage as copy, SAMPLE_BLOG } from "@/content/blog";
+import { SAMPLE_BLOG } from "@/content/blog";
+import { tr } from "@/i18n/content";
 import { blocksToText } from "@/content/blocks";
 import { getLocale } from "@/i18n/dictionaries";
 import { getNextPost, getPost, getPosts } from "@/lib/content";
 import { absolute, jsonLd, pageMetadata, personJsonLd } from "@/lib/seo";
+import { longDate } from "@/i18n/dates";
 
 const Rule = () => <div aria-hidden className="h-px w-full shrink-0 bg-(--color-border-line-divider)" />;
 
@@ -18,10 +20,11 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
-  const post = await getPost((await params).slug);
+  const lang = await getLocale();
+  const post = await getPost((await params).slug, lang);
   if (!post) return {};
   return pageMetadata({
-    lang: await getLocale(),
+    lang,
     path: `/blog/${post.slug}`,
     title: post.title,
     description: post.excerpt || post.dek,
@@ -30,14 +33,16 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   });
 }
 
-const date = (iso: string) => new Date(iso).toLocaleDateString("en", { day: "numeric", month: "long", year: "numeric" });
+/** Publish date in the page language: "28 October 2026", "ទី28 ខែតុលា ឆ្នាំ2026", "2026年10月28日". */
+const date = (iso: string, lang: string) => longDate(lang, new Date(iso), { weekday: false });
 
 /** Blog post page: the full article behind a magazine card or the preview drawer. Content comes from lib/content. */
 export default async function PostPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const post = await getPost(slug);
+  const lang = await getLocale();
+  const [post, next] = await Promise.all([getPost(slug, lang), getNextPost(slug, lang)]);
   if (!post) notFound();
-  const [lang, next] = await Promise.all([getLocale(), getNextPost(slug)]);
+  const copy = tr(lang, "postPage");
   const spoken = `${post.title}. ${post.body ? blocksToText(post.body) : post.excerpt}`;
 
   return (
@@ -54,7 +59,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
             ...(post.published ? { datePublished: post.published } : {}),
             ...(post.cover ? { image: absolute(post.cover) } : {}),
             articleSection: post.category,
-            inLanguage: "en",
+            inLanguage: lang,
             author: personJsonLd(lang),
           }),
         }}
@@ -73,13 +78,13 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
         <p className="type-eyebrow flex flex-wrap items-center gap-x-12 gap-y-8 whitespace-pre text-secondary">
           {SAMPLE_BLOG && <span className="rounded-full bg-status-warning-subtle px-10 py-2 text-primary">{copy.sample}</span>}
           <span>{post.category}</span>
-          <span className="text-accent-green">{post.minutes} MIN READ</span>
+          <span className="text-accent-green">{tr(lang, "units").minRead(post.minutes)}</span>
         </p>
         <h1 className="type-large-metric tablet:type-display w-full whitespace-pre-line text-primary">{post.displayTitle ?? post.title}</h1>
         <p className="type-body w-full max-w-680 text-secondary">{post.dek}</p>
         <p className="type-eyebrow whitespace-pre-wrap text-brand">
           {copy.byline}
-          {post.published && `   /   ${date(post.published).toUpperCase()}`}
+          {post.published && `   /   ${date(post.published, lang).toUpperCase()}`}
         </p>
       </header>
 
@@ -90,7 +95,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
 
       {/* Body */}
       <div className="mx-auto flex w-full max-w-680 flex-col items-start gap-24 py-32 tablet:py-48">
-        <TextReader title={post.title} text={spoken} lang="en" labels={copy.reader} bordered />
+        <TextReader title={post.title} text={spoken} lang={lang} labels={copy.reader} bordered />
         {post.body ? (
           <Blocks blocks={post.body} />
         ) : (

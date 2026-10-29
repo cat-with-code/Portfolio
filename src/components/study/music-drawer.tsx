@@ -5,11 +5,12 @@ import { useState } from "react";
 import { ChevronLeftIcon, ChevronRightIcon, CloseIcon, PlaylistIcon, PlusIcon, TrashIcon } from "@/components/icons";
 import { useDrawer, useDrawerPayload, useDrawerState } from "@/components/shell/drawer-provider";
 import { PanelClose, SidePanel } from "@/components/ui/side-panel";
-import { audioCopy as a, vibes, type Vibe } from "@/content/study";
+import { type Vibe } from "@/content/study";
 import { youTubeId, youTubeInfo, youTubeThumb } from "@/lib/youtube";
 import { CustomCover, covers } from "./focus-audio";
 import { useStudy, type CustomSong, type Playlist } from "./study-provider";
 import { uid } from "@/lib/uid";
+import { useT } from "@/i18n/lang-context";
 
 const CustomArt = covers.custom;
 const sourceOf = (url: string) =>
@@ -35,6 +36,7 @@ function EmptyState({ title, hint, action }: { title: string; hint: string; acti
 
 /** Audio / Custom playlists (1018:2540): Empty → Create → Detail ↔ List. Songs are links that open on their own site. */
 function CustomPlaylists() {
+  const a = useT("audioCopy");
   const { playlists, savePlaylists, playCustom, customSong, status, stop } = useStudy();
   const [view, setView] = useState<{ mode: "list" | "create" | "detail"; id?: string }>({ mode: "list" });
   const [name, setName] = useState("");
@@ -238,6 +240,8 @@ function CustomPlaylists() {
 
 /** Music library drawer — Audio / Track library (523:11967): browse the five vibes, or your own playlists. */
 export function MusicDrawer({ closeLabel }: { closeLabel: string }) {
+  const a = useT("audioCopy");
+  const vibes = useT("vibes");
   const { tracks } = useSiteContent();
   const state = useDrawerState("study-music");
   const opened = useDrawerPayload("study-music") as Vibe | "custom" | null;

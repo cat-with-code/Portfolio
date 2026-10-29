@@ -2,13 +2,14 @@
 
 import { useState, type ComponentType, type SVGProps } from "react";
 import { ArrowUpIcon, LinkIcon, MicrophoneIcon, PencilIcon, PlusIcon, RobotIcon, SparklesIcon, ZoomInIcon } from "@/components/icons";
-import { developer, sdabbyUrl } from "@/content/developer";
+import { sdabbyUrl } from "@/content/developer";
+import { useT } from "@/i18n/lang-context";
 
-const lab = developer.aiLab;
 const starterIcons: Record<string, ComponentType<SVGProps<SVGSVGElement>>> = { zoom: ZoomInIcon, sparkles: SparklesIcon, pencil: PencilIcon };
 
 /** AI / Chat message (677:3553) Layout=Assistant: 28px Sdabby avatar, SDABBY label, message. */
 function AssistantMessage({ text }: { text: string }) {
+  const lab = useT("developer").aiLab;
   return (
     <div className="flex w-full items-start gap-12 overflow-clip">
       <span className="flex size-28 shrink-0 items-center justify-center overflow-clip rounded-full bg-brand text-icon-on-brand">
@@ -35,6 +36,7 @@ function UserMessage({ text }: { text: string }) {
 
 /** AI / Chat panel (Figma 677:3722). The composer is the prototype's visual sample — a real model connects later. */
 function ChatPanel({ question, reply, onAsk }: { question: string; reply: string; onAsk: (q: string, r: string) => void }) {
+  const lab = useT("developer").aiLab;
   const tryButton = "flex size-40 shrink-0 items-center justify-center gap-4 overflow-clip rounded-full bg-brand p-0 text-icon-on-brand";
   return (
     <div className="flex min-w-0 flex-1 flex-col items-start gap-12 overflow-clip rounded-shell bg-surface-primary p-20">
@@ -98,6 +100,7 @@ function ChatPanel({ question, reply, onAsk }: { question: string; reply: string
 
 /** AI / Support card (Figma 677:3642) Layout=Prompts. */
 function PromptsCard({ onAsk }: { onAsk: (q: string, r: string) => void }) {
+  const lab = useT("developer").aiLab;
   const p = lab.prompts;
   return (
     <div className="flex w-full flex-col items-start gap-12 overflow-clip rounded-shell bg-accent-violet-subtle p-20">
@@ -140,6 +143,7 @@ function PromptsCard({ onAsk }: { onAsk: (q: string, r: string) => void }) {
 
 /** AI / Support card Layout=Workflow: Ask → Explore → Refine. */
 function WorkflowCard() {
+  const lab = useT("developer").aiLab;
   const w = lab.workflow;
   return (
     <div className="flex w-full flex-col items-start gap-12 overflow-clip rounded-shell bg-accent-green-subtle p-20">
@@ -172,6 +176,7 @@ function WorkflowCard() {
 
 /** Developer / AI Playground section: heading + two-column bento (chat panel + supporting cards). */
 export function AiLab() {
+  const lab = useT("developer").aiLab;
   const [chat, setChat] = useState<{ question: string; reply: string }>({ ...lab.conversation });
   const ask = (question: string, reply: string) => setChat({ question, reply });
   return (

@@ -3,18 +3,20 @@ import { Archive } from "@/components/blog/archive";
 import { LibraryButton, OpenDrawer } from "@/components/blog/drawer-triggers";
 import { CoverStoryCard, FeatureCard } from "@/components/blog/post-card";
 import { ReadingRoom } from "@/components/blog/reading-room";
-import { magazine as m } from "@/content/blog";
 import { getLocale } from "@/i18n/dictionaries";
-import { pageMetadata, sectionDescriptions } from "@/lib/seo";
+import { pageMetadata, sectionMeta } from "@/lib/seo";
+import { tr } from "@/i18n/content";
 
 const Rule = ({ className = "" }: { className?: string }) => <div aria-hidden className={`h-px w-full shrink-0 bg-(--color-border-line-divider) ${className}`} />;
 
 export async function generateMetadata(): Promise<Metadata> {
-  return pageMetadata({ lang: await getLocale(), path: "/blog", title: "The Notebook — Blog", description: sectionDescriptions.blog });
+  const lang = await getLocale();
+  return pageMetadata({ lang, path: "/blog", ...sectionMeta(lang, "blog") });
 }
 
 /** Blog — The Notebook magazine (Figma Desktop 694:19591 · Tablet 696:35187 · Mobile 696:41849). Posts are sample content. */
-export default function BlogPage() {
+export default async function BlogPage() {
+  const m = tr(await getLocale(), "magazine");
   return (
     <div className="flex w-full flex-col items-start pb-32">
       <div className="flex w-full flex-col items-start gap-16 tablet:gap-0 tablet:pt-2">

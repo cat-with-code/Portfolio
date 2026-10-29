@@ -2,7 +2,8 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 import { ArrowRightIcon } from "@/components/icons";
 import { TextReader } from "@/components/reader/text-reader";
-import { caseStudyCopy as copy, type CaseStudy as Study } from "@/content/case-studies";
+import { type CaseStudy as Study } from "@/content/case-studies";
+import { tr } from "@/i18n/content";
 import { CaseCover } from "./case-cover";
 
 const Rule = () => <div aria-hidden className="h-px w-full shrink-0 bg-(--color-border-line-divider)" />;
@@ -23,6 +24,7 @@ function Section({ eyebrow, title, children }: { eyebrow: string; title: string;
 /** Projects / Case study (Figma 1108:92445): Desktop · Tablet · Mobile layouts of one project page. */
 /** `preview` (dashboard Publish review) leaves out the audio reader, which needs the site's providers. */
 export function CaseStudy({ lang, study, next, image, preview = false }: { lang: string; study: Study; next?: Study; image?: string; preview?: boolean }) {
+  const copy = tr(lang, "caseStudyCopy");
   const spoken = [
     study.title,
     study.summary,

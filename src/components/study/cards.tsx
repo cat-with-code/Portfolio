@@ -3,9 +3,9 @@
 import { useEffect, useRef, useState } from "react";
 import { BookOpenIcon, CheckIcon, CloseIcon, PencilIcon, PlusIcon, SparklesIcon } from "@/components/icons";
 import { Button } from "@/components/ui/button";
-import { goalCopy, intentionCopy as ic, planCopy as pc, reminderCopy as rc, techniques } from "@/content/study";
 import { useStudy } from "./study-provider";
 import { uid } from "@/lib/uid";
+import { useT } from "@/i18n/lang-context";
 
 function useStored<T>(key: string, fallback: T) {
   const [value, setValue] = useState<T>(fallback);
@@ -27,6 +27,7 @@ function useStored<T>(key: string, fallback: T) {
 
 /** Study / Intention card (Figma 696:13752): View → Editing (focus, plan, quick start) → Saved. */
 export function IntentionCard({ className = "" }: { className?: string }) {
+  const ic = useT("intentionCopy");
   const [saved, setSaved] = useStored<{ focus: string; plan: string } | null>("study-intention", null);
   const [editing, setEditing] = useState(false);
   const [focus, setFocus] = useState(ic.defaultFocus);
@@ -126,11 +127,12 @@ export function IntentionCard({ className = "" }: { className?: string }) {
 }
 
 type Task = { id: string; text: string; done: boolean };
-const defaults: Task[] = pc.defaults.map((text, i) => ({ id: `d${i}`, text, done: false }));
+const toTasks = (list: readonly string[]): Task[] => list.map((text, i) => ({ id: `d${i}`, text, done: false }));
 
 /** Study / Plan card (Figma 696:13762): today's checklist — tick, remove, add. Saved per browser. */
 export function PlanCard({ className = "" }: { className?: string }) {
-  const [tasks, setTasks] = useStored<Task[]>("study-plan", defaults);
+  const pc = useT("planCopy");
+  const [tasks, setTasks] = useStored<Task[]>("study-plan", toTasks(pc.defaults));
   const [adding, setAdding] = useState(false);
   const [draft, setDraft] = useState("");
   const input = useRef<HTMLInputElement>(null);
@@ -209,6 +211,9 @@ export function PlanCard({ className = "" }: { className?: string }) {
 
 /** Study / Focus goal (Figma 696:13793): the selected technique's length and today's sessions out of four. */
 export function GoalCard({ className = "" }: { className?: string }) {
+  const units = useT("units");
+  const goalCopy = useT("goalCopy");
+  const techniques = useT("techniques");
   const { technique, sessionsToday } = useStudy();
   const minutes = techniques[technique].focus;
   const n = Math.min(4, sessionsToday);
@@ -219,7 +224,7 @@ export function GoalCard({ className = "" }: { className?: string }) {
       <div className="flex w-full items-center gap-16">
         <div className="flex min-w-0 flex-1 flex-col gap-4">
           <p className="type-eyebrow text-secondary">{goalCopy.eyebrow}</p>
-          <p className="type-section-heading text-primary">{minutes ? `${minutes} min` : "Flexible"}</p>
+          <p className="type-section-heading text-primary">{minutes ? units.minutes(minutes) : units.flexible}</p>
           <p className="type-caption text-secondary">{goalCopy.footer}</p>
         </div>
         <div className="relative size-64 shrink-0" role="img" aria-label={`${n} of 4 sessions today`}>
@@ -236,6 +241,7 @@ export function GoalCard({ className = "" }: { className?: string }) {
 
 /** Study / Focus reminder (Figma 696:13813). */
 export function ReminderCard({ className = "" }: { className?: string }) {
+  const rc = useT("reminderCopy");
   return (
     <section className={`flex flex-col gap-8 rounded-card bg-surface-primary p-20 ${className}`}>
       <p className="type-eyebrow text-secondary">{rc.eyebrow}</p>

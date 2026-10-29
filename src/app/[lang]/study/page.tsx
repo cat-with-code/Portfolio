@@ -6,16 +6,20 @@ import { FocusClock } from "@/components/study/focus-clock";
 import { MusicDrawer } from "@/components/study/music-drawer";
 import { RecentlyRead } from "@/components/study/recently-read";
 import { FavoriteBooksButton, LibraryLink } from "@/components/study/triggers";
-import { recentlyRead as rr, welcome } from "@/content/study";
 import { getDictionary, getLocale } from "@/i18n/dictionaries";
-import { pageMetadata, sectionDescriptions } from "@/lib/seo";
+import { pageMetadata, sectionMeta } from "@/lib/seo";
+import { tr } from "@/i18n/content";
 
 export async function generateMetadata(): Promise<Metadata> {
-  return pageMetadata({ lang: await getLocale(), path: "/study", title: "Study", description: sectionDescriptions.study });
+  const lang = await getLocale();
+  return pageMetadata({ lang, path: "/study", ...sectionMeta(lang, "study") });
 }
 
 /** Study — Focus Studio (Figma Desktop 694:14994 · Tablet 696:33340 · Mobile 696:40002). */
 export default async function StudyPage() {
+  const lang = await getLocale();
+  const rr = tr(lang, "recentlyRead");
+  const welcome = tr(lang, "welcome");
   const dict = await getDictionary();
   return (
     <>

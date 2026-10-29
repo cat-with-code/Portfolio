@@ -15,7 +15,8 @@ import {
   SearchIcon,
   StudyIcon18,
 } from "@/components/icons";
-import { searchGroups, searchIndex, searchMatches, searchSuggestions, type SearchGroup, type SearchIconKey, type SearchItem } from "@/lib/search-index";
+import { searchIndex as englishIndex, searchMatches, type SearchGroup, type SearchIconKey, type SearchItem } from "@/lib/search-index";
+import { useT } from "@/i18n/lang-context";
 import { Chip } from "@/components/ui/chip";
 import { useSearch } from "./search-provider";
 
@@ -94,6 +95,9 @@ const subscribeDesktop = (cb: () => void) => {
 
 /** Global search overlay (Desktop 710:44121 · Tablet 710:44232 · Mobile 710:44343). */
 export function SearchDialog({ lang, copy }: { lang: string; copy: SearchCopy }) {
+  const searchGroups = useT("searchGroups");
+  const searchIndex = useT("searchIndex");
+  const searchSuggestions = useT("searchSuggestions");
   const { open, setOpen } = useSearch();
   const router = useRouter();
   const [query, setQuery] = useState("");
@@ -101,11 +105,13 @@ export function SearchDialog({ lang, copy }: { lang: string; copy: SearchCopy })
   const isDesktop = useSyncExternalStore(subscribeDesktop, () => window.matchMedia(desktopQuery).matches, () => true);
 
   const groupsWithContent = searchGroups.filter((g) => searchIndex.some((i) => i.group === g.key));
-  const suggestions = searchSuggestions.filter((s) => searchIndex.some((i) => searchMatches(i, s)));
+  // On translated pages a result also matches its English wording, so typing in English always works.
+  const matches = (i: SearchItem, q: string) => searchMatches(i, q) || searchMatches(englishIndex.find((e) => e.id === i.id) ?? i, q);
+  const suggestions = searchSuggestions.filter((s) => searchIndex.some((i) => matches(i, s)));
 
   const results = useMemo(
-    () => searchIndex.filter((i) => (filter === "all" || i.group === filter) && searchMatches(i, query)),
-    [filter, query]
+    () => searchIndex.filter((i) => (filter === "all" || i.group === filter) && (searchMatches(i, query) || searchMatches(englishIndex.find((e) => e.id === i.id) ?? i, query))),
+    [searchIndex, filter, query]
   );
 
   const reset = () => {

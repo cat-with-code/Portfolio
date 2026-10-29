@@ -13,7 +13,7 @@ const looks = {
  * Projects / Try it card (Figma 860:2301): mini preview, "Try it" chip, title, one line and an action.
  * The whole card is the link; the action wraps under the copy on narrow widths.
  */
-export function TryItCard({ lang, item, className = "min-w-0" }: { lang: string; item: (typeof developer.tryIt)[number]; className?: string }) {
+export function TryItCard({ lang, item, chip = developer.tryItChip, className = "min-w-0" }: { lang: string; item: (typeof developer.tryIt)[number]; chip?: string; className?: string }) {
   const { Art, bg } = looks[item.key];
   return (
     <Link
@@ -24,7 +24,7 @@ export function TryItCard({ lang, item, className = "min-w-0" }: { lang: string;
       <span className="flex min-w-160 flex-1 flex-col items-start gap-4 overflow-clip">
         <span className="flex flex-wrap content-center items-center gap-x-8 gap-y-4 overflow-clip">
           <span className="type-table-heading flex items-center gap-4 overflow-clip rounded-full bg-surface-primary px-8 py-2 whitespace-nowrap text-brand">
-            {developer.tryItChip}
+            {chip}
           </span>
           <span className="type-table-heading whitespace-nowrap text-secondary">{item.eyebrow}</span>
         </span>

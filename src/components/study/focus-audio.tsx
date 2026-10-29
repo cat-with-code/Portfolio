@@ -29,10 +29,11 @@ import { AudioNeoArt } from "@/components/illustrations/audio-neo";
 import { AudioPianoArt } from "@/components/illustrations/audio-piano";
 import { AudioRainArt } from "@/components/illustrations/audio-rain";
 import { useDrawer } from "@/components/shell/drawer-provider";
-import { audioCopy as a, trackCaption, vibes, type Vibe } from "@/content/study";
+import { trackCaption, type Vibe } from "@/content/study";
 import { clock } from "@/lib/focus-audio";
 import { youTubeId, youTubeThumb } from "@/lib/youtube";
 import { useStudy, type CustomSong } from "./study-provider";
+import { useT } from "@/i18n/lang-context";
 
 type Style = Vibe | "custom";
 export const covers: Record<Style, ComponentType<SVGProps<SVGSVGElement>>> = {
@@ -135,6 +136,8 @@ function Toggle({ on, label, onClick, children }: { on: boolean; label: string; 
 
 /** Audio / Sleep timer menu (930:4460): Off / 15 / 25 / 50 / 90 min, or a custom length in 5-min steps. */
 function SleepMenu() {
+  const units = useT("units");
+  const a = useT("audioCopy");
   const { sleep, setSleep } = useStudy();
   const [view, setView] = useState<"list" | "custom">("list");
   const [custom, setCustom] = useState(30);
@@ -167,7 +170,7 @@ function SleepMenu() {
                     onClick={() => { setSleep(m); setOpen(false); }}
                     className={`type-label flex h-36 cursor-pointer items-center justify-between rounded-md px-12 ${selected ? "bg-brand-subtle text-brand" : "text-primary hover:bg-surface-hover"}`}
                   >
-                    {m ? `${m} min` : a.sleep.off}
+                    {m ? units.minutes(m) : a.sleep.off}
                     {selected && <CheckIcon />}
                   </button>
                 );
@@ -179,7 +182,7 @@ function SleepMenu() {
               >
                 {a.custom}
                 <span className="type-caption flex items-center gap-2 text-muted">
-                  {isCustom ? sleep.minutes : custom} min
+                  {units.minutes(isCustom ? sleep.minutes : custom)}
                   <ChevronRightIcon className="size-16" />
                 </span>
               </button>
@@ -215,6 +218,7 @@ function SleepMenu() {
 
 /** Mute button: tap to mute, press and hold (or ↑/↓) for a volume slider. */
 function VolumeButton() {
+  const a = useT("audioCopy");
   const s = useStudy();
   const [open, setOpen] = useState(false);
   const hold = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -333,6 +337,8 @@ function SeekBar() {
 
 /** Melody picker (Figma 1332:135293): press and hold a sound style to pick one of its tracks (only styles with more than one). */
 function MelodyPicker({ vibe, onClose }: { vibe: Vibe | null; onClose: () => void }) {
+  const a = useT("audioCopy");
+  const vibes = useT("vibes");
   const { tracks } = useSiteContent();
   const { playTrack, vibe: current, index, status } = useStudy();
   const info = vibes.find((v) => v.key === vibe);
@@ -393,6 +399,8 @@ function MelodyPicker({ vibe, onClose }: { vibe: Vibe | null; onClose: () => voi
 
 /** Study / Focus audio (Figma 379:15202): generated focus music with play, skip, seek, loop, sleep timer and mute. */
 export function FocusAudio({ className = "" }: { className?: string }) {
+  const a = useT("audioCopy");
+  const vibes = useT("vibes");
   const { tracks } = useSiteContent();
   const s = useStudy();
   const { setOpen } = useDrawer();
@@ -450,7 +458,7 @@ export function FocusAudio({ className = "" }: { className?: string }) {
         {s.vibe === "custom" ? <CustomCover song={s.customSong} className="size-64 rounded-lg" /> : <TrackCover vibe={s.vibe} index={s.index} className="size-64" />}
         <div className="flex min-w-0 flex-1 flex-col gap-4">
           <p className="truncate text-[20px] leading-[28px] font-semibold text-primary">{s.vibe === "custom" && !s.customSong ? a.customLists.count.split(" · ")[1] : s.title}</p>
-          <p className="type-caption truncate text-secondary">{s.vibe === "custom" ? (s.blocked ? a.customLists.blocked : (s.customSong?.source ?? a.custom)) : trackCaption(tracks, s.vibe, s.index)}</p>
+          <p className="type-caption truncate text-secondary">{s.vibe === "custom" ? (s.blocked ? a.customLists.blocked : (s.customSong?.source ?? a.custom)) : trackCaption(tracks, s.vibe, s.index, { vibes, audioCopy: a })}</p>
         </div>
         <VolumeButton />
       </div>

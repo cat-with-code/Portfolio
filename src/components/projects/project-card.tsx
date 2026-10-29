@@ -1,10 +1,12 @@
 import Link from "next/link";
 import { ArrowUpRightIcon } from "@/components/icons";
-import { projectsPage, type ProjectCard as Card } from "@/content/projects";
+import { type ProjectCard as Card } from "@/content/projects";
 import { ProjectCover } from "./project-cover";
+import { tr } from "@/i18n/content";
 
 /** Projects / Project card (Figma 856:2446): cover, category + status, name, description, tags, Explore link. */
 export function ProjectCard({ lang, project, image }: { lang: string; project: Card; image?: string }) {
+  const projectsPage = tr(lang, "projectsPage");
   return (
     <Link
       href={`/${lang}/projects/${project.key}`}
