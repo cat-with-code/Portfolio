@@ -4,7 +4,8 @@ import { createContext, useCallback, useContext, useEffect, useState, type React
 
 export type DrawerKind = "settings" | "profile" | "approach" | "projects" | "blog-browse" | "blog-post" | "book-library" | "book-brief" | "study-music" | "game-library";
 
-type DrawerState = { open: DrawerKind | null; payloads: Partial<Record<DrawerKind, string>> };
+/** `instant`: shown without its open animation (Settings reappearing after a language switch). */
+type DrawerState = { open: DrawerKind | null; payloads: Partial<Record<DrawerKind, string>>; instant?: boolean };
 const DrawerContext = createContext<(DrawerState & { setOpen: (d: DrawerKind | null, payload?: string | null) => void }) | null>(null);
 
 /**
@@ -20,12 +21,12 @@ export function DrawerProvider({ children }: { children: ReactNode }) {
       if (sessionStorage.getItem(REOPEN) !== "settings") return;
       sessionStorage.removeItem(REOPEN);
       // eslint-disable-next-line react-hooks/set-state-in-effect -- one-time restore after a language switch
-      setState((s) => ({ ...s, open: "settings" }));
+      setState((s) => ({ ...s, open: "settings", instant: true }));
     } catch {}
   }, []);
   const setOpen = useCallback(
     (open: DrawerKind | null, payload: string | null = null) =>
-      setState((prev) => ({ open, payloads: open && payload ? { ...prev.payloads, [open]: payload } : prev.payloads })),
+      setState((prev) => ({ open, payloads: open && payload ? { ...prev.payloads, [open]: payload } : prev.payloads, instant: false })),
     []
   );
   return <DrawerContext.Provider value={{ ...state, setOpen }}>{children}</DrawerContext.Provider>;
@@ -47,8 +48,8 @@ export function useDrawer() {
 
 /** Props for a Radix Dialog root bound to one drawer kind. */
 export function useDrawerState(kind: DrawerKind) {
-  const { open, setOpen } = useDrawer();
-  return { open: open === kind, onOpenChange: (next: boolean) => setOpen(next ? kind : null) };
+  const { open, setOpen, instant } = useDrawer();
+  return { open: open === kind, instant: open === kind && !!instant, onOpenChange: (next: boolean) => setOpen(next ? kind : null) };
 }
 
 /** What a content drawer last showed (post slug, book key). */

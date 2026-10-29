@@ -13,9 +13,12 @@ export function SidePanel({
   onOpenChange,
   title,
   className,
+  instant = false,
   children,
 }: {
   open: boolean;
+  /** Appear without the slide-in (e.g. Settings staying open across a language switch) */
+  instant?: boolean;
   onOpenChange: (open: boolean) => void;
   title: string;
   className: string;
@@ -24,10 +27,10 @@ export function SidePanel({
   return (
     <Dialog.Root open={open} onOpenChange={onOpenChange}>
       <Dialog.Portal>
-        <Dialog.Overlay className="fixed inset-0 z-50 bg-overlay-scrim backdrop-blur-backdrop data-[state=closed]:animate-scrim-out data-[state=open]:animate-scrim-in" />
+        <Dialog.Overlay className={`fixed inset-0 z-50 bg-overlay-scrim backdrop-blur-backdrop data-[state=closed]:animate-scrim-out ${instant ? "" : "data-[state=open]:animate-scrim-in"}`} />
         <Dialog.Content
           aria-describedby={undefined}
-          className={`fixed z-50 flex flex-col overflow-clip rounded-shell outline-none data-[state=closed]:animate-panel-out data-[state=open]:animate-panel-in ${className}`}
+          className={`fixed z-50 flex flex-col overflow-clip rounded-shell outline-none data-[state=closed]:animate-panel-out ${instant ? "" : "data-[state=open]:animate-panel-in"} ${className}`}
         >
           <Dialog.Title className="sr-only">{title}</Dialog.Title>
           {children}
