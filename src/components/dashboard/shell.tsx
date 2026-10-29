@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { SignatureLogo } from "@/components/icons";
+import { SessionKeepAlive } from "./session-keepalive";
 import { SearchProvider } from "@/components/shell/search-provider";
 import { SearchField, SearchIconButton } from "@/components/shell/search-triggers";
 import { SidebarToggle } from "@/components/shell/sidebar-toggle";
@@ -25,6 +26,7 @@ export async function DashboardShell({ children }: { children: ReactNode }) {
   ];
   return (
     <SearchProvider>
+      <SessionKeepAlive />
       <div className="flex min-h-dvh flex-col">
         <header className="sticky top-0 z-40 flex h-72 shrink-0 items-start bg-surface-primary">
           {/* Mobile */}

@@ -8,6 +8,7 @@ import type { User } from "@supabase/supabase-js";
 import { cookies } from "next/headers";
 import { connection } from "next/server";
 import { needsCode } from "./mfa";
+import { ACTIVE_COOKIE, browserSessionCookie, sessionExpiry, signedInAt } from "./session-policy";
 
 const url = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
@@ -21,7 +22,7 @@ export async function supabaseServer() {
       getAll: () => store.getAll(),
       setAll: (list) => {
         try {
-          list.forEach(({ name, value, options }) => store.set(name, value, options));
+          list.forEach(({ name, value, options }) => store.set(name, value, browserSessionCookie(options)));
         } catch {
           // Called from a Server Component: the proxy refreshes the cookie instead.
         }
@@ -41,6 +42,9 @@ export async function getOwnerSession() {
   const supabase = await supabaseServer();
   const { data } = await supabase.auth.getUser();
   if (!isOwnerUser(data.user)) return null;
+  // Past the session limits (inactivity or maximum length) counts as signed out; the proxy clears the cookies.
+  const [{ data: auth }, store] = await Promise.all([supabase.auth.getClaims(), cookies()]);
+  if (sessionExpiry(signedInAt(auth?.claims), Number(store.get(ACTIVE_COOKIE)?.value) || null)) return null;
   return { supabase, user: data.user!, needsCode: await needsCode(supabase) };
 }
 

@@ -10,7 +10,10 @@ import { signInCopy as c } from "@/content/dashboard";
 
 /** Dashboard / Sign in (Figma Desktop 1371:4346): your Supabase account. Only the owner account gets in. */
 export function SignInForm() {
-  const next = useSearchParams().get("next") ?? "";
+  const params = useSearchParams();
+  const next = params.get("next") ?? "";
+  const reason = params.get("reason");
+  const ended = reason === "idle" || reason === "max" ? c.ended[reason] : null;
   const [state, action, pending] = useActionState<SignInState, FormData>(signIn, undefined);
   return (
     <form action={action} className="flex w-full max-w-332 flex-col gap-16 rounded-card border border-general-default bg-surface-primary p-24">
@@ -19,6 +22,7 @@ export function SignInForm() {
         <h1 className="type-subheading text-primary">{c.title}</h1>
         <p className="type-body text-secondary">{c.body}</p>
       </div>
+      {ended && !state?.error && <p className="type-caption rounded-lg bg-surface-secondary px-12 py-8 text-secondary">{ended}</p>}
       <input type="hidden" name="next" value={next} />
       <FieldShell id="sign-in-email" label={c.email} className="w-full">
         <div className={`${fieldControl(!!state?.error)} h-44 rounded-shell px-12 py-8`}>

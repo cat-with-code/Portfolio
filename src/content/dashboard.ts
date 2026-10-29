@@ -241,6 +241,11 @@ export const signInCopy = {
   password: "Password",
   submit: "Sign in",
   pending: "Signing in…",
+  /** Shown after the session limits signed you out (see lib/supabase/session-policy) */
+  ended: {
+    idle: "You were signed out after a while without activity. Sign in again to continue.",
+    max: "Your session reached its time limit. Sign in again to continue.",
+  },
 };
 
 export const verifyCopy = {
