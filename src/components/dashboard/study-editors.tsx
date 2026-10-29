@@ -10,6 +10,7 @@ import { SectionHeading } from "@/components/ui/section-heading";
 import { bookCover, type Book } from "@/content/books";
 import { bookEditorCopy as bc, trackEditorCopy as tc } from "@/content/dashboard";
 import { vibes, type Track, type Vibe } from "@/content/study";
+import { AudioPreview } from "./audio-preview";
 import { CoverField, DeleteZone, UploadAudioButton } from "./dialogs";
 import { BackLink, EditorSection, FieldRow, SaveNote, SelectField, TextArea, TextField, useSaver } from "./editor";
 
@@ -92,7 +93,8 @@ export function TrackEditor({ vibe: initialVibe, track, id }: { vibe: Vibe; trac
                 <p className="type-caption text-secondary">{src ? tc.audio.fileNote(length) : tc.audio.generatedNote(vibeLabel)}</p>
               </div>
             </div>
-            <div className="flex shrink-0 gap-8">
+            <div className="flex shrink-0 flex-wrap gap-8">
+              {src && <AudioPreview key={src} src={src} labels={tc.audio} />}
               <UploadAudioButton onFile={takeAudio}>{src ? tc.audio.replace : tc.audio.upload}</UploadAudioButton>
               {src && (
                 <Button variant="ghost" size="small" onClick={() => set(2)(undefined)}>

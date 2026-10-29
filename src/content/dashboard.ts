@@ -192,7 +192,7 @@ export const trackEditorCopy = {
     generated: "Generated soundscape",
     generatedNote: (vibe: string) => `No file yet — the player makes a ${vibe.toLowerCase()} soundscape for this track.`,
     fileNote: (length: string) => `MP3 or WAV · ${length}`,
-    upload: "Upload audio", replace: "Replace", remove: "Remove",
+    upload: "Upload audio", replace: "Replace", remove: "Remove", preview: "Preview", stop: "Stop", previewError: "Couldn’t play this file.",
   },
   cover: { eyebrow: "COVER", title: "Cover image", where: "Music player" },
 };
