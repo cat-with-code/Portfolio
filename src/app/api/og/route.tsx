@@ -1,14 +1,20 @@
 /**
- * The site's share preview (1200×630), shown when a page is linked on social apps and chats. One fixed image, built
- * once at build time — it takes no input, so nobody can make it say something else.
+ * The site's share preview (1200×630), shown when a page is linked on social apps and chats. One fixed image — it
+ * takes no input, so nobody can make it say something else — built once at build time.
  */
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 import { ImageResponse } from "next/og";
 import { profile } from "@/content/profile";
 
+/** The memoji as a data URL, read once while building (cached, so the route can be prerendered). */
+async function memojiDataUrl() {
+  "use cache";
+  return `data:image/png;base64,${(await readFile(join(process.cwd(), "public/images/memoji.png"))).toString("base64")}`;
+}
+
 export async function GET() {
-  const memoji = `data:image/png;base64,${(await readFile(join(process.cwd(), "public/images/memoji.png"))).toString("base64")}`;
+  const memoji = await memojiDataUrl();
   return new ImageResponse(
     (
       <div style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", gap: 64, padding: "0 96px", background: "#f5f6f8", fontFamily: "sans-serif" }}>
@@ -30,6 +36,6 @@ export async function GET() {
         </div>
       </div>
     ),
-    { width: 1200, height: 630 }
+    { width: 1200, height: 630, headers: { "Cache-Control": "public, max-age=86400, s-maxage=86400" } }
   );
 }
