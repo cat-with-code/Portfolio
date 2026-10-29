@@ -89,9 +89,7 @@ export function ContactForm() {
     return (
       <div className="flex min-h-528 w-full flex-col items-center justify-center gap-20 rounded-card py-32 text-center tablet:min-w-0 tablet:flex-1 tablet:self-stretch" aria-live="polite">
         <span className="flex size-64 items-center justify-center rounded-full bg-status-success-subtle text-icon-status-success">
-          <span className="relative size-28">
-            <CheckIcon className="absolute top-0 left-0 size-20" />
-          </span>
+          <CheckIcon aria-hidden className="size-28" />
         </span>
         <h2 className="type-page-title w-full text-primary">{sent.via === "server" ? form.sent.title : form.sent.mailAppTitle}</h2>
         <p className="type-body w-full text-muted">{sent.via === "server" ? form.sent.body(sent.email) : form.sent.mailAppBody}</p>
