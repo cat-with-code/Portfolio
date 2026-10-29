@@ -52,8 +52,19 @@ export async function uploadFile(kind: "cover" | "audio", folder: string, picked
       const { error } = await db.storage.from("covers").uploadToSignedUrl(start.path, start.token, file, { contentType: file.type, upsert: false });
       if (error) throw error;
     } else {
-      const res = await fetch(start.url, { method: "PUT", body: file, headers: { "Content-Type": file.type } });
-      if (!res.ok) throw new Error(`upload ${res.status}`);
+      let res: Response;
+      try {
+        res = await fetch(start.url, { method: "PUT", body: file, headers: { "Content-Type": file.type } });
+      } catch (e) {
+        // The browser refused before or while sending: a site not allowed in the storage's CORS rules, a VPN or ad
+        // blocker stopping Cloudflare's storage address, or the connection dropping mid-upload.
+        console.error("music upload blocked", { from: location.origin, error: e });
+        return { ok: false, error: `The upload was blocked (${location.host} → music storage). If a VPN or ad blocker is on, pause it and try again.` };
+      }
+      if (!res.ok) {
+        console.error("music upload refused", res.status, await res.text().catch(() => ""));
+        return { ok: false, error: `Music storage refused the file (error ${res.status}). Please try again.` };
+      }
     }
   } catch (e) {
     console.error(e);
