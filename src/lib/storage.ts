@@ -9,10 +9,13 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 
 export type UploadKind = "cover" | "audio";
 
-/** What each kind accepts. The covers bucket enforces the same type and size limits itself. */
+/**
+ * What each kind accepts. The covers bucket enforces the same type and size limits itself. Covers stay small because
+ * the browser resizes photos before uploading (components/dashboard/upload.ts); audio streams, so it may be larger.
+ */
 export const uploadRules = {
   cover: { types: { "image/png": "png", "image/jpeg": "jpg", "image/webp": "webp" } as Record<string, string>, max: 5 * 1024 * 1024 },
-  audio: { types: { "audio/mpeg": "mp3", "audio/wav": "wav", "audio/x-wav": "wav", "audio/wave": "wav" } as Record<string, string>, max: 20 * 1024 * 1024 },
+  audio: { types: { "audio/mpeg": "mp3", "audio/wav": "wav", "audio/x-wav": "wav", "audio/wave": "wav" } as Record<string, string>, max: 100 * 1024 * 1024 },
 };
 /** Folders per kind; file names are always random. */
 export const uploadFolders = { cover: ["blog", "projects", "music", "books"], audio: ["tracks"] } as const;
