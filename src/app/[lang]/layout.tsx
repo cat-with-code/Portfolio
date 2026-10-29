@@ -24,6 +24,8 @@ export async function generateMetadata(): Promise<Metadata> {
     keywords: ["Hoeurn Dareach", "UI/UX designer", "web developer", "Phnom Penh", "Cambodia", "portfolio", "design systems", "Next.js"],
     robots: index ? { index: true, follow: true, googleBot: { index: true, follow: true, "max-image-preview": "large", "max-snippet": -1 } } : { index: false, follow: false },
     formatDetection: { telephone: false, email: false, address: false },
+    // Google Search Console ownership check (the code is public; set GOOGLE_SITE_VERIFICATION in Vercel).
+    ...(process.env.GOOGLE_SITE_VERIFICATION?.trim() ? { verification: { google: process.env.GOOGLE_SITE_VERIFICATION.trim() } } : {}),
   };
 }
 
