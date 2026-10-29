@@ -45,7 +45,7 @@ export function BrowseDrawer({ closeLabel }: { closeLabel: string }) {
   const state = useDrawerState("blog-browse");
   const { setOpen } = useDrawer();
   const [filter, setFilter] = useState<"all" | PostTopicFilter>("all");
-  const { posts } = useSiteContent();
+  const { posts, readingTime = true } = useSiteContent();
   const list = browse.posts.flatMap((slug) => (posts[slug] ? [posts[slug]] : [])).filter((post) => filter === "all" || post.filter === filter);
   return (
     <SidePanel {...state} title={browse.title} className={`${panelPlacement} bg-surface-primary`}>
@@ -86,7 +86,7 @@ export function BrowseDrawer({ closeLabel }: { closeLabel: string }) {
                 <span className="type-card-title w-full text-primary">{post.title}</span>
                 <span className="type-caption w-full text-secondary">{post.dek}</span>
                 <span className="min-h-0 flex-1" />
-                <span className="type-eyebrow w-full text-accent-green">{units.minRead(post.minutes)}</span>
+                {readingTime && <span className="type-eyebrow w-full text-accent-green">{units.minRead(post.minutes)}</span>}
               </span>
             </button>
             <span aria-hidden className="h-px w-full shrink-0 bg-(--color-border-line-divider)" />
@@ -104,7 +104,7 @@ export function PostDrawer({ closeLabel }: { closeLabel: string }) {
   const preview = useT("preview");
   const state = useDrawerState("blog-post");
   const { setOpen } = useDrawer();
-  const { posts } = useSiteContent();
+  const { posts, readingTime = true } = useSiteContent();
   const post = posts[useDrawerPayload("blog-post") ?? ""] ?? posts[browse.posts[0]] ?? Object.values(posts)[0];
   const lang = usePathname().split("/")[1];
   if (!post) return null;
@@ -112,8 +112,8 @@ export function PostDrawer({ closeLabel }: { closeLabel: string }) {
     <SidePanel {...state} title={post.title} className={`${panelPlacement} bg-surface-primary`}>
       <Header eyebrow={preview.eyebrow} title={preview.title} closeLabel={closeLabel} height="h-62" />
       <p className="type-eyebrow w-full shrink-0 whitespace-pre-wrap text-secondary">
-        {`${preview.sample}  ·  ${post.category}  ·  `}
-        <span className="text-accent-green">{units.minRead(post.minutes)}</span>
+        {`${preview.sample}  ·  ${post.category}${readingTime ? "  ·  " : ""}`}
+        {readingTime && <span className="text-accent-green">{units.minRead(post.minutes)}</span>}
       </p>
       <article className="flex min-h-0 w-full flex-1 flex-col items-start gap-14 overflow-y-auto rounded-card px-16 pt-16 pb-32 [scrollbar-width:none]">
         <h2 className="w-full text-[31px] leading-[40px] font-semibold whitespace-pre-line text-primary">{post.displayTitle ?? post.title}</h2>

@@ -16,6 +16,8 @@ export const dashboardNav: { key: DashboardNavKey; label: string; path: string }
 
 export const dashboardShell = {
   manager: "PORTFOLIO MANAGER",
+  /** Read aloud next to the red dot on Inbox */
+  unread: (n: number) => `${n} unread ${n === 1 ? "message" : "messages"}`,
   search: "Search your dashboard",
   owner: "Hoeurn Dareach",
   viewPortfolio: "View portfolio",

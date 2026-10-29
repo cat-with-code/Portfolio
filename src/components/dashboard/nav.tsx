@@ -9,6 +9,7 @@ import { itemClasses } from "@/components/shell/nav-links";
 import { DrawerHeader } from "@/components/ui/drawer-header";
 import { IconButton } from "@/components/ui/icon-button";
 import { dashboardNav, dashboardShell as copy, type DashboardNavKey } from "@/content/dashboard";
+import { useUnread } from "./unread";
 
 const icons: Record<DashboardNavKey | "settings" | "portfolio", ComponentType<SVGProps<SVGSVGElement>>> = {
   overview: GridIcon,
@@ -27,6 +28,7 @@ const base = "/dashboard";
 /** Sidebar navigation (Figma Dashboard / Rail item 1371:138058, Navigation item 51:11). `allowRail` is false in the mobile menu. */
 export function DashboardNav({ allowRail = true, onNavigate }: { allowRail?: boolean; onNavigate?: () => void }) {
   const pathname = usePathname();
+  const unread = useUnread();
   const active = (path: string) => (path ? pathname === base + path || pathname.startsWith(`${base}${path}/`) : pathname === base);
 
   const item = (key: DashboardNavKey | "settings" | "portfolio", label: string, href: string, current: boolean, { external = false, className = "" } = {}) => {
@@ -45,7 +47,16 @@ export function DashboardNav({ allowRail = true, onNavigate }: { allowRail?: boo
         >
           <span className={c.indicator} />
           <span className={c.content}>
-            <Icon className={`size-20 ${c.icon}`} />
+            <span className="relative flex shrink-0">
+              <Icon className={`size-20 ${c.icon}`} />
+              {key === "inbox" && unread > 0 && (
+                <>
+                  {/* New messages waiting: a red dot on the mail icon */}
+                  <span aria-hidden className="absolute -top-2 -right-2 size-8 rounded-full bg-status-error ring-2 ring-(--color-bg-surface-primary)" />
+                  <span className="sr-only">{copy.unread(unread)}</span>
+                </>
+              )}
+            </span>
             <span className={c.label}>{label}</span>
           </span>
         </Link>

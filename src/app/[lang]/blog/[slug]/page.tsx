@@ -11,6 +11,7 @@ import { blocksToText } from "@/content/blocks";
 import { getLocale } from "@/i18n/dictionaries";
 import { getNextPost, getPost, getPosts } from "@/lib/content";
 import { absolute, jsonLd, pageMetadata, personJsonLd } from "@/lib/seo";
+import { sitePrefs } from "@/lib/site-prefs";
 import { longDate } from "@/i18n/dates";
 
 const Rule = () => <div aria-hidden className="h-px w-full shrink-0 bg-(--color-border-line-divider)" />;
@@ -78,7 +79,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
         <p className="type-eyebrow flex flex-wrap items-center gap-x-12 gap-y-8 whitespace-pre text-secondary">
           {SAMPLE_BLOG && <span className="rounded-full bg-status-warning-subtle px-10 py-2 text-primary">{copy.sample}</span>}
           <span>{post.category}</span>
-          <span className="text-accent-green">{tr(lang, "units").minRead(post.minutes)}</span>
+          {(await sitePrefs()).readingTime && <span className="text-accent-green">{tr(lang, "units").minRead(post.minutes)}</span>}
         </p>
         <h1 className="type-large-metric tablet:type-display w-full whitespace-pre-line text-primary">{post.displayTitle ?? post.title}</h1>
         <p className="type-body w-full max-w-680 text-secondary">{post.dek}</p>

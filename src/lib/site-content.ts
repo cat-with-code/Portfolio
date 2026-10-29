@@ -12,6 +12,7 @@ import { createClient } from "@supabase/supabase-js";
 import { cacheLife, cacheTag } from "next/cache";
 import type { SiteContent } from "@/components/content/site-content";
 import { translateRow } from "./content-translations";
+import { freshFetch } from "./supabase/fresh-fetch";
 import { posts as filePosts, type Post } from "@/content/blog";
 import type { Block } from "@/content/blocks";
 import { books as fileBooks, type Book } from "@/content/books";
@@ -112,7 +113,7 @@ export async function getSiteContent(lang = "en"): Promise<SiteContent> {
   cacheTag("content");
   cacheLife("hours");
   if (!supabaseConfigured) return fromFiles();
-  return load(createClient(url!, anonKey!, { auth: { persistSession: false, autoRefreshToken: false } }), true, lang);
+  return load(createClient(url!, anonKey!, { auth: { persistSession: false, autoRefreshToken: false }, global: { fetch: freshFetch } }), true, lang);
 }
 
 /**

@@ -5,9 +5,9 @@
  */
 import "server-only";
 import type { Metadata } from "next";
-import { cacheLife, cacheTag } from "next/cache";
 import { profile, profileLinks } from "@/content/profile";
 import { tr } from "@/i18n/content";
+import { sitePrefs } from "@/lib/site-prefs";
 import { locales, type Locale } from "@/i18n/dictionaries";
 
 /** The live address: NEXT_PUBLIC_SITE_URL (your domain), else Vercel's production address, else local. */
@@ -134,18 +134,7 @@ export async function searchable() {
   return !previewDeploy && (await indexingAllowed());
 }
 
-/**
- * Dashboard switch "Let search engines find my portfolio". Read with the service key (settings are owner-only),
- * cached and refreshed when Settings are saved. On unless switched off.
- */
+/** Dashboard switch "Let search engines find my portfolio" (see lib/site-prefs). */
 export async function indexingAllowed(): Promise<boolean> {
-  "use cache";
-  cacheTag("settings");
-  cacheLife("hours");
-  const { supabaseAdmin } = await import("@/lib/supabase/admin");
-  const db = supabaseAdmin();
-  if (!db) return true;
-  const { data, error } = await db.from("settings").select("prefs").eq("id", 1).maybeSingle();
-  if (error) return true;
-  return (data?.prefs as Record<string, unknown> | undefined)?.indexing !== false;
+  return (await sitePrefs()).indexing;
 }

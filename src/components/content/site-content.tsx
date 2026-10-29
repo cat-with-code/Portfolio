@@ -24,6 +24,8 @@ export type SiteContent = {
   gameLinks: Record<string, string>;
   /** Dashboard only (owner): status per item — "post:<slug>", "project:<key>", "book:<key>", "track:<id>" */
   status?: Record<string, "draft" | "published">;
+  /** Public pages: "Show reading time" from Settings (off hides "5 min read" on stories) */
+  readingTime?: boolean;
   /** Dashboard only (owner): database id of each track, parallel to `tracks` */
   trackIds?: Record<Vibe, string[]>;
 };

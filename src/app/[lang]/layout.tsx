@@ -5,6 +5,7 @@ import { PageHold } from "@/components/feedback/page-hold";
 import { AppShell } from "@/components/shell/app-shell";
 import { ThemeRestore } from "@/components/shell/theme-toggle";
 import { getSiteContent } from "@/lib/site-content";
+import { sitePrefs } from "@/lib/site-prefs";
 import { getDictionary, getLocale, locales } from "@/i18n/dictionaries";
 import { searchable, sectionMeta, siteName, siteTitle, siteUrl } from "@/lib/seo";
 import { bootScript, fontVariables } from "../fonts";
@@ -50,7 +51,7 @@ export default async function RootLayout({ children }: LayoutProps<"/[lang]">) {
       </head>
       <body>
         <ThemeRestore />
-        <SiteContentProvider value={await getSiteContent(lang)}>
+        <SiteContentProvider value={{ ...(await getSiteContent(lang)), readingTime: (await sitePrefs()).readingTime }}>
         <AppShell lang={lang} dict={dict}>
           {lang !== "en" && (
             // Honest about machine translation, with the original one tap away

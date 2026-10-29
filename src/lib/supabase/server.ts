@@ -7,6 +7,7 @@ import { createServerClient } from "@supabase/ssr";
 import type { User } from "@supabase/supabase-js";
 import { cookies } from "next/headers";
 import { connection } from "next/server";
+import { freshFetch } from "./fresh-fetch";
 import { needsCode } from "./mfa";
 import { ACTIVE_COOKIE, browserSessionCookie, sessionExpiry, signedInAt } from "./session-policy";
 
@@ -18,6 +19,7 @@ export async function supabaseServer() {
   await connection();
   const store = await cookies();
   return createServerClient(url, anonKey, {
+    global: { fetch: freshFetch },
     cookies: {
       getAll: () => store.getAll(),
       setAll: (list) => {
