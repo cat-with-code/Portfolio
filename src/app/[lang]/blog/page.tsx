@@ -6,6 +6,8 @@ import { ReadingRoom } from "@/components/blog/reading-room";
 import { getLocale } from "@/i18n/dictionaries";
 import { pageMetadata, sectionMeta } from "@/lib/seo";
 import { tr } from "@/i18n/content";
+import { blogLayout } from "@/lib/blog-layout";
+import { getSiteContent } from "@/lib/site-content";
 
 const Rule = ({ className = "" }: { className?: string }) => <div aria-hidden className={`h-px w-full shrink-0 bg-(--color-border-line-divider) ${className}`} />;
 
@@ -16,7 +18,9 @@ export async function generateMetadata(): Promise<Metadata> {
 
 /** Blog — The Notebook magazine (Figma Desktop 694:19591 · Tablet 696:35187 · Mobile 696:41849). Posts are sample content. */
 export default async function BlogPage() {
-  const m = tr(await getLocale(), "magazine");
+  const lang = await getLocale();
+  const m = tr(lang, "magazine");
+  const layout = blogLayout(Object.values((await getSiteContent(lang)).posts), m.cover.kicker);
   return (
     <div className="flex w-full flex-col items-start pb-32">
       <div className="flex w-full flex-col items-start gap-16 tablet:gap-0 tablet:pt-2">
@@ -48,26 +52,30 @@ export default async function BlogPage() {
 
         {/* Responsive feature row */}
         <div className="flex w-full flex-col items-start gap-20 tablet:mt-22 tablet:flex-row">
-          <CoverStoryCard placement={m.cover} />
+          {layout.cover && <CoverStoryCard placement={layout.cover} />}
           <div className="flex w-full flex-col gap-16 tablet:w-372 tablet:shrink-0">
-            {m.features.map((placement) => (
+            {layout.features.map((placement) => (
               <FeatureCard key={placement.slug} placement={placement} />
             ))}
           </div>
         </div>
 
-        {/* The reading room */}
-        <div className="flex w-full flex-col gap-16 tablet:mt-10 tablet:flex-row tablet:items-end tablet:justify-between tablet:gap-0 desktop:mt-32">
-          <div className="flex flex-col gap-16 tablet:gap-7">
-            <p className="type-eyebrow text-brand">{m.readingRoom.eyebrow}</p>
-            <h2 className="type-page-title tablet:type-section-heading text-primary">{m.readingRoom.title}</h2>
-          </div>
-          <p className="type-eyebrow whitespace-pre text-secondary tablet:mr-2 tablet:mb-9 tablet:w-300">{m.readingRoom.total}</p>
-        </div>
-        <Rule className="tablet:mt-19" />
-        <div className="w-full tablet:mt-17">
-          <ReadingRoom />
-        </div>
+        {layout.readingRoom.length > 0 && (
+          <>
+            {/* The reading room */}
+            <div className="flex w-full flex-col gap-16 tablet:mt-10 tablet:flex-row tablet:items-end tablet:justify-between tablet:gap-0 desktop:mt-32">
+              <div className="flex flex-col gap-16 tablet:gap-7">
+                <p className="type-eyebrow text-brand">{m.readingRoom.eyebrow}</p>
+                <h2 className="type-page-title tablet:type-section-heading text-primary">{m.readingRoom.title}</h2>
+              </div>
+              <p className="type-eyebrow whitespace-pre text-secondary tablet:mr-2 tablet:mb-9 tablet:w-300">{m.readingRoom.total}</p>
+            </div>
+            <Rule className="tablet:mt-19" />
+            <div className="w-full tablet:mt-17">
+              <ReadingRoom />
+            </div>
+          </>
+        )}
 
         {/* The archive */}
         <Rule className="tablet:mt-24" />

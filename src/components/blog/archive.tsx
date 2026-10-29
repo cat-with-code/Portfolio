@@ -4,11 +4,14 @@ import { useState } from "react";
 import { ChevronDownIcon } from "@/components/icons";
 import { ArchiveCard } from "./post-card";
 import { useT } from "@/i18n/lang-context";
+import { useSiteContent } from "@/components/content/site-content";
+import { blogLayout } from "@/lib/blog-layout";
 
 
 /** Archive / Post list: five rows, then "View more" shows the rest (Blog / View more button 1095:2368, disabled once all are shown). */
 export function Archive() {
-  const { archive } = useT("magazine");
+  const { archive: copy } = useT("magazine");
+  const archive = { ...copy, posts: blogLayout(Object.values(useSiteContent().posts)).archive };
   const [all, setAll] = useState(false);
   const shown = all ? archive.posts : archive.posts.slice(0, archive.initial);
   const done = shown.length === archive.posts.length;

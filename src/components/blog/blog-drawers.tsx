@@ -10,6 +10,7 @@ import { useDrawer, useDrawerPayload, useDrawerState } from "@/components/shell/
 import { type PostTopicFilter } from "@/content/blog";
 import { PostArt } from "./topic-art";
 import { useT } from "@/i18n/lang-context";
+import { blogLayout } from "@/lib/blog-layout";
 
 /** Blog drawers place their panel like the other drawers: 544 wide, 24 from the edges; full width (8 inset) on phones. */
 export const panelPlacement = "inset-8 gap-16 p-24 tablet:inset-y-24 tablet:right-24 tablet:left-auto tablet:w-544";
@@ -46,7 +47,7 @@ export function BrowseDrawer({ closeLabel }: { closeLabel: string }) {
   const { setOpen } = useDrawer();
   const [filter, setFilter] = useState<"all" | PostTopicFilter>("all");
   const { posts, readingTime = true } = useSiteContent();
-  const list = browse.posts.flatMap((slug) => (posts[slug] ? [posts[slug]] : [])).filter((post) => filter === "all" || post.filter === filter);
+  const list = blogLayout(Object.values(posts)).archive.flatMap((a) => (posts[a.slug] ? [posts[a.slug]] : [])).filter((post) => filter === "all" || post.filter === filter);
   return (
     <SidePanel {...state} title={browse.title} className={`${panelPlacement} bg-surface-primary`}>
       <Header eyebrow={browse.eyebrow} title={browse.title} closeLabel={closeLabel} height="h-63" />
@@ -100,12 +101,11 @@ export function BrowseDrawer({ closeLabel }: { closeLabel: string }) {
 /** Blog / Post preview drawer — "Inside the story" (Figma 694:20009). */
 export function PostDrawer({ closeLabel }: { closeLabel: string }) {
   const units = useT("units");
-  const browse = useT("browse");
   const preview = useT("preview");
   const state = useDrawerState("blog-post");
   const { setOpen } = useDrawer();
   const { posts, readingTime = true } = useSiteContent();
-  const post = posts[useDrawerPayload("blog-post") ?? ""] ?? posts[browse.posts[0]] ?? Object.values(posts)[0];
+  const post = posts[useDrawerPayload("blog-post") ?? ""] ?? Object.values(posts)[0];
   const lang = usePathname().split("/")[1];
   if (!post) return null;
   return (

@@ -120,7 +120,7 @@ export async function savePost(input: z.input<typeof postInput>): Promise<Result
       await dropReplaced(supabase, [current?.cover_url], [row.cover_url]);
     } else {
       slug = await freeKey(supabase, "posts", "slug", slugify(p.title));
-      check((await supabase.from("posts").insert({ ...row, slug, sort: -Date.now() % 2147483647, published_at: p.status === "published" ? new Date().toISOString() : null })).error);
+      check((await supabase.from("posts").insert({ ...row, slug, sort: -Math.floor(Date.now() / 1000) /* newest first */, published_at: p.status === "published" ? new Date().toISOString() : null })).error);
     }
     updateTag("content");
     return { ok: true, key: slug };

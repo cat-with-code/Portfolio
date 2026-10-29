@@ -4,7 +4,8 @@ import { useRef, useState } from "react";
 import { ChevronLeftIcon, ChevronRightIcon } from "@/components/icons";
 import { IconButton } from "@/components/ui/icon-button";
 import { WideCard } from "./post-card";
-import { useT } from "@/i18n/lang-context";
+import { useSiteContent } from "@/components/content/site-content";
+import { blogLayout } from "@/lib/blog-layout";
 
 const pad = (n: number) => String(n).padStart(2, "0");
 
@@ -13,7 +14,7 @@ const pad = (n: number) => String(n).padStart(2, "0");
  * (dimmed at the ends), swipe left or right on the story to turn the page.
  */
 export function ReadingRoom() {
-  const pages = useT("magazine").readingRoom.pages;
+  const pages = blogLayout(Object.values(useSiteContent().posts)).readingRoom;
   const [page, setPage] = useState(0);
   const start = useRef<number | null>(null);
   const go = (next: number) => setPage(Math.min(pages.length - 1, Math.max(0, next)));
