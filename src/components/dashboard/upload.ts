@@ -48,7 +48,7 @@ export async function uploadFile(kind: "cover" | "audio", folder: string, picked
     if (start.store === "covers") {
       // The publishable key only identifies the project; the signed token is what allows this one upload.
       const { createClient } = await import("@supabase/supabase-js");
-      const db = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL?.trim()!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY?.trim()!, { auth: { persistSession: false, autoRefreshToken: false } });
+      const db = createClient((process.env.NEXT_PUBLIC_SUPABASE_URL ?? "").trim(), (process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? "").trim(), { auth: { persistSession: false, autoRefreshToken: false } });
       const { error } = await db.storage.from("covers").uploadToSignedUrl(start.path, start.token, file, { contentType: file.type, upsert: false });
       if (error) throw error;
     } else {
