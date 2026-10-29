@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { SiteContentProvider } from "@/components/content/site-content";
 import { PageHold } from "@/components/feedback/page-hold";
 import { AppShell } from "@/components/shell/app-shell";
+import { ThemeRestore } from "@/components/shell/theme-toggle";
 import { getSiteContent } from "@/lib/site-content";
 import { getDictionary, getLocale, locales } from "@/i18n/dictionaries";
 import { searchable, sectionMeta, siteName, siteTitle, siteUrl } from "@/lib/seo";
@@ -33,7 +34,9 @@ export default async function RootLayout({ children }: LayoutProps<"/[lang]">) {
   const lang = await getLocale();
   const dict = await getDictionary();
   return (
-    <html lang={lang} data-theme="light" data-theme-mode="light" className={fontVariables} suppressHydrationWarning>
+    // No data-theme here: bootScript sets it from the visitor's choice before the page paints. Writing it in JSX would
+    // reset dark mode to light whenever this layout is rebuilt (switching language does that).
+    <html lang={lang} className={fontVariables} suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: bootScript }} />
         {/* Noto Sans SC is split into ~300 files, too many to self-host via next/font — load it from Google Fonts on Chinese pages only */}
@@ -46,6 +49,7 @@ export default async function RootLayout({ children }: LayoutProps<"/[lang]">) {
         )}
       </head>
       <body>
+        <ThemeRestore />
         <SiteContentProvider value={await getSiteContent(lang)}>
         <AppShell lang={lang} dict={dict}>
           {lang !== "en" && (

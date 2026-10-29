@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useCallback, useContext, useState, type ReactNode } from "react";
+import { createContext, useCallback, useContext, useEffect, useState, type ReactNode } from "react";
 
 export type DrawerKind = "settings" | "profile" | "approach" | "projects" | "blog-browse" | "blog-post" | "book-library" | "book-brief" | "study-music" | "game-library";
 
@@ -14,12 +14,29 @@ const DrawerContext = createContext<(DrawerState & { setOpen: (d: DrawerKind | n
  */
 export function DrawerProvider({ children }: { children: ReactNode }) {
   const [state, setState] = useState<DrawerState>({ open: null, payloads: {} });
+  // Switching language rebuilds the page; Settings (where you switched) reopens so you can carry on.
+  useEffect(() => {
+    try {
+      if (sessionStorage.getItem(REOPEN) !== "settings") return;
+      sessionStorage.removeItem(REOPEN);
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- one-time restore after a language switch
+      setState((s) => ({ ...s, open: "settings" }));
+    } catch {}
+  }, []);
   const setOpen = useCallback(
     (open: DrawerKind | null, payload: string | null = null) =>
       setState((prev) => ({ open, payloads: open && payload ? { ...prev.payloads, [open]: payload } : prev.payloads })),
     []
   );
   return <DrawerContext.Provider value={{ ...state, setOpen }}>{children}</DrawerContext.Provider>;
+}
+
+const REOPEN = "reopen-drawer";
+/** Call before switching language from Settings, so Settings is open again on the new page. */
+export function reopenSettingsAfterSwitch() {
+  try {
+    sessionStorage.setItem(REOPEN, "settings");
+  } catch {}
 }
 
 export function useDrawer() {

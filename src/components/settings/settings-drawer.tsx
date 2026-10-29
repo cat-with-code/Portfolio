@@ -1,9 +1,9 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useSyncExternalStore, type ReactNode } from "react";
+import { useEffect, useSyncExternalStore, type ReactNode } from "react";
 import { CloseIcon, MonitorIcon, MoonIcon, SignatureLogo, SunIcon } from "@/components/icons";
-import { useDrawerState } from "@/components/shell/drawer-provider";
+import { reopenSettingsAfterSwitch, useDrawerState } from "@/components/shell/drawer-provider";
 import { applyTheme } from "@/components/shell/theme-toggle";
 import { IconButton } from "@/components/ui/icon-button";
 import { PanelClose, SidePanel } from "@/components/ui/side-panel";
@@ -85,6 +85,9 @@ function Card({ title, help, children, gap = "gap-8" }: { title: ReactNode; help
 }
 
 /** Settings drawer (Figma Desktop 707:43772 · Tablet 707:43867 · Mobile 707:43956). */
+/** This page's address in another language: /en/blog → /km/blog. */
+const inLanguage = (next: string) => window.location.pathname.replace(/^\/[a-z]{2}(?=\/|$)/, `/${next}`) + window.location.search;
+
 export function SettingsDrawer({ lang, dict }: { lang: string; dict: Dictionary }) {
   const settingsCopy = useT("settingsCopy");
   const state = useDrawerState("settings");
@@ -96,8 +99,14 @@ export function SettingsDrawer({ lang, dict }: { lang: string; dict: Dictionary 
   const switchLanguage = (next: string) => {
     if (next === lang) return;
     rememberLocale(next);
-    router.push(window.location.pathname.replace(/^\/[a-z]{2}(?=\/|$)/, `/${next}`));
+    reopenSettingsAfterSwitch();
+    router.push(inLanguage(next));
   };
+  // Load the other languages as soon as Settings opens, so switching is instant (no loading skeleton).
+  useEffect(() => {
+    if (!state.open) return;
+    for (const o of languageOptions) if (o.lang !== lang) router.prefetch(inLanguage(o.lang));
+  }, [state.open, lang, router]);
 
   const themes: { mode: Mode; label: string; Icon: typeof SunIcon }[] = [
     { mode: "light", label: dict.theme.light, Icon: SunIcon },
