@@ -57,7 +57,11 @@ async function run(fn: () => Promise<Result>): Promise<Result> {
     if (e instanceof z.ZodError) return { ok: false, error: e.issues[0]?.message ?? "Check the highlighted fields." };
     if (e instanceof Error && e.message === "Not signed in") return { ok: false, error: "Your session ended — sign in again." };
     console.error("dashboard action failed", e);
-    return { ok: false, error: "Couldn’t save — please try again." };
+    // Only the signed-in owner gets this far (every action starts with requireOwner), so the database's own reason is
+    // safe to show — it's what makes a failed save fixable.
+    const reason = e instanceof Error ? e.message : "";
+    if (/row-level security/i.test(reason)) return { ok: false, error: "The database didn’t accept this sign-in. Sign out, sign in again (with your code), and retry." };
+    return { ok: false, error: reason ? `Couldn’t save — ${reason.slice(0, 160)}` : "Couldn’t save — please try again." };
   }
 }
 const check = (error: { message: string } | null) => {
