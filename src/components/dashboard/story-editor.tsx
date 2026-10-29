@@ -115,7 +115,7 @@ export function StoryEditor({ initial, slug, status = "draft" }: { initial: Stor
 
           <EditorSection eyebrow={c.section.eyebrow} title={c.section.title} where={c.section.where}>
             <TextField label={c.section.heading} value={f.heading} onChange={set("heading")} />
-            <TextArea label={c.section.body} value={f.body} onChange={set("body")} hint={c.section.hint} max={max.body} rows={6} />
+            <TextArea label={c.section.body} value={f.body} onChange={set("body")} hint={c.section.hint} max={max.body} rows={12} />
           </EditorSection>
 
           <EditorSection eyebrow={c.quote.eyebrow} title={c.quote.title} where={c.quote.where}>

@@ -43,7 +43,7 @@ const slugify = (s: string) =>
 const status = z.enum(["draft", "published"]);
 
 const block = z.discriminatedUnion("type", [
-  z.object({ type: z.literal("paragraph"), text: required(4000) }),
+  z.object({ type: z.literal("paragraph"), text: required(10_000) }),
   z.object({ type: z.literal("heading"), text: required(200) }),
   z.object({ type: z.literal("quote"), text: required(400), label: text(60).optional() }),
   z.object({ type: z.literal("list"), items: z.array(required(300)).min(1).max(20), ordered: z.boolean().optional() }),
@@ -92,7 +92,7 @@ const postInput = z.object({
   excerpt: text(400),
   dek: text(200),
   cover: mediaUrl.optional(),
-  body: z.array(block).max(60),
+  body: z.array(block).max(200),
   status,
 });
 

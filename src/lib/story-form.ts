@@ -37,7 +37,7 @@ export type StoryForm = {
   points: string[];
 };
 
-export const storyLimits = { excerpt: 220, dek: 80, intro: 260, body: 800, quote: 140 };
+export const storyLimits = { excerpt: 220, dek: 80, intro: 260, body: 10_000, quote: 140 };
 
 /** Reads a post (or nothing, for a new story) into the editor's fields. */
 export function toStoryForm(post?: Post | null): StoryForm {
